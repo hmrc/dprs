@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.config
+package uk.gov.hmrc.dprs.services
 
-import com.google.inject.AbstractModule
+import com.google.inject.ImplementedBy
 
-import java.time.{Clock, ZoneOffset}
+import java.util.UUID
 
-class Module extends AbstractModule {
+@ImplementedBy(classOf[AcknowledgementReferenceGeneratorImpl])
+trait AcknowledgementReferenceGenerator {
+  def generate(): String
+}
 
-  override def configure(): Unit = {
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
-  }
-
+class AcknowledgementReferenceGeneratorImpl extends AcknowledgementReferenceGenerator {
+  def generate(): String = UUID.randomUUID().toString
 }

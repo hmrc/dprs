@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.config
+package uk.gov.hmrc.dprs.services
 
-import com.google.inject.AbstractModule
+import java.util.UUID
+import scala.util.Try
 
-import java.time.{Clock, ZoneOffset}
+class AcknowledgementReferenceGeneratorImplSpec extends BaseSpec {
 
-class Module extends AbstractModule {
+  val acknowledgementReferenceGeneratorImpl = new AcknowledgementReferenceGeneratorImpl()
 
-  override def configure(): Unit = {
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
+  "the acknowledgement reference generator should" - {
+    "return a valid UUID" in {
+      (1 to 1000).foreach { _ =>
+        val acknowledgementReference = acknowledgementReferenceGeneratorImpl.generate()
+
+        Try(UUID.fromString(acknowledgementReference)).isSuccess shouldBe true
+      }
+    }
   }
 
 }

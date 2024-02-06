@@ -1,0 +1,2086 @@
+{
+	"info": {
+		"_postman_id": "19fa232a-a8de-47a3-8179-5df53bae0d90",
+		"name": "Registration With ID",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30217849"
+	},
+	"item": [
+		{
+			"name": "Success",
+			"item": [
+				{
+					"name": "Individual",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/registrations/withId/individual",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"registrations",
+								"withId",
+								"individual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Organisation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/registrations/withId/organisation",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"registrations",
+								"withId",
+								"organisation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Failure",
+			"item": [
+				{
+					"name": "Individual",
+					"item": [
+						{
+							"name": "Downstream",
+							"item": [
+								{
+									"name": "Internal Server Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 503\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is 'eis-returned-internal-server-error'\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000500\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Bad Request",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Body is empty\", function () {",
+													"    pm.response.to.have.body(\"\");",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000400\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Service Unavailable",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 503\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is 'eis-returned-service-unavailable'\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000503B\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Invalid",
+							"item": [
+								{
+									"name": "Id / Type",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"VAT\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Id / Value",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"XX3902342094804482044449234029408242\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "First Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick Alexander John Fitzpatrick James\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Middle Name",
+									"item": [
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-middle-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-middle-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"Alexander John Fitzpatrick James Edward\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Last Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Date Of Birth",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Invalid Format",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"10-04-1970\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Doesn't Exist",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1977-02-29\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Organisation",
+					"item": [
+						{
+							"name": "Downstream",
+							"item": [
+								{
+									"name": "Internal Server Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 503\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is 'eis-returned-internal-server-error'\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000500\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Bad Request",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 500\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Body is empty\", function () {",
+													"    pm.response.to.have.body(\"\");",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000400\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Service Unavailable",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 503\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is 'eis-returned-service-unavailable'\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000503B\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Invalid",
+							"item": [
+								{
+									"name": "Id / Type",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"XYZ\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unsuitable",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Id / Value",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"XX3902342094804482044449234029408242\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-name'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson Home Appliance Corporation Of The United Kingdom\",\n    \"type\": \"CorporateBody\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Type",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 400\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is 'invalid-type'\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"1234567890\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"Charity\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:20001/dprs",
+			"type": "string"
+		}
+	]
+}

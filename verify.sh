@@ -1,0 +1,1 @@
+sbt "clean;scalafmtCheck;test:scalafmtCheck;coverage;test;it/scalafmtCheck;it/test;coverageReport"
