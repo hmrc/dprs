@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.connectors
 import com.google.inject.Singleton
 import play.api.http.Status.BAD_REQUEST
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.{Request, Responses}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -28,6 +28,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import javax.inject.Inject
+import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -63,59 +64,57 @@ class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, httpClientV2:
 
 object RegistrationWithIdConnector {
 
-  case class Request(common: Request.Common, detail: Request.Detail)
+  final case class Request(common: Request.Common, detail: Request.Detail)
 
   object Request {
 
-    implicit val writes: Writes[Request] =
+    implicit lazy val writes: OWrites[Request] =
       ((JsPath \ "registerWithIDRequest" \ "requestCommon").write[Common] and
-        (JsPath \ "registerWithIDRequest" \ "requestDetail").write[Detail])(request => (request.common, request.detail))
+        (JsPath \ "registerWithIDRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
 
-    case class Common(receiptDate: String, regime: String, acknowledgementReference: String)
+    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String)
 
     object Common {
-      implicit val writes: Writes[Common] =
+      implicit val writes: OWrites[Common] =
         ((JsPath \ "receiptDate").write[String] and
           (JsPath \ "regime").write[String] and
-          (JsPath \ "acknowledgementReference").write[String])(common => (common.receiptDate, common.regime, common.acknowledgementReference))
+          (JsPath \ "acknowledgementReference").write[String])(unlift(Common.unapply))
     }
 
-    case class Detail(idType: String,
-                      idNumber: String,
-                      requiresNameMatch: Boolean,
-                      isAnAgent: Boolean,
-                      individual: Option[Individual],
-                      organisation: Option[Organisation]
+    final case class Detail(idType: String,
+                            idNumber: String,
+                            requiresNameMatch: Boolean,
+                            isAnAgent: Boolean,
+                            individual: Option[Individual],
+                            organisation: Option[Organisation]
     )
 
     object Detail {
-      implicit val writes: Writes[Detail] =
+      implicit lazy val writes: OWrites[Detail] =
         ((JsPath \ "IDType").write[String] and
           (JsPath \ "IDNumber").write[String] and
           (JsPath \ "requiresNameMatch").write[Boolean] and
           (JsPath \ "isAnAgent").write[Boolean] and
           (JsPath \ "individual").writeNullable[Individual] and
-          (JsPath \ "organisation").writeNullable[Organisation])(detail =>
-          (detail.idType, detail.idNumber, detail.requiresNameMatch, detail.isAnAgent, detail.individual, detail.organisation)
-        )
+          (JsPath \ "organisation").writeNullable[Organisation])(unlift(Detail.unapply))
     }
 
-    case class Individual(firstName: String, middleName: Option[String], lastName: String, dateOfBirth: String)
+    final case class Individual(firstName: String, middleName: Option[String], lastName: String, dateOfBirth: String)
 
     object Individual {
-      implicit val writes: Writes[Individual] =
+      implicit val writes: OWrites[Individual] =
         ((JsPath \ "firstName").write[String] and
           (JsPath \ "middleName").writeNullable[String] and
           (JsPath \ "lastName").write[String] and
-          (JsPath \ "dateOfBirth").write[String])(individual => (individual.firstName, individual.middleName, individual.lastName, individual.dateOfBirth))
+          (JsPath \ "dateOfBirth").write[String])(unlift(Individual.unapply))
     }
 
-    case class Organisation(name: String, _type: String)
+    final case class Organisation(name: String, _type: String)
 
     object Organisation {
-      implicit val writes: Writes[Organisation] =
+      implicit val writes: OWrites[Organisation] =
         ((JsPath \ "organisationName").write[String] and
-          (JsPath \ "organisationType").write[String])(organisation => (organisation.name, organisation._type))
+          (JsPath \ "organisationType").write[String])(unlift(Organisation.unapply))
     }
   }
 
@@ -131,14 +130,14 @@ object RegistrationWithIdConnector {
       def detail: GenericDetail
     }
 
-    case class Common(returnParams: Seq[ReturnParam])
+    final case class Common(returnParams: Seq[ReturnParam])
 
     object Common {
-      implicit val reads: Reads[Common] =
+      implicit lazy val reads: Reads[Common] =
         (JsPath \ "returnParameters").read[Seq[ReturnParam]].map(Common(_))
     }
 
-    case class ReturnParam(name: String, value: String)
+    final case class ReturnParam(name: String, value: String)
 
     object ReturnParam {
       implicit val reads: Reads[ReturnParam] =
@@ -146,7 +145,13 @@ object RegistrationWithIdConnector {
           (JsPath \ "paramValue").read[String])(ReturnParam.apply _)
     }
 
-    case class Address(lineOne: String, lineTwo: Option[String], lineThree: Option[String], lineFour: Option[String], postalCode: String, countryCode: String)
+    final case class Address(lineOne: String,
+                             lineTwo: Option[String],
+                             lineThree: Option[String],
+                             lineFour: Option[String],
+                             postalCode: String,
+                             countryCode: String
+    )
 
     object Address {
       implicit val reads: Reads[Address] =
@@ -158,7 +163,7 @@ object RegistrationWithIdConnector {
           (JsPath \ "countryCode").read[String])(Address.apply _)
     }
 
-    case class ContactDetails(
+    final case class ContactDetails(
       landline: Option[String],
       mobile: Option[String],
       fax: Option[String],
@@ -173,7 +178,7 @@ object RegistrationWithIdConnector {
           (JsPath \ "emailAddress").readNullable[String])(ContactDetails.apply _)
     }
 
-    case class Individual(
+    final case class Individual(
       common: Common,
       detail: Individual.Detail
     ) extends GenericResponse
@@ -184,18 +189,18 @@ object RegistrationWithIdConnector {
         ((JsPath \ "registerWithIDResponse" \ "responseCommon").read[Common] and
           (JsPath \ "registerWithIDResponse" \ "responseDetail").read[Detail])(Individual.apply _)
 
-      case class Detail(safeId: String,
-                        arn: Option[String],
-                        firstName: String,
-                        middleName: Option[String],
-                        lastName: String,
-                        dateOfBirth: Option[String],
-                        address: Address,
-                        contactDetails: ContactDetails
+      final case class Detail(safeId: String,
+                              arn: Option[String],
+                              firstName: String,
+                              middleName: Option[String],
+                              lastName: String,
+                              dateOfBirth: Option[String],
+                              address: Address,
+                              contactDetails: ContactDetails
       ) extends GenericDetail
 
       object Detail {
-        implicit val reads: Reads[Detail] = ((JsPath \ "SAFEID").read[String] and
+        implicit lazy val reads: Reads[Detail] = ((JsPath \ "SAFEID").read[String] and
           (JsPath \ "ARN").readNullable[String] and
           (JsPath \ "individual" \ "firstName").read[String] and
           (JsPath \ "individual" \ "middleName").readNullable[String] and
@@ -207,22 +212,22 @@ object RegistrationWithIdConnector {
 
     }
 
-    case class Organisation(
+    final case class Organisation(
       common: Common,
       detail: Organisation.Detail
     ) extends GenericResponse
 
     object Organisation {
 
-      implicit val reads: Reads[Organisation] =
+      implicit lazy val reads: Reads[Organisation] =
         ((JsPath \ "registerWithIDResponse" \ "responseCommon").read[Common] and
           (JsPath \ "registerWithIDResponse" \ "responseDetail").read[Detail])(Organisation.apply _)
 
-      case class Detail(safeId: String, arn: Option[String], name: String, typeCode: Option[String], address: Address, contactDetails: ContactDetails)
+      final case class Detail(safeId: String, arn: Option[String], name: String, typeCode: Option[String], address: Address, contactDetails: ContactDetails)
           extends GenericDetail
 
       object Detail {
-        implicit val reads: Reads[Detail] =
+        implicit lazy val reads: Reads[Detail] =
           ((JsPath \ "SAFEID").read[String] and
             (JsPath \ "ARN").readNullable[String] and
             (JsPath \ "organisation" \ "organisationName").read[String] and
@@ -233,7 +238,7 @@ object RegistrationWithIdConnector {
 
     }
 
-    case class Error(statusCode: Int)
+    final case class Error(statusCode: Int)
 
   }
 }

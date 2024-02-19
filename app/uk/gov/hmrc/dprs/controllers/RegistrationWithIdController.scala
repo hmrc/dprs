@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.dprs.controllers
 
-import org.apache.pekko.util.ByteString
-import play.api.http.HttpEntity
 import play.api.libs.json._
-import play.api.mvc.{Action, ControllerComponents, ResponseHeader, Result}
+import play.api.mvc.{Action, ControllerComponents, Result}
 import uk.gov.hmrc.dprs.services.RegistrationService
 import uk.gov.hmrc.dprs.services.RegistrationService.Responses
 import uk.gov.hmrc.dprs.services.RegistrationService.Responses.{Error, ErrorCodeWithStatus}
@@ -56,15 +54,8 @@ class RegistrationWithIdController @Inject() (cc: ControllerComponents, registra
 
   private def handleServiceError(errorCodeWithStatus: ErrorCodeWithStatus): Result =
     errorCodeWithStatus match {
-      case ErrorCodeWithStatus(_, None) => InternalServerError("")
-      case ErrorCodeWithStatus(statusCode, Some(code)) =>
-        Result(
-          ResponseHeader(statusCode),
-          HttpEntity.Strict(
-            ByteString(Json.toJson(Seq(Error(code))).toString()),
-            Some("application/json")
-          )
-        )
+      case ErrorCodeWithStatus(_, None)                => InternalServerError
+      case ErrorCodeWithStatus(statusCode, Some(code)) => Status(statusCode)(Json.toJson(Seq(Error(code))))
     }
 
   private def convertForIndividual(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[Responses.Error] =

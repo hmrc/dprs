@@ -16,11 +16,6 @@ object AppDependencies {
   )
 
   val it = Seq(
-    "uk.gov.hmrc"       %% "bootstrap-test-play-30"  % bootstrapVersion % Test,
-    "org.wiremock" % "wiremock" % "3.3.1" % Test excludeAll (
-      ExclusionRule("org.slf4j"),
-      ExclusionRule("com.fasterxml.jackson.core"),
-      ExclusionRule("com.fasterxml.jackson.datatype")
-    )
+    "uk.gov.hmrc"       %% "bootstrap-test-play-30"  % bootstrapVersion % Test
   )
 }

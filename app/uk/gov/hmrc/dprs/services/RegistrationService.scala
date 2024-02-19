@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.services
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
-import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector
 import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Organisation
 import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Organisation.RequestId
@@ -30,6 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import java.text.SimpleDateFormat
 import java.time.{Clock, Instant}
 import javax.inject.Inject
+import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -75,11 +76,11 @@ object RegistrationService {
 
   object Requests {
 
-    case class Individual(id: Individual.RequestId, firstName: String, middleName: Option[String], lastName: String, dateOfBirth: String)
+    final case class Individual(id: Individual.RequestId, firstName: String, middleName: Option[String], lastName: String, dateOfBirth: String)
 
     object Individual {
 
-      case class RequestId(idType: RequestIdType, value: String)
+      final case class RequestId(idType: RequestIdType, value: String)
 
       object RequestId {
         implicit val reads: Reads[RequestId] =
@@ -115,11 +116,11 @@ object RegistrationService {
           (JsPath \ "dateOfBirth").read[String](minLength[String](1).keepAnd(verifying[String](isValidDate))))(Individual.apply _)
     }
 
-    case class Organisation(id: RequestId, name: String, _type: Organisation.Type)
+    final case class Organisation(id: RequestId, name: String, _type: Organisation.Type)
 
     object Organisation {
 
-      case class RequestId(idType: RequestIdType, value: String)
+      final case class RequestId(idType: RequestIdType, value: String)
 
       object RequestId {
         implicit val reads: Reads[RequestId] =
@@ -196,39 +197,30 @@ object RegistrationService {
       case object SAFE extends IdType
     }
 
-    case class Individual(ids: Seq[Id],
-                          firstName: String,
-                          middleName: Option[String],
-                          lastName: String,
-                          dateOfBirth: Option[String],
-                          address: Address,
-                          contactDetails: ContactDetails
+    final case class Individual(ids: Seq[Id],
+                                firstName: String,
+                                middleName: Option[String],
+                                lastName: String,
+                                dateOfBirth: Option[String],
+                                address: Address,
+                                contactDetails: ContactDetails
     )
 
     object Individual {
-      implicit val writes: Writes[Individual] =
+      implicit val writes: OWrites[Individual] =
         ((JsPath \ "ids").write[Seq[Id]] and
           (JsPath \ "firstName").write[String] and
           (JsPath \ "middleName").writeNullable[String] and
           (JsPath \ "lastName").write[String] and
           (JsPath \ "dateOfBirth").writeNullable[String] and
           (JsPath \ "address").write[Address] and
-          (JsPath \ "contactDetails").write[ContactDetails])(forIndividual =>
-          (forIndividual.ids,
-           forIndividual.firstName,
-           forIndividual.middleName,
-           forIndividual.lastName,
-           forIndividual.dateOfBirth,
-           forIndividual.address,
-           forIndividual.contactDetails
-          )
-        )
+          (JsPath \ "contactDetails").write[ContactDetails])(unlift(Individual.unapply))
     }
 
-    case class Organisation(ids: Seq[Id], name: String, _type: Organisation.Type, address: Address, contactDetails: ContactDetails)
+    final case class Organisation(ids: Seq[Id], name: String, _type: Organisation.Type, address: Address, contactDetails: ContactDetails)
 
     object Organisation {
-      implicit val writes: Writes[Organisation] =
+      implicit val writes: OWrites[Organisation] =
         ((JsPath \ "ids").write[Seq[Id]] and
           (JsPath \ "name").write[String] and
           (JsPath \ "type").write[String] and
@@ -241,7 +233,7 @@ object RegistrationService {
 
       object Type {
 
-        val all: Set[Type with Serializable] =
+        val all: Set[Type] =
           Set(NotSpecified, Partnership, LimitedLiabilityPartnership, CorporateBody, UnincorporatedBody, UnknownOrganisationType)
 
         case object NotSpecified extends Type
@@ -270,46 +262,48 @@ object RegistrationService {
       }
     }
 
-    case class Id(idType: String, value: String)
+    final case class Id(idType: String, value: String)
 
     object Id {
-      implicit val writes: Writes[Id] =
+      implicit val writes: OWrites[Id] =
         ((JsPath \ "type").write[String] and
-          (JsPath \ "value").write[String])(id => (id.idType, id.value))
+          (JsPath \ "value").write[String])(unlift(Id.unapply))
     }
 
-    case class Address(lineOne: String, lineTwo: Option[String], lineThree: Option[String], lineFour: Option[String], postalCode: String, countryCode: String)
+    final case class Address(lineOne: String,
+                             lineTwo: Option[String],
+                             lineThree: Option[String],
+                             lineFour: Option[String],
+                             postalCode: String,
+                             countryCode: String
+    )
 
     object Address {
-      implicit val writes: Writes[Address] =
+      implicit val writes: OWrites[Address] =
         ((JsPath \ "lineOne").write[String] and
           (JsPath \ "lineTwo").writeNullable[String] and
           (JsPath \ "lineThree").writeNullable[String] and
           (JsPath \ "lineFour").writeNullable[String] and
           (JsPath \ "postalCode").write[String] and
-          (JsPath \ "countryCode").write[String])(address =>
-          (address.lineOne, address.lineTwo, address.lineThree, address.lineFour, address.postalCode, address.countryCode)
-        )
+          (JsPath \ "countryCode").write[String])(unlift(Address.unapply))
     }
 
-    case class ContactDetails(landline: Option[String], mobile: Option[String], fax: Option[String], emailAddress: Option[String])
+    final case class ContactDetails(landline: Option[String], mobile: Option[String], fax: Option[String], emailAddress: Option[String])
 
     object ContactDetails {
-      implicit val writes: Writes[ContactDetails] =
+      implicit val writes: OWrites[ContactDetails] =
         ((JsPath \ "landline").writeNullable[String] and
           (JsPath \ "mobile").writeNullable[String] and
           (JsPath \ "fax").writeNullable[String] and
-          (JsPath \ "emailAddress").writeNullable[String])(contactDetails =>
-          (contactDetails.landline, contactDetails.mobile, contactDetails.fax, contactDetails.emailAddress)
-        )
+          (JsPath \ "emailAddress").writeNullable[String])(unlift(ContactDetails.unapply))
     }
 
-    case class ErrorCodeWithStatus(statusCode: Int, code: Option[String])
+    final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String])
 
-    case class Error(code: String)
+    final case class Error(code: String)
 
     object Error {
-      implicit val writes: Writes[Error] =
+      implicit val writes: OWrites[Error] =
         (JsPath \ "code").write[String].contramap(_.code)
     }
 
