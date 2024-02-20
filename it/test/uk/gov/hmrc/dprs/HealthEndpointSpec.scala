@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.config
+package uk.gov.hmrc.dprs
 
-import com.google.inject.AbstractModule
+class HealthEndpointSpec extends BaseIntegrationSpec {
 
-import java.time.{Clock, ZoneOffset}
+  "service health endpoint should" - {
+    "respond with 200 status" - {
+      val response =
+        wsClient
+          .url(s"$baseUrl/ping/ping")
+          .get()
+          .futureValue
 
-class Module extends AbstractModule {
-
-  override def configure(): Unit = {
-    bind(classOf[AppConfig]).asEagerSingleton()
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
+      response.status shouldBe 200
+    }
   }
 
 }

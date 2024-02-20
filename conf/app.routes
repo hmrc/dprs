@@ -1,3 +1,4 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.dprs.controllers.MicroserviceHelloWorldController.hello
+POST        /registrations/withId/individual          uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forIndividual()
+POST        /registrations/withId/organisation        uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forOrganisation()
