@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.config
+package uk.gov.hmrc.dprs.registration.withId
 
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
-import javax.inject.{Inject, Singleton}
+class BaseRegistrationWithIdSpec extends BaseIntegrationWithConnectorSpec {
 
-@Singleton
-class AppConfig @Inject() (servicesConfig: ServicesConfig) {
+  override val connectorPath                = "/dac6/dct70b/v1"
 
-  val registrationWithIdBaseUrl: String = generateBaseUrl("registration-with-id", "/dac6/dct70b/v1")
-
-  val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
-
-  private def generateBaseUrl(key: String, fallback: String): String =
-    servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)
+  override def extraApplicationConfig: Map[String, Any] = Map(
+    "microservice.services.registration-with-id.host"    -> wireMockHost,
+    "microservice.services.registration-with-id.port"    -> wireMockPort,
+    "microservice.services.registration-with-id.context" -> connectorPath
+  )
 
 }

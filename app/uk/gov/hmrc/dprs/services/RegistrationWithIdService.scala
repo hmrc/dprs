@@ -16,40 +16,39 @@
 
 package uk.gov.hmrc.dprs.services
 
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 import play.api.libs.json.{JsPath, OWrites, Reads}
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector
-import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Organisation
-import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Organisation.RequestId
-import uk.gov.hmrc.dprs.services.RegistrationService.Responses.IdType
-import uk.gov.hmrc.dprs.services.RegistrationService._
+import uk.gov.hmrc.dprs.connectors.{BaseConnector, RegistrationWithIdConnector}
+import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation.RequestId
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.IdType
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService._
+import uk.gov.hmrc.dprs.support.ValidationSupport
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.text.SimpleDateFormat
 import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
-class RegistrationService @Inject() (clock: Clock,
-                                     acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
-                                     registrationWithIdConnector: RegistrationWithIdConnector
-) {
+class RegistrationWithIdService @Inject() (clock: Clock,
+                                           acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
+                                           registrationWithIdConnector: RegistrationWithIdConnector
+) extends BaseService {
 
-  private val converter = new RegistrationService.Converter(clock, acknowledgementReferenceGenerator)
+  private val converter = new RegistrationWithIdService.Converter(clock, acknowledgementReferenceGenerator)
 
   def registerIndividual(
     request: Requests.Individual
   )(implicit
     headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
-  ): Future[Either[Responses.ErrorCodeWithStatus, Responses.Individual]] =
+  ): Future[Either[ErrorCodeWithStatus, Responses.Individual]] =
     registrationWithIdConnector.forIndividual(converter.convert(request)).map {
-      case Right(response)                                               => Right(converter.convert(response))
-      case Left(RegistrationWithIdConnector.Responses.Error(statusCode)) => Left(convert(statusCode))
+      case Right(response)                       => Right(converter.convert(response))
+      case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
     }
 
   def registerOrganisation(
@@ -57,22 +56,15 @@ class RegistrationService @Inject() (clock: Clock,
   )(implicit
     headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
-  ): Future[Either[Responses.ErrorCodeWithStatus, Responses.Organisation]] =
+  ): Future[Either[ErrorCodeWithStatus, Responses.Organisation]] =
     registrationWithIdConnector.forOrganisation(converter.convert(request)).map {
-      case Right(response)                                               => Right(converter.convert(response))
-      case Left(RegistrationWithIdConnector.Responses.Error(statusCode)) => Left(convert(statusCode))
+      case Right(response)                       => Right(converter.convert(response))
+      case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
     }
-
-  private def convert(errorStatusCode: Int): Responses.ErrorCodeWithStatus = errorStatusCode match {
-    case INTERNAL_SERVER_ERROR => Responses.ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-internal-server-error"))
-    case SERVICE_UNAVAILABLE   => Responses.ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-service-unavailable"))
-    case BAD_REQUEST           => Responses.ErrorCodeWithStatus(INTERNAL_SERVER_ERROR, None)
-    case otherStatusCode       => Responses.ErrorCodeWithStatus(otherStatusCode, None)
-  }
 
 }
 
-object RegistrationService {
+object RegistrationWithIdService {
 
   object Requests {
 
@@ -113,7 +105,7 @@ object RegistrationService {
           (JsPath \ "firstName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
           (JsPath \ "middleName").readNullable[String](minLength[String](1).keepAnd(maxLength[String](35))) and
           (JsPath \ "lastName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "dateOfBirth").read[String](minLength[String](1).keepAnd(verifying[String](isValidDate))))(Individual.apply _)
+          (JsPath \ "dateOfBirth").read[String](minLength[String](1).keepAnd(verifying[String](ValidationSupport.isValidDate))))(Individual.apply _)
     }
 
     final case class Organisation(id: RequestId, name: String, _type: Organisation.Type)
@@ -178,11 +170,6 @@ object RegistrationService {
           (JsPath \ "type").read[Type])(Organisation.apply _)
     }
 
-    private def isValidDate(rawDate: String): Boolean = {
-      val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
-      dateFormat.setLenient(false)
-      Try(dateFormat.parse(rawDate)).isSuccess
-    }
   }
 
   object Responses {
@@ -296,15 +283,6 @@ object RegistrationService {
           (JsPath \ "mobile").writeNullable[String] and
           (JsPath \ "fax").writeNullable[String] and
           (JsPath \ "emailAddress").writeNullable[String])(unlift(ContactDetails.unapply))
-    }
-
-    final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String])
-
-    final case class Error(code: String)
-
-    object Error {
-      implicit val writes: OWrites[Error] =
-        (JsPath \ "code").write[String].contramap(_.code)
     }
 
   }

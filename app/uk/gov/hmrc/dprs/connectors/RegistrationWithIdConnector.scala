@@ -17,48 +17,32 @@
 package uk.gov.hmrc.dprs.connectors
 
 import com.google.inject.Singleton
-import play.api.http.Status.BAD_REQUEST
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.{Request, Responses}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.UpstreamErrorResponse.Upstream5xxResponse
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
 
 @Singleton
-class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) {
+class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
 
   def forIndividual(
     request: Request
-  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[Responses.Error, Responses.Individual]] =
-    post[Responses.Individual](request)
+  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Responses.Individual]] =
+    post[RegistrationWithIdConnector.Request, Responses.Individual](request)
 
   def forOrganisation(
     request: Request
-  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[Responses.Error, Responses.Organisation]] =
-    post[Responses.Organisation](request)
+  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Responses.Organisation]] =
+    post[RegistrationWithIdConnector.Request, Responses.Organisation](request)
 
-  private def post[T](
-    request: Request
-  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext, httpReads: uk.gov.hmrc.http.HttpReads[T]): Future[Either[Responses.Error, T]] =
-    httpClientV2
-      .post(url())
-      .withBody(Json.toJson(request))
-      .execute[T]
-      .transform {
-        case Success(response)                           => Success(Right(response))
-        case Failure(Upstream5xxResponse(errorResponse)) => Success(Left(Responses.Error(errorResponse.statusCode)))
-        case Failure(_)                                  => Success(Left(Responses.Error(BAD_REQUEST)))
-      }
-
-  private def url() = url"${appConfig.registrationWithIdBaseUrl}"
+  override def url() = url"${appConfig.registrationWithIdBaseUrl}"
 
 }
 
@@ -237,8 +221,6 @@ object RegistrationWithIdConnector {
       }
 
     }
-
-    final case class Error(statusCode: Int)
 
   }
 }

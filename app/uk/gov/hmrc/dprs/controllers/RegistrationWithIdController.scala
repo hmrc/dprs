@@ -17,22 +17,20 @@
 package uk.gov.hmrc.dprs.controllers
 
 import play.api.libs.json._
-import play.api.mvc.{Action, ControllerComponents, Result}
-import uk.gov.hmrc.dprs.services.RegistrationService
-import uk.gov.hmrc.dprs.services.RegistrationService.Responses
-import uk.gov.hmrc.dprs.services.RegistrationService.Responses.{Error, ErrorCodeWithStatus}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import play.api.mvc.{Action, ControllerComponents}
+import uk.gov.hmrc.dprs.services.{BaseService, RegistrationWithIdService}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationWithIdController @Inject() (cc: ControllerComponents, registrationService: RegistrationService)(implicit executionContext: ExecutionContext)
-    extends BackendController(cc) {
+class RegistrationWithIdController @Inject() (cc: ControllerComponents, registrationWithIdService: RegistrationWithIdService)(implicit
+  executionContext: ExecutionContext
+) extends BaseController(cc) {
 
   def forIndividual(): Action[JsValue] = Action(parse.json).async { implicit request =>
-    request.body.validate[RegistrationService.Requests.Individual] match {
+    request.body.validate[RegistrationWithIdService.Requests.Individual] match {
       case JsSuccess(requestForIndividual, _) =>
-        registrationService.registerIndividual(requestForIndividual).map {
+        registrationWithIdService.registerIndividual(requestForIndividual).map {
           case Right(responseForIndividual) => Ok(Json.toJson(responseForIndividual))
           case Left(error)                  => handleServiceError(error)
         }
@@ -41,9 +39,9 @@ class RegistrationWithIdController @Inject() (cc: ControllerComponents, registra
   }
 
   def forOrganisation(): Action[JsValue] = Action(parse.json).async { implicit request =>
-    request.body.validate[RegistrationService.Requests.Organisation] match {
+    request.body.validate[RegistrationWithIdService.Requests.Organisation] match {
       case JsSuccess(requestForIndividual, _) =>
-        registrationService.registerOrganisation(requestForIndividual).map {
+        registrationWithIdService.registerOrganisation(requestForIndividual).map {
           case Right(responseForIndividual) => Ok(Json.toJson(responseForIndividual))
           case Left(error)                  => handleServiceError(error)
         }
@@ -52,13 +50,7 @@ class RegistrationWithIdController @Inject() (cc: ControllerComponents, registra
     }
   }
 
-  private def handleServiceError(errorCodeWithStatus: ErrorCodeWithStatus): Result =
-    errorCodeWithStatus match {
-      case ErrorCodeWithStatus(_, None)                => InternalServerError
-      case ErrorCodeWithStatus(statusCode, Some(code)) => Status(statusCode)(Json.toJson(Seq(Error(code))))
-    }
-
-  private def convertForIndividual(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[Responses.Error] =
+  private def convertForIndividual(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[BaseService.Error] =
     convert(
       errors,
       Map(
@@ -71,7 +63,7 @@ class RegistrationWithIdController @Inject() (cc: ControllerComponents, registra
       )
     )
 
-  private def convertForOrganisation(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[Responses.Error] =
+  private def convertForOrganisation(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[BaseService.Error] =
     convert(
       errors,
       Map(
@@ -81,19 +73,5 @@ class RegistrationWithIdController @Inject() (cc: ControllerComponents, registra
         "/type"     -> "invalid-type"
       )
     )
-
-  private def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
-                      fieldToErrorCode: Map[String, String]
-  ): Seq[Responses.Error] =
-    extractSimplePaths(errors)
-      .map(fieldToErrorCode.get(_).map(Error(_)))
-      .toSeq
-      .flatten
-
-  private def extractSimplePaths(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): collection.Seq[String] =
-    errors
-      .map(_._1)
-      .map(_.path)
-      .map(_.mkString)
 
 }

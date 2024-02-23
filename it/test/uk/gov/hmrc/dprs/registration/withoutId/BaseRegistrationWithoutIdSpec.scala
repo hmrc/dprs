@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs
+package uk.gov.hmrc.dprs.registration.withoutId
 
-import com.github.tomakehurst.wiremock.client.WireMock.{postRequestedFor, urlEqualTo, verify}
+import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
-class BaseRegistrationWithIdSpec extends BaseIntegrationSpec {
+class BaseRegistrationWithoutIdSpec extends BaseIntegrationWithConnectorSpec {
 
-  val connectorPath                         = "/dac6/dct70b/v1"
-  lazy val acknowledgementReference: String = fixedAcknowledgeReferenceGenerator.generate()
+  override val connectorPath                = "/dac6/dct70a/v1"
 
   override def extraApplicationConfig: Map[String, Any] = Map(
-    "microservice.services.registration-with-id.host"    -> wireMockHost,
-    "microservice.services.registration-with-id.port"    -> wireMockPort,
-    "microservice.services.registration-with-id.context" -> connectorPath
+    "microservice.services.registration-without-id.host"    -> wireMockHost,
+    "microservice.services.registration-without-id.port"    -> wireMockPort,
+    "microservice.services.registration-without-id.context" -> connectorPath
   )
 
-  def verifyThatDownstreamApiWasNotCalled(): Unit =
-    verify(0, postRequestedFor(urlEqualTo(connectorPath)))
 }

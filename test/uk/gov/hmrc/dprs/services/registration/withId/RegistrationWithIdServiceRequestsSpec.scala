@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.registration.withId
 
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.services.BaseSpec.{beInvalid, beValid}
+import uk.gov.hmrc.dprs.services.{BaseSpec, RegistrationWithIdService}
 
 import scala.collection.immutable
 
-class RegistrationServiceRequestsSpec extends BaseSpec {
+class RegistrationWithIdServiceRequestsSpec extends BaseSpec {
 
   "parsing JSON should give the expected result, when it concerns" - {
     "an individual, which is assumed to be" - {
-      import RegistrationService.Requests.Individual
-      import RegistrationService.Requests.Individual.RequestId
-      import RegistrationService.Requests.Individual.RequestIdType._
+      import RegistrationWithIdService.Requests.Individual
+      import RegistrationWithIdService.Requests.Individual.RequestId
+      import RegistrationWithIdService.Requests.Individual.RequestIdType._
       "valid" - {
         "with an id where the type is recognised" in {
           val types =
@@ -38,7 +39,7 @@ class RegistrationServiceRequestsSpec extends BaseSpec {
               ("EORI", "EORI")
             )
           forAll(types) { (_type, expectedRawType) =>
-            val expectedType = RegistrationService.Requests.Individual.RequestIdType.all.find(_.toString == expectedRawType).get
+            val expectedType = Individual.RequestIdType.all.find(_.toString == expectedRawType).get
             val rawJson =
               s"""
                 |{
@@ -460,10 +461,10 @@ class RegistrationServiceRequestsSpec extends BaseSpec {
       }
     }
     "an organisation, which is assumed to be" - {
-      import RegistrationService.Requests.Organisation
-      import RegistrationService.Requests.Organisation.RequestId
-      import RegistrationService.Requests.Organisation.RequestIdType._
-      import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Organisation.Type._
+      import RegistrationWithIdService.Requests.Organisation
+      import RegistrationWithIdService.Requests.Organisation.RequestId
+      import RegistrationWithIdService.Requests.Organisation.RequestIdType._
+      import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation.Type._
       "valid" - {
         "with a recognised id type" in {
           val types =
@@ -485,7 +486,7 @@ class RegistrationServiceRequestsSpec extends BaseSpec {
                 |}
                 |""".stripMargin
 
-            val expectedIdType = RegistrationService.Requests.Organisation.RequestIdType.all.find(_.toString == expectedRawIdType).get
+            val expectedIdType = Organisation.RequestIdType.all.find(_.toString == expectedRawIdType).get
             rawJson should beValid(
               Organisation(id = RequestId(expectedIdType, "1234567890"), "Dyson", CorporateBody)
             )
@@ -513,9 +514,9 @@ class RegistrationServiceRequestsSpec extends BaseSpec {
                 |  "type": "${_type}"
                 |}
                 |""".stripMargin
-            val _expectedType = RegistrationService.Requests.Organisation.Type.all.find(_.toString == expectedRawType).get
+            val expectedType = Organisation.Type.all.find(_.toString == expectedRawType).get
             rawJson should beValid(
-              Organisation(id = RequestId(UTR, "1234567890"), "Dyson", _expectedType)
+              Organisation(id = RequestId(UTR, "1234567890"), "Dyson", expectedType)
             )
           }
         }

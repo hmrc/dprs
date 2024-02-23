@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors
+package uk.gov.hmrc.dprs.connectors.registration.withId
 
 import play.api.libs.json.Json
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.Request

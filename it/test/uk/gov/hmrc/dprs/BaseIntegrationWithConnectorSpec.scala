@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.config
+package uk.gov.hmrc.dprs
 
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import com.github.tomakehurst.wiremock.client.WireMock.{getAllServeEvents, postRequestedFor, urlEqualTo, verify}
 
-import javax.inject.{Inject, Singleton}
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-@Singleton
-class AppConfig @Inject() (servicesConfig: ServicesConfig) {
+abstract class BaseIntegrationWithConnectorSpec extends BaseIntegrationSpec {
 
-  val registrationWithIdBaseUrl: String = generateBaseUrl("registration-with-id", "/dac6/dct70b/v1")
+  def connectorPath: String
 
-  val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
+  def verifyThatDownstreamApiWasCalled(): Unit =
+    getAllServeEvents.asScala.count(_.getWasMatched) shouldBe 1
 
-  private def generateBaseUrl(key: String, fallback: String): String =
-    servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)
-
+  def verifyThatDownstreamApiWasNotCalled(): Unit =
+    verify(0, postRequestedFor(urlEqualTo(connectorPath)))
 }

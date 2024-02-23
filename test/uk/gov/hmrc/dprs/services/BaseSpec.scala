@@ -21,12 +21,17 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.libs.json._
+import uk.gov.hmrc.dprs.FixedAcknowledgeReferenceGenerator
 import uk.gov.hmrc.dprs.services.BaseSpec.CustomMatchers.{BeInvalid, BeSameAs, BeValid}
 
 import java.time.{Clock, Instant, ZoneId}
+import java.util.UUID
 
 class BaseSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
-  val fixedClock: Clock = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
+  val acknowledgementReference          = UUID.randomUUID().toString
+  val acknowledgementReferenceGenerator = new FixedAcknowledgeReferenceGenerator(acknowledgementReference)
+  val fixedClock: Clock                 = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
+  val currentDateTime                   = Instant.now(fixedClock).toString
 }
 
 object BaseSpec {
