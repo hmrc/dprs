@@ -2424,7 +2424,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example"
+                        |        "emailAddress": "@example.com"
                         |    }
                         |}
                         |""".stripMargin)

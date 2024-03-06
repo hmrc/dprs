@@ -61,7 +61,10 @@ class ValidationSupportSpec extends BaseSpec {
           ("value", "verdict"),
           ("someone@example.com", true),
           ("bob,roberts@example.com", false),
-          ("someone@example", false),
+          ("someone@example", true),
+          ("someone@wtf", true),
+          ("someone@problems.wtf", true),
+          ("someone@apple", true),
           ("@example.com", false),
           ("Loremipsumdolorsitametconsetetursadipscingelitrseddiam@example.com", true)
         )

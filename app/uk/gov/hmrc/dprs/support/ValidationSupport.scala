@@ -27,7 +27,7 @@ object ValidationSupport {
 
   private val dateFormat                     = generateDateFormat()
   private val phoneNumberPattern: Regex      = raw"[A-Z0-9/)(\\\-*#+]*".r
-  private val emailValidator: EmailValidator = EmailValidator.getInstance(false)
+  private val emailValidator: EmailValidator = EmailValidator.getInstance(true)
 
   def isValidDate(rawDate: String): Boolean = Try(dateFormat.parse(rawDate)).isSuccess
 
