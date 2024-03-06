@@ -1,0 +1,4522 @@
+{
+	"info": {
+		"_postman_id": "e449888b-cdbb-43d2-a0fb-e806f6015b31",
+		"name": "Registration Without ID",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30217849"
+	},
+	"item": [
+		{
+			"name": "Individual",
+			"item": [
+				{
+					"name": "Success",
+					"item": [
+						{
+							"name": "Outside UK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"78 Rue Marie De Médicis\",\n        \"lineTwo\": \"Cambrai\",\n        \"lineThree\": \"Nord-Pas-de-Calais\",\n        \"countryCode\": \"FR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"registrations",
+										"withoutId",
+										"individual"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inside UK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"registrations",
+										"withoutId",
+										"individual"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Failure",
+					"item": [
+						{
+							"name": "Downstream",
+							"item": [
+								{
+									"name": "Internal Server Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000005000\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Bad Request",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Body is empty\", function () {",
+													"    pm.response.to.have.body(\"\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004000\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Service Unavailable",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000005030\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Conflict",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(409);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-conflict\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004090\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Invalid",
+							"item": [
+								{
+									"name": "First Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick Alexander John Fitzpatrick James\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Middle Name",
+									"item": [
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"Alexander John Fitzpatrick James Edward\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Last Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Alexander III, Earl Of Somewhere Else\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Date Of Birth",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Invalid Format",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"10-04-1970\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Doesn't Exist",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1977-02-29\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"individual"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Address",
+									"item": [
+										{
+											"name": "Line One",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"6000-6600 Great Peter Boulevard North\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Two",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building Number Two, Northwest Corner\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Three",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100, formerly the Presidential Suite\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Four",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester, United Kingdom of Great Britain and Northern Ireland\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Country Code",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GBR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Unrecognised",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"XX\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Postal Code",
+											"item": [
+												{
+													"name": "Expected But Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"509480494049\",\n        \"countryCode\": \"FR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Contact Details",
+									"item": [
+										{
+											"name": "Landline",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966747663966747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"£747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Mobile",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243383907562433839\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"£38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Fax",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"583718130205837181302058371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"£58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Email Address",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
+																	"});",
+																	"",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"individual"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Organisation",
+			"item": [
+				{
+					"name": "Success",
+					"item": [
+						{
+							"name": "Outside UK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"registrations",
+										"withoutId",
+										"organisation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Inside UK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"78 Rue Marie De Médicis\",\n        \"lineTwo\": \"Cambrai\",\n        \"lineThree\": \"Nord-Pas-de-Calais\",\n        \"countryCode\": \"FR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"registrations",
+										"withoutId",
+										"organisation"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Failure",
+					"item": [
+						{
+							"name": "Downstream",
+							"item": [
+								{
+									"name": "Internal Server Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000005000\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Bad Request",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Body is empty\", function () {",
+													"    pm.response.to.have.body(\"\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004000\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Service Unavailable",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000005030\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Conflict",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(409);",
+													"});",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-conflict\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004090\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Invalid",
+							"item": [
+								{
+									"name": "Name",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"name\": \"\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"name\": \"The Dyson Electronics Company Of Great Britain And Northern Ireland (aka The Dyson Electronics Company Of Great Britain And Northern Ireland)\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"registrations",
+														"withoutId",
+														"organisation"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Address",
+									"item": [
+										{
+											"name": "Line One",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"6000-6600 Great Peter Boulevard North\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Two",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building Number Two, Northwest Corner\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Three",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100, formerly the Presidential Suite\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Line Four",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester, United Kingdom of Great Britain and Northern Ireland\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Country Code",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GBR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Unrecognised",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"XX\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Postal Code",
+											"item": [
+												{
+													"name": "Expected But Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"509480494049\",\n        \"countryCode\": \"FR\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Contact Details",
+									"item": [
+										{
+											"name": "Landline",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966747663966747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"£747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Mobile",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243383907562433839\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code is 400\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"£38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Fax",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"583718130205837181302058371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"£58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Email Address",
+											"item": [
+												{
+													"name": "Blank",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
+																	"});",
+																	"",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Invalid Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"@example.com\"\n    }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"registrations",
+																"withoutId",
+																"organisation"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:20001/dprs",
+			"type": "string"
+		}
+	]
+}

@@ -138,11 +138,103 @@ curl 'http://localhost:20001/dprs/registrations/withId/organisation' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/RegistrationWithIdSpec.scala).
+To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/RegistrationWithIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/RegistrationWithIdForAnOrganisationSpec.scala).
+
+### Registration (Without ID)
+
+Here's an example of a successful call, firstly with an individual:
+
+``` 
+curl 'http://localhost:20001/dprs/registrations/withoutId/individual' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "firstName": "Patrick",
+    "middleName": "John",
+    "lastName": "Dyson",
+    "dateOfBirth": "1970-10-04",
+    "address": {
+        "lineOne": "34 Park Lane",
+        "lineTwo": "Building A",
+        "lineThree": "Suite 100",
+        "lineFour": "Manchester",
+        "postalCode": "M54 1MQ",
+        "countryCode": "GB"
+    },
+    "contactDetails": {
+        "landline": "747663966",
+        "mobile": "38390756243",
+        "fax": "58371813020",
+        "emailAddress": "Patrick.Dyson@example.com"
+    }
+}'
+```
+
+```json
+{
+  "ids": [
+    {
+      "type": "ARN",
+      "value": "ZARN5574814"
+    },
+    {
+      "type": "SAFE",
+      "value": "XE2986131148578"
+    },
+    {
+      "type": "SAP",
+      "value": "5094800652"
+    }
+  ]
+}
+```
+
+And here's one for an organisation:
+
+``` 
+curl 'http://localhost:20001/dprs/registrations/withoutId/organisation' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Dyson",
+    "address": {
+        "lineOne": "78 Rue Marie De Médicis",
+        "lineTwo": "Cambrai",
+        "lineThree": "Nord-Pas-de-Calais",
+        "countryCode": "FR"
+    },
+    "contactDetails": {
+        "landline": "747663966",
+        "mobile": "38390756243",
+        "fax": "58371813020",
+        "emailAddress": "dyson@example.com"
+    }
+}'
+```
+
+```json
+{
+  "ids": [
+    {
+      "type": "ARN",
+      "value": "ZARN5574814"
+    },
+    {
+      "type": "SAFE",
+      "value": "XE2986131148578"
+    },
+    {
+      "type": "SAP",
+      "value": "5094800652"
+    }
+  ]
+}
+```
+
+To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/RegistrationWithoutIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/RegistrationWithoutIdForAnOrganisationSpec.scala).
+
 
 ## Demo ([Postman](https://www.postman.com/downloads/))
 
-You can explore [the various Postman collections](etc/postman) (currently only the one).
+You can explore [the various Postman collections](etc/postman).
 
 If you want to run them on the CLI via [Newman](https://learning.postman.com/docs/collections/using-newman-cli/installing-running-newman/):
 
@@ -150,13 +242,7 @@ If you want to run them on the CLI via [Newman](https://learning.postman.com/doc
 npm install -g newman
 ```
 
-Assuming that `DPRS_STUBS` is already running, as well as this application. you can run all the collections with:
-
-``` 
-newman run ./etc/postman/*.json
-```
-
-Or just a single one:
+Assuming that `DPRS_STUBS` is already running, as well as this application. you can run any collections with, for example:
 
 ``` 
 newman run ./etc/postman/RegistrationWithID.json

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.registration.withId
 
 import play.api.libs.json.Json
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
-import uk.gov.hmrc.dprs.services.RegistrationService.Responses
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.Individual
 
-class RegistrationServiceResponsesSpec extends BaseSpec {
+class RegistrationWithIdServiceResponsesSpec extends BaseSpec {
 
-  "writing to JSON should give the expected object, when it concerns" - {
+  "writing to JSON should give the expected output, when it concerns" - {
     "an individual" in {
-      import uk.gov.hmrc.dprs.services.RegistrationService.Responses.Individual
       val individual = Individual(
         ids = Seq(
           Responses.Id("ARN", "WARN3849921"),

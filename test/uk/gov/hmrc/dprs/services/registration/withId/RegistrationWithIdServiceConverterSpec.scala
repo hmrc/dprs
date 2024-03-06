@@ -14,27 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.registration.withId
 
-import uk.gov.hmrc.dprs.FixedAcknowledgeReferenceGenerator
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector
-import uk.gov.hmrc.dprs.services.RegistrationService.Requests.Individual
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Individual
+import uk.gov.hmrc.dprs.services.RegistrationWithIdService.{Requests, Responses}
+import uk.gov.hmrc.dprs.services.{BaseSpec, RegistrationWithIdService}
 
-import java.time.Instant
-import java.util.UUID
+class RegistrationWithIdServiceConverterSpec extends BaseSpec {
 
-class RegistrationServiceConverterSpec extends BaseSpec {
-
-  private val acknowledgementRef                = UUID.randomUUID().toString
-  private val acknowledgementReferenceGenerator = new FixedAcknowledgeReferenceGenerator(acknowledgementRef)
-  private val converter                         = new RegistrationService.Converter(fixedClock, acknowledgementReferenceGenerator)
-  private val currentDateTime                   = Instant.now(fixedClock).toString
+  private val converter = new RegistrationWithIdService.Converter(fixedClock, acknowledgementReferenceGenerator)
 
   "when converting from" - {
-    "a service to a connector request, for" - {
+    "a service request to a connector request, for" - {
       "an individual" in {
-        val serviceRequest = RegistrationService.Requests.Individual(
-          id = RegistrationService.Requests.Individual.RequestId(idType = Individual.RequestIdType.NINO, value = "AA000000A"),
+        val serviceRequest = Requests.Individual(
+          id = Requests.Individual.RequestId(idType = Individual.RequestIdType.NINO, value = "AA000000A"),
           firstName = "Patrick",
           middleName = Some("John"),
           lastName = "Dyson",
@@ -47,7 +42,7 @@ class RegistrationServiceConverterSpec extends BaseSpec {
           common = RegistrationWithIdConnector.Request.Common(
             receiptDate = currentDateTime,
             regime = "MDR",
-            acknowledgementReference = acknowledgementRef
+            acknowledgementReference = acknowledgementReference
           ),
           detail = RegistrationWithIdConnector.Request.Detail(
             idType = "NINO",
@@ -73,10 +68,9 @@ class RegistrationServiceConverterSpec extends BaseSpec {
           )
 
         forAll(types) { (rawType, expectedCode) =>
-          val _type = RegistrationService.Requests.Organisation.Type.all.find(_.toString == rawType).get
-          val serviceRequest = RegistrationService.Requests.Organisation(
-            id =
-              RegistrationService.Requests.Organisation.RequestId(idType = RegistrationService.Requests.Organisation.RequestIdType.UTR, value = "1234567890"),
+          val _type = Requests.Organisation.Type.all.find(_.toString == rawType).get
+          val serviceRequest = Requests.Organisation(
+            id = Requests.Organisation.RequestId(idType = Requests.Organisation.RequestIdType.UTR, value = "1234567890"),
             name = "Dyson",
             _type = _type
           )
@@ -84,7 +78,8 @@ class RegistrationServiceConverterSpec extends BaseSpec {
           val connectorRequest = converter.convert(serviceRequest)
 
           connectorRequest shouldBe RegistrationWithIdConnector.Request(
-            common = RegistrationWithIdConnector.Request.Common(receiptDate = currentDateTime, regime = "MDR", acknowledgementReference = acknowledgementRef),
+            common =
+              RegistrationWithIdConnector.Request.Common(receiptDate = currentDateTime, regime = "MDR", acknowledgementReference = acknowledgementReference),
             detail = RegistrationWithIdConnector.Request.Detail(
               idType = "UTR",
               idNumber = "1234567890",
@@ -97,7 +92,7 @@ class RegistrationServiceConverterSpec extends BaseSpec {
         }
       }
     }
-    "a connector to a service response, for" - {
+    "a connector response to a service response, for" - {
       "an individual" in {
         val connectorResponse = RegistrationWithIdConnector.Responses.Individual(
           common = RegistrationWithIdConnector.Responses.Common(
@@ -130,17 +125,17 @@ class RegistrationServiceConverterSpec extends BaseSpec {
 
         val serviceResponse = converter.convert(connectorResponse)
 
-        serviceResponse shouldBe RegistrationService.Responses.Individual(
+        serviceResponse shouldBe Responses.Individual(
           ids = Seq(
-            RegistrationService.Responses.Id("ARN", "WARN3849921"),
-            RegistrationService.Responses.Id("SAFE", "XE0000200775706"),
-            RegistrationService.Responses.Id("SAP", "1960629967")
+            Responses.Id("ARN", "WARN3849921"),
+            Responses.Id("SAFE", "XE0000200775706"),
+            Responses.Id("SAP", "1960629967")
           ),
           firstName = "Patrick",
           middleName = Some("John"),
           lastName = "Dyson",
           dateOfBirth = Some("1970-10-04"),
-          address = RegistrationService.Responses.Address(
+          address = Responses.Address(
             lineOne = "26424 Cecelia Junction",
             lineTwo = Some("Suite 858"),
             lineThree = Some("-"),
@@ -148,10 +143,10 @@ class RegistrationServiceConverterSpec extends BaseSpec {
             postalCode = "OX2 3HD",
             countryCode = "AD"
           ),
-          contactDetails = RegistrationService.Responses.ContactDetails(landline = Some("747663966"),
-                                                                        mobile = Some("38390756243"),
-                                                                        fax = Some("58371813020"),
-                                                                        emailAddress = Some("Patrick.Dyson@example.com")
+          contactDetails = Responses.ContactDetails(landline = Some("747663966"),
+                                                    mobile = Some("38390756243"),
+                                                    fax = Some("58371813020"),
+                                                    emailAddress = Some("Patrick.Dyson@example.com")
           )
         )
 
@@ -170,7 +165,7 @@ class RegistrationServiceConverterSpec extends BaseSpec {
           )
 
         forAll(types) { (code, expectedRawType) =>
-          val expectedType = RegistrationService.Responses.Organisation.Type.all.find(_.toString == expectedRawType).get
+          val expectedType = Responses.Organisation.Type.all.find(_.toString == expectedRawType).get
           val connectorResponse = RegistrationWithIdConnector.Responses.Organisation(
             common =
               RegistrationWithIdConnector.Responses.Common(returnParams = Seq(RegistrationWithIdConnector.Responses.ReturnParam("SAP_NUMBER", "8231791429"))),
@@ -196,25 +191,25 @@ class RegistrationServiceConverterSpec extends BaseSpec {
 
           val serviceResponse = converter.convert(connectorResponse)
 
-          serviceResponse shouldBe RegistrationService.Responses.Organisation(
+          serviceResponse shouldBe Responses.Organisation(
             ids = Seq(
-              RegistrationService.Responses.Id(idType = "ARN", value = "WARN1442450"),
-              RegistrationService.Responses.Id(idType = "SAFE", value = "XE0000586571722"),
-              RegistrationService.Responses.Id(idType = "SAP", value = "8231791429")
+              Responses.Id(idType = "ARN", value = "WARN1442450"),
+              Responses.Id(idType = "SAFE", value = "XE0000586571722"),
+              Responses.Id(idType = "SAP", value = "8231791429")
             ),
             name = "Dyson",
             _type = expectedType,
-            address = RegistrationService.Responses.Address(lineOne = "2627 Gus Hill",
-                                                            lineTwo = Some("Apt. 898"),
-                                                            lineThree = Some("-"),
-                                                            lineFour = Some("West Corrinamouth"),
-                                                            postalCode = "OX2 3HD",
-                                                            countryCode = "AD"
+            address = Responses.Address(lineOne = "2627 Gus Hill",
+                                        lineTwo = Some("Apt. 898"),
+                                        lineThree = Some("-"),
+                                        lineFour = Some("West Corrinamouth"),
+                                        postalCode = "OX2 3HD",
+                                        countryCode = "AD"
             ),
-            contactDetails = RegistrationService.Responses.ContactDetails(landline = Some("176905117"),
-                                                                          mobile = Some("62281724761"),
-                                                                          fax = Some("08959633679"),
-                                                                          emailAddress = Some("edward.goodenough@example.com")
+            contactDetails = Responses.ContactDetails(landline = Some("176905117"),
+                                                      mobile = Some("62281724761"),
+                                                      fax = Some("08959633679"),
+                                                      emailAddress = Some("edward.goodenough@example.com")
             )
           )
 

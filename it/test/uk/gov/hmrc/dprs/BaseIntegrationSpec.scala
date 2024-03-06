@@ -15,7 +15,6 @@
  */
 
 package uk.gov.hmrc.dprs
-import com.github.tomakehurst.wiremock.client.WireMock.getAllServeEvents
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
@@ -32,9 +31,8 @@ import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
 
 import java.time.{Clock, Instant, ZoneId}
 import java.util.UUID
-import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-class BaseIntegrationSpec
+abstract class BaseIntegrationSpec
     extends AnyFreeSpec
     with Matchers
     with ScalaFutures
@@ -48,6 +46,7 @@ class BaseIntegrationSpec
   lazy val fixedClock: Clock                  = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
   lazy val fixedAcknowledgeReferenceGenerator = new FixedAcknowledgeReferenceGenerator(UUID.randomUUID().toString)
   lazy val currentDateAndTime: String         = Instant.now(fixedClock).toString
+  lazy val acknowledgementReference: String = fixedAcknowledgeReferenceGenerator.generate()
 
   override def fakeApplication(): Application =
     baseApplicationBuilder()
@@ -66,9 +65,6 @@ class BaseIntegrationSpec
       )
 
   def fullUrl(path: String): String = baseUrl + "/dprs" + path
-
-  def verifyThatDownstreamApiWasCalled(): Unit =
-    getAllServeEvents.asScala.count(_.getWasMatched) shouldBe 1
 
   def assertAsExpected(response: WSResponse, status: Int, jsonBodyOpt: Option[String] = None): Unit = {
     response should haveStatus(status)

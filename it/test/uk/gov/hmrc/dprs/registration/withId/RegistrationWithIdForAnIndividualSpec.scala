@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs
+package uk.gov.hmrc.dprs.registration.withId
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status._

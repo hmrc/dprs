@@ -1,4 +1,7 @@
 # microservice specific routes
 
-POST        /registrations/withId/individual          uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forIndividual()
-POST        /registrations/withId/organisation        uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forOrganisation()
+POST        /registrations/withId/individual             uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forIndividual()
+POST        /registrations/withId/organisation           uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forOrganisation()
+
+POST        /registrations/withoutId/individual          uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forIndividual()
+POST        /registrations/withoutId/organisation        uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forOrganisation()
