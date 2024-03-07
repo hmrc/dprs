@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.services.registration.withoutId
 
-import play.api.libs.json.Json
+import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
 import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.Responses.{Id, Individual, Organisation}
@@ -29,7 +29,7 @@ class RegistrationWithoutIdServiceResponsesSpec extends BaseSpec {
         Seq(Id("ARN", "WARN3849921"), Id("SAFE", "XE0000200775706"), Id("SAP", "1960629967"), Id("AAA", "6709b659-6be1-4bde-8a77-f42ab7b5b8ba"))
       )
 
-      val json = Json.toJson(individual)
+      val json = toJson(individual)
 
       json should beSameAs("""
           |{
@@ -60,7 +60,7 @@ class RegistrationWithoutIdServiceResponsesSpec extends BaseSpec {
         Seq(Id("ARN", "WARN3849921"), Id("SAFE", "XE0000200775706"), Id("SAP", "1960629967"), Id("XXX", "6709b659-6be1-4bde-8a77-f42ab7b5b8ba"))
       )
 
-      val json = Json.toJson(organisation)
+      val json = toJson(organisation)
       json should beSameAs("""
           |{
           |  "ids": [

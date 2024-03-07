@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.connectors.registration.withoutId
 
-import play.api.libs.json.Json
+import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.connectors.RegistrationWithoutIdConnector.Request
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
@@ -47,7 +47,7 @@ class RegistrationWithoutIdConnectorRequestSpec extends BaseSpec {
         )
       )
 
-      val json = Json.toJson(request)
+      val json = toJson(request)
 
       json should beSameAs(s"""
            |{
@@ -104,7 +104,7 @@ class RegistrationWithoutIdConnectorRequestSpec extends BaseSpec {
         )
       )
 
-      val json = Json.toJson(request)
+      val json = toJson(request)
 
       json should beSameAs(s"""
                               |{

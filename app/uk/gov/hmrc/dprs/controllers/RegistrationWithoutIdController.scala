@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.dprs.controllers
 
+import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.dprs.services.{BaseService, RegistrationWithoutIdService}
@@ -31,10 +32,10 @@ class RegistrationWithoutIdController @Inject() (cc: ControllerComponents, regis
     request.body.validate[RegistrationWithoutIdService.Requests.Individual] match {
       case JsSuccess(requestForIndividual, _) =>
         registrationWithoutIdService.registerIndividual(requestForIndividual).map {
-          case Right(responseForIndividual) => Ok(Json.toJson(responseForIndividual))
+          case Right(responseForIndividual) => Ok(toJson(responseForIndividual))
           case Left(error)                  => handleServiceError(error)
         }
-      case JsError(errors) => Future.successful(BadRequest(Json.toJson(convertForIndividual(errors))))
+      case JsError(errors) => Future.successful(BadRequest(toJson(convertForIndividual(errors))))
     }
   }
 
@@ -42,11 +43,11 @@ class RegistrationWithoutIdController @Inject() (cc: ControllerComponents, regis
     request.body.validate[RegistrationWithoutIdService.Requests.Organisation] match {
       case JsSuccess(requestForOrganisation, _) =>
         registrationWithoutIdService.registerOrganisation(requestForOrganisation).map {
-          case Right(responseForIndividual) => Ok(Json.toJson(responseForIndividual))
+          case Right(responseForIndividual) => Ok(toJson(responseForIndividual))
           case Left(error)                  => handleServiceError(error)
         }
       case JsError(errors: collection.Seq[(JsPath, collection.Seq[JsonValidationError])]) =>
-        Future.successful(BadRequest(Json.toJson(convertForOrganisation(errors))))
+        Future.successful(BadRequest(toJson(convertForOrganisation(errors))))
     }
   }
 

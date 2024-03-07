@@ -138,7 +138,7 @@ curl 'http://localhost:20001/dprs/registrations/withId/organisation' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/RegistrationWithIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/RegistrationWithIdForAnOrganisationSpec.scala).
+To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnOrganisationSpec.scala).
 
 ### Registration (Without ID)
 
@@ -229,7 +229,49 @@ curl 'http://localhost:20001/dprs/registrations/withoutId/organisation' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/RegistrationWithoutIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/RegistrationWithoutIdForAnOrganisationSpec.scala).
+To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnOrganisationSpec.scala).
+
+### Create Subscription
+
+Here's an example of a successful call:
+
+``` 
+curl 'http://localhost:20001/dprs/subscriptions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": {
+        "type": "NINO",
+        "value": "AA000000A"
+    },
+    "name": "Harold Winter",
+    "contacts": [
+        {
+            "type": "I",
+            "firstName": "Patrick",
+            "middleName": "John",
+            "lastName": "Dyson",
+            "landline": "747663966",
+            "mobile": "38390756243",
+            "emailAddress": "Patrick.Dyson@example.com"
+        },
+        {
+            "type": "O",
+            "name": "Dyson",
+            "landline": "847663966",
+            "mobile": "48390756243",
+            "emailAddress": "info@example.com"
+        }
+    ]
+}'
+```
+
+``` 
+{
+  "id": "XAMDR0000XE0000526017"
+}
+```
+
+To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/CreateSubscriptionSpec.scala).
 
 
 ## Demo ([Postman](https://www.postman.com/downloads/))
@@ -250,7 +292,7 @@ newman run ./etc/postman/RegistrationWithID.json
 
 ## Dev
 
-Before pushing, you can run [verify.sh](./verify.sh) which will run all of the tests, as well as check the format.
+Before pushing, you can run [verify.sh](./verify.sh) which will run all the tests, as well as check the format.
 
 ### Tests
 

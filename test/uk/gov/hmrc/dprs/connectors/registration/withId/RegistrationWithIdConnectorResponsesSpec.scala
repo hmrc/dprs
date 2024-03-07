@@ -18,6 +18,7 @@ package uk.gov.hmrc.dprs.connectors.registration.withId
 
 import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.Responses
 import uk.gov.hmrc.dprs.services.BaseSpec
+import uk.gov.hmrc.dprs.services.BaseSpec.beValid
 
 class RegistrationWithIdConnectorResponsesSpec extends BaseSpec {
 
@@ -68,7 +69,7 @@ class RegistrationWithIdConnectorResponsesSpec extends BaseSpec {
           |}
           |""".stripMargin
 
-      rawJson should BaseSpec.beValid(
+      rawJson should beValid(
         Responses.Individual(
           common = Responses.Common(returnParams = Seq(Responses.ReturnParam("SAP_NUMBER", "1960629967"))),
           detail = Responses.Individual.Detail(
@@ -140,7 +141,7 @@ class RegistrationWithIdConnectorResponsesSpec extends BaseSpec {
           |}
           |""".stripMargin
 
-      rawJson should BaseSpec.beValid(
+      rawJson should beValid(
         Responses.Organisation(
           common = Responses.Common(returnParams = Seq(Responses.ReturnParam("SAP_NUMBER", "1960629967"))),
           detail = Responses.Organisation.Detail(

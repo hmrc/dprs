@@ -24,8 +24,19 @@ abstract class BaseIntegrationWithConnectorSpec extends BaseIntegrationSpec {
 
   def connectorPath: String
 
-  def verifyThatDownstreamApiWasCalled(): Unit =
-    getAllServeEvents.asScala.count(_.getWasMatched) shouldBe 1
+  def connectorName: String
+
+  override def extraApplicationConfig: Map[String, Any] = Map(
+    s"microservice.services.$connectorName.host"    -> wireMockHost,
+    s"microservice.services.$connectorName.port"    -> wireMockPort,
+    s"microservice.services.$connectorName.context" -> connectorPath
+  )
+
+  def verifyThatDownstreamApiWasCalled(): Unit = {
+    withClue("We expected a single downstream API (stub) to be called, but it wasn't.") {
+      getAllServeEvents.asScala.count(_.getWasMatched) shouldBe 1
+    }
+  }
 
   def verifyThatDownstreamApiWasNotCalled(): Unit =
     verify(0, postRequestedFor(urlEqualTo(connectorPath)))

@@ -1,0 +1,2588 @@
+{
+	"info": {
+		"_postman_id": "0e08079e-d520-467d-a725-e0c6567cc183",
+		"name": "Subscription",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30217849"
+	},
+	"item": [
+		{
+			"name": "Creation",
+			"item": [
+				{
+					"name": "Success",
+					"item": [
+						{
+							"name": "One Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has an id\", function () {",
+											"    pm.expect(pm.response.json().id).to.eql(\"XAMDR0000XE0000526017\")",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/subscriptions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "One Contact But No Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has an id\", function () {",
+											"    pm.expect(pm.response.json().id).to.eql(\"XAMDR0000XE0000526017\")",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/subscriptions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Two Contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has an id\", function () {",
+											"    pm.expect(pm.response.json().id).to.eql(\"XAMDR0000XE0000526017\")",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/subscriptions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Failure",
+					"item": [
+						{
+							"name": "Downstream",
+							"item": [
+								{
+									"name": "Internal Server Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000500\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/subscriptions",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"subscriptions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Bad Request",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"pm.test(\"Body is empty\", function () {",
+													"    pm.response.to.have.body(\"\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000400\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/subscriptions",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"subscriptions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Service Unavailable",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000503\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/subscriptions",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"subscriptions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Conflict",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(409);",
+													"});",
+													"",
+													"",
+													"pm.test(\"Has only one error code\", function () {",
+													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"});",
+													"",
+													"pm.test(\"Error code is as expected\", function () {",
+													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-conflict\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000409\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/subscriptions",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"subscriptions"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Invalid",
+							"item": [
+								{
+									"name": "Id / Type",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"VAT\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Id / Value",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000AAA00000\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Name",
+									"item": [
+										{
+											"name": "Blank",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000\"\n    },\n    \"name\": \"\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Has only one error code\", function () {",
+															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"});",
+															"",
+															"pm.test(\"Error code is as expected\", function () {",
+															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000\"\n    },\n    \"name\": \"Harold Winter, III, Earl Of East Mountain & North River, Duke Of South Wales, Phd\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/subscriptions",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"subscriptions"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Contacts",
+									"item": [
+										{
+											"name": "Number",
+											"item": [
+												{
+													"name": "None",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-number-of-contacts\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n    ]\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/subscriptions",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"subscriptions"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Three",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-number-of-contacts\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        },\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patricia\",\n            \"middleName\": \"Jane\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663967\",\n            \"mobile\": \"38390756244\",\n            \"emailAddress\": \"Patricia.Dyson@example.com\"\n        }\n    ]\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/subscriptions",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"subscriptions"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Individual",
+											"item": [
+												{
+													"name": "First Name",
+													"item": [
+														{
+															"name": "Absent",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-first-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-first-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-first-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick Alexander John Fitzpatrick James\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Middle Name",
+													"item": [
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-middle-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-middle-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"Alexander John Fitzpatrick James Edward\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Last Name",
+													"item": [
+														{
+															"name": "Absent",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-last-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-last-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-last-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Alexander III, Earl Of Somewhere Else\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Landline",
+													"item": [
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966747663966747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"£747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Mobile",
+													"item": [
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243383907562433839\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"£48390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Email Address",
+													"item": [
+														{
+															"name": "Absent",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"loremipsumdolorsitametconsetetursadipscingelitrseddiamnonumyeirmodtemporinviduntutlaboreetdoloremagnLoremipsumdolorsisum@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												}
+											]
+										},
+										{
+											"name": "Organisation",
+											"item": [
+												{
+													"name": "Name",
+													"item": [
+														{
+															"name": "Absent",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-name\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"The Dyson Electronics Company Of Great Britain And Northern Ireland (aka The Dyson Electronics Company Of Great Britain And Northern Ireland)\",\n            \"landline\": \"847663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Landline",
+													"item": [
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966747663966747663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-landline\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"£747663966\",\n            \"mobile\": \"48390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Mobile",
+													"item": [
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243383907562433839\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-mobile\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"£38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "Email Address",
+													"item": [
+														{
+															"name": "Absent",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Blank",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Too Long",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"loremipsumdolorsitametconsetetursadipscingelitrseddiamnonumyeirmodtemporinviduntutlaboreetdoloremagnLoremipsumdolorsisum@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Invalid Format",
+															"event": [
+																{
+																	"listen": "test",
+																	"script": {
+																		"exec": [
+																			"pm.test(\"Status code as expected\", function () {",
+																			"    pm.response.to.have.status(400);",
+																			"});",
+																			"",
+																			"pm.test(\"Has only one error code\", function () {",
+																			"    pm.expect(pm.response.json().length).to.equal(1);",
+																			"});",
+																			"",
+																			"pm.test(\"Error code is as expected\", function () {",
+																			"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																			"});",
+																			"",
+																			""
+																		],
+																		"type": "text/javascript"
+																	}
+																}
+															],
+															"request": {
+																"method": "POST",
+																"header": [],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"@example.com\"\n        }\n    ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{BASE_URL}}/subscriptions",
+																	"host": [
+																		"{{BASE_URL}}"
+																	],
+																	"path": [
+																		"subscriptions"
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												}
+											]
+										},
+										{
+											"name": "Type",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-1-type\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"O\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/subscriptions",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"subscriptions"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Unrecognised",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Has only one error code\", function () {",
+																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"});",
+																	"",
+																	"pm.test(\"Error code is as expected\", function () {",
+																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-2-type\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript"
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"AA000000A\"\n    },\n    \"name\": \"Harold Winter\",\n    \"contacts\": [\n        {\n            \"type\": \"I\",\n            \"firstName\": \"Patrick\",\n            \"middleName\": \"John\",\n            \"lastName\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"Patrick.Dyson@example.com\"\n        },\n        {\n            \"type\": \"X\",\n            \"name\": \"Dyson\",\n            \"landline\": \"747663966\",\n            \"mobile\": \"38390756243\",\n            \"emailAddress\": \"info@example.com\"\n        }\n    ]\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/subscriptions",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"subscriptions"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:20001/dprs",
+			"type": "string"
+		}
+	]
+}

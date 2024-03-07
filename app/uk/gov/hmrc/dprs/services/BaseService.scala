@@ -26,15 +26,15 @@ abstract class BaseService {
     case INTERNAL_SERVER_ERROR => ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-internal-server-error"))
     case SERVICE_UNAVAILABLE   => ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-service-unavailable"))
     case CONFLICT              => ErrorCodeWithStatus(CONFLICT, Some("eis-returned-conflict"))
-    case BAD_REQUEST           => ErrorCodeWithStatus(INTERNAL_SERVER_ERROR, None)
-    case otherStatusCode       => ErrorCodeWithStatus(otherStatusCode, None)
+    case BAD_REQUEST           => ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
+    case otherStatusCode       => ErrorCodeWithStatus(otherStatusCode)
   }
 
 }
 
 object BaseService {
 
-  final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String])
+  final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String] = None)
 
   final case class Error(code: String)
 

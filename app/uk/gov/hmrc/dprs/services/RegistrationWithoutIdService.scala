@@ -17,12 +17,14 @@
 package uk.gov.hmrc.dprs.services
 
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
-import play.api.libs.json.Reads.{maxLength, minLength, verifying}
+import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.{BaseConnector, RegistrationWithoutIdConnector}
 import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.Responses.IdType
 import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.{Requests, Responses}
 import uk.gov.hmrc.dprs.support.ValidationSupport
+import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
+import uk.gov.hmrc.dprs.support.ValidationSupport.isValidCountryCode
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{Clock, Instant}
@@ -80,10 +82,10 @@ object RegistrationWithoutIdService {
 
     object Individual {
       implicit val reads: Reads[Individual] =
-        ((JsPath \ "firstName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "middleName").readNullable[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "lastName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "dateOfBirth").read[String](minLength[String](1).keepAnd(verifying[String](ValidationSupport.isValidDate))) and
+        ((JsPath \ "firstName").read(lengthBetween(1, 35)) and
+          (JsPath \ "middleName").readNullable(lengthBetween(1, 35)) and
+          (JsPath \ "lastName").read(lengthBetween(1, 35)) and
+          (JsPath \ "dateOfBirth").read(minLength[String](1).keepAnd(verifying[String](ValidationSupport.isValidDate))) and
           (JsPath \ "address").read[Address] and
           (JsPath \ "contactDetails").read[ContactDetails])(Individual.apply _)
     }
@@ -92,7 +94,7 @@ object RegistrationWithoutIdService {
 
     object Organisation {
       implicit val reads: Reads[Organisation] =
-        ((JsPath \ "name").read[String](minLength[String](1).keepAnd(maxLength[String](105))) and
+        ((JsPath \ "name").read(lengthBetween(1, 105)) and
           (JsPath \ "address").read[Address] and
           (JsPath \ "contactDetails").read[ContactDetails])(Organisation.apply _)
     }
@@ -108,13 +110,12 @@ object RegistrationWithoutIdService {
       }
 
       implicit val reads: Reads[Address] =
-        ((JsPath \ "lineOne").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "lineTwo").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "lineThree").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "lineFour").readNullable[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "postalCode").readNullable[String](minLength[String](1).keepAnd(maxLength[String](10))) and
-          (JsPath \ "countryCode")
-            .read[String](minLength[String](1).andKeep(maxLength[String](2)).andKeep(verifying(ValidationSupport.isValidCountryCode))))(Address.apply _)
+        ((JsPath \ "lineOne").read(lengthBetween(1, 35)) and
+          (JsPath \ "lineTwo").read(lengthBetween(1, 35)) and
+          (JsPath \ "lineThree").read(lengthBetween(1, 35)) and
+          (JsPath \ "lineFour").readNullable(lengthBetween(1, 35)) and
+          (JsPath \ "postalCode").readNullable(lengthBetween(1, 10)) and
+          (JsPath \ "countryCode").read(lengthBetween(1, 2).andKeep(verifying(isValidCountryCode))))(Address.apply _)
           .flatMapResult { address =>
             if (!postalCodePresentIfExpected(address)) JsError(JsPath(List(KeyPathNode("postalCode"))), "error.path.missing")
             else JsSuccess(address)
@@ -128,13 +129,11 @@ object RegistrationWithoutIdService {
       emailAddress: Option[String]
     )
     object ContactDetails {
-      private val phoneNumberConstraints: Reads[String] =
-        minLength[String](1).keepAnd(maxLength[String](24)).keepAnd(verifying(ValidationSupport.isValidPhoneNumber))
       implicit val reads: Reads[ContactDetails] =
-        ((JsPath \ "landline").readNullable[String](phoneNumberConstraints) and
-          (JsPath \ "mobile").readNullable[String](phoneNumberConstraints) and
-          (JsPath \ "fax").readNullable[String](phoneNumberConstraints) and
-          (JsPath \ "emailAddress").readNullable[String](verifying(ValidationSupport.isValidEmailAddress)))(ContactDetails.apply _)
+        ((JsPath \ "landline").readNullable(validPhoneNumber) and
+          (JsPath \ "mobile").readNullable(validPhoneNumber) and
+          (JsPath \ "fax").readNullable(validPhoneNumber) and
+          (JsPath \ "emailAddress").readNullable(validEmailAddress))(ContactDetails.apply _)
     }
 
   }
