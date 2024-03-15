@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.services.registration.withId
 
-import play.api.libs.json.Json
+import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses
@@ -52,7 +52,7 @@ class RegistrationWithIdServiceResponsesSpec extends BaseSpec {
         )
       )
 
-      val json = Json.toJson(individual)
+      val json = toJson(individual)
 
       json should beSameAs(
         """
@@ -130,7 +130,7 @@ class RegistrationWithIdServiceResponsesSpec extends BaseSpec {
           )
         )
 
-        val json = Json.toJson(organisation)
+        val json = toJson(organisation)
 
         json should beSameAs(s"""
               |{

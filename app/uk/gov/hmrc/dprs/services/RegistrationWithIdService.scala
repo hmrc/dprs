@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.services
 
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
-import play.api.libs.json.Reads.{maxLength, minLength, verifying}
+import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.connectors.{BaseConnector, RegistrationWithIdConnector}
 import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
@@ -26,6 +26,7 @@ import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.IdType
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService._
 import uk.gov.hmrc.dprs.support.ValidationSupport
+import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.lengthBetween
 import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{Clock, Instant}
@@ -77,7 +78,7 @@ object RegistrationWithIdService {
       object RequestId {
         implicit val reads: Reads[RequestId] =
           ((JsPath \ "type").read[RequestIdType] and
-            (JsPath \ "value").read[String](minLength[String](1).keepAnd(maxLength[String](35))))(RequestId.apply _)
+            (JsPath \ "value").read(lengthBetween(1, 35)))(RequestId.apply _)
       }
 
       trait RequestIdType
@@ -102,10 +103,10 @@ object RegistrationWithIdService {
 
       implicit val reads: Reads[Individual] =
         ((JsPath \ "id").read[RequestId] and
-          (JsPath \ "firstName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "middleName").readNullable[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "lastName").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
-          (JsPath \ "dateOfBirth").read[String](minLength[String](1).keepAnd(verifying[String](ValidationSupport.isValidDate))))(Individual.apply _)
+          (JsPath \ "firstName").read[String](lengthBetween(1, 35)) and
+          (JsPath \ "middleName").readNullable(lengthBetween(1, 35)) and
+          (JsPath \ "lastName").read(lengthBetween(1, 35)) and
+          (JsPath \ "dateOfBirth").read(minLength[String](1).keepAnd(verifying[String](ValidationSupport.isValidDate))))(Individual.apply _)
     }
 
     final case class Organisation(id: RequestId, name: String, _type: Organisation.Type)
@@ -117,7 +118,7 @@ object RegistrationWithIdService {
       object RequestId {
         implicit val reads: Reads[RequestId] =
           ((JsPath \ "type").read[RequestIdType] and
-            (JsPath \ "value").read[String](minLength[String](1).keepAnd(maxLength[String](35))))(RequestId.apply _)
+            (JsPath \ "value").read(lengthBetween(1, 35)))(RequestId.apply _)
 
       }
 
@@ -166,7 +167,7 @@ object RegistrationWithIdService {
 
       implicit val reads: Reads[Organisation] =
         ((JsPath \ "id").read[RequestId] and
-          (JsPath \ "name").read[String](minLength[String](1).keepAnd(maxLength[String](35))) and
+          (JsPath \ "name").read(lengthBetween(1, 35)) and
           (JsPath \ "type").read[Type])(Organisation.apply _)
     }
 

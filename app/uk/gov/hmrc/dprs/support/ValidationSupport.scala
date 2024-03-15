@@ -17,6 +17,9 @@
 package uk.gov.hmrc.dprs.support
 
 import org.apache.commons.validator.routines.EmailValidator
+import play.api.libs.functional.syntax.toApplicativeOps
+import play.api.libs.json.Reads
+import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -37,6 +40,16 @@ object ValidationSupport {
 
   def isValidCountryCode(rawCountryCode: String): Boolean =
     Locale.getISOCountries.toSeq.contains(rawCountryCode.toUpperCase)
+
+  object Reads {
+    def lengthBetween(min: Int, max: Int): Reads[String] =
+      minLength[String](min).keepAnd(maxLength[String](max))
+
+    val validPhoneNumber: Reads[String] =
+      lengthBetween(1, 24).keepAnd(verifying(ValidationSupport.isValidPhoneNumber))
+
+    val validEmailAddress: Reads[String] = verifying(isValidEmailAddress)
+  }
 
   private def generateDateFormat(): SimpleDateFormat = {
     val dateFormat = new SimpleDateFormat("yyyy-MM-dd")

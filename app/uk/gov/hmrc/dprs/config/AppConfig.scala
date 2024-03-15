@@ -27,6 +27,8 @@ class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
   val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
 
+  val createSubscriptionBaseUrl: String = generateBaseUrl("create-subscription", "/dac6/dct70c/v1")
+
   private def generateBaseUrl(key: String, fallback: String): String =
     servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)
 

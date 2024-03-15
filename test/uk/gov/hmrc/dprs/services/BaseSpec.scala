@@ -20,18 +20,25 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{MatchResult, Matcher}
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.FixedAcknowledgeReferenceGenerator
 import uk.gov.hmrc.dprs.services.BaseSpec.CustomMatchers.{BeInvalid, BeSameAs, BeValid}
 
 import java.time.{Clock, Instant, ZoneId}
 import java.util.UUID
+import scala.concurrent.{Await, Awaitable}
 
-class BaseSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
-  val acknowledgementReference          = UUID.randomUUID().toString
-  val acknowledgementReferenceGenerator = new FixedAcknowledgeReferenceGenerator(acknowledgementReference)
-  val fixedClock: Clock                 = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
-  val currentDateTime                   = Instant.now(fixedClock).toString
+class BaseSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks with MockitoSugar {
+
+  val acknowledgementReference: String                                      = UUID.randomUUID().toString
+  val acknowledgementReferenceGenerator: FixedAcknowledgeReferenceGenerator = new FixedAcknowledgeReferenceGenerator(acknowledgementReference)
+  protected val fixedClock: Clock = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
+  val currentDateTime: String     = Instant.now(fixedClock).toString
+
+  def await[T](awaitable: Awaitable[T]): T = Await.result(awaitable, 1.second)
+
 }
 
 object BaseSpec {
@@ -52,7 +59,7 @@ object BaseSpec {
       override def apply(rawJson: String): MatchResult = {
         val result = Json.parse(rawJson).validate[T]
         MatchResult(
-          result == JsSuccess(expectedObject),
+          result.isSuccess && result.get == expectedObject,
           s"We expected the json validation to successfully result in a [$expectedObject], but the result was actually [$result].",
           s"We didn't expect the json validation to result in a [$expectedObject], but it actually did."
         )

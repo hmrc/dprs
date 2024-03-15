@@ -5,3 +5,5 @@ POST        /registrations/withId/organisation           uk.gov.hmrc.dprs.contro
 
 POST        /registrations/withoutId/individual          uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forIndividual()
 POST        /registrations/withoutId/organisation        uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forOrganisation()
+
+POST        /subscriptions                               uk.gov.hmrc.dprs.controllers.CreateSubscriptionController.call()

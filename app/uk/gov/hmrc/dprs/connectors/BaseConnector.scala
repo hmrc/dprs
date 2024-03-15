@@ -17,7 +17,8 @@
 package uk.gov.hmrc.dprs.connectors
 
 import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.Json.toJson
+import play.api.libs.json.Writes
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Error
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.UpstreamErrorResponse.{Upstream4xxResponse, Upstream5xxResponse}
@@ -39,7 +40,7 @@ abstract class BaseConnector(httpClientV2: HttpClientV2) {
   ): Future[Either[Error, T]] =
     httpClientV2
       .post(url())
-      .withBody(Json.toJson(request))
+      .withBody(toJson(request))
       .execute[T]
       .transform {
         case Success(response)                           => Success(Right(response))

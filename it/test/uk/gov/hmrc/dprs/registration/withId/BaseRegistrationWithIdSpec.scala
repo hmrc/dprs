@@ -20,12 +20,7 @@ import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class BaseRegistrationWithIdSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath                = "/dac6/dct70b/v1"
-
-  override def extraApplicationConfig: Map[String, Any] = Map(
-    "microservice.services.registration-with-id.host"    -> wireMockHost,
-    "microservice.services.registration-with-id.port"    -> wireMockPort,
-    "microservice.services.registration-with-id.context" -> connectorPath
-  )
+  override val connectorPath         = "/dac6/dct70b/v1"
+  override lazy val connectorName: String = "registration-with-id"
 
 }

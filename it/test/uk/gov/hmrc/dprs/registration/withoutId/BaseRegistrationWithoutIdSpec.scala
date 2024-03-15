@@ -20,12 +20,7 @@ import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class BaseRegistrationWithoutIdSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath                = "/dac6/dct70a/v1"
-
-  override def extraApplicationConfig: Map[String, Any] = Map(
-    "microservice.services.registration-without-id.host"    -> wireMockHost,
-    "microservice.services.registration-without-id.port"    -> wireMockPort,
-    "microservice.services.registration-without-id.context" -> connectorPath
-  )
+  override val connectorPath: String = "/dac6/dct70a/v1"
+  override lazy val connectorName: String = "registration-without-id"
 
 }

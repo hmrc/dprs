@@ -718,11 +718,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |""".stripMargin)
             .futureValue
 
-          assertAsExpected(
-            response,
-            INTERNAL_SERVER_ERROR,
-            None
-          )
+          assertAsExpected(response, INTERNAL_SERVER_ERROR)
           verifyThatDownstreamApiWasCalled()
         }
       }
@@ -766,7 +762,6 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                      |]
                      |""".stripMargin)
             )
-
             verifyThatDownstreamApiWasNotCalled()
           }
           "blank" in {
