@@ -166,9 +166,9 @@ object CreateSubscriptionService {
 
     /** We're awaiting the specs for the underlying API; in the meantime, we'll use the one for MDR; this matches the expectations of the stub service.
       */
-    /* This is sort of what I was referring to with the literals, where we have then declared as constants.
-    For reusable ones, they could be in a shared class that can be used anywhere
-    */
+    // This is sort of what I was referring to with the literals, where we have then declared as constants.
+    // For reusable ones, they could be in a shared class that can be used anywhere
+
     private val regime            = "MDR"
     private val originatingSystem = "MDTP"
 
