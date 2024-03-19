@@ -23,6 +23,11 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
+//  From my days of writing Java and C#, there's usually a contention against 'magic strings' or 'magic numbers' in code.
+//  Dev teams usually preach declaring all your strings and numbers as constants at the top of the class.
+//  I've found most Scala codebase seem not to really be bothered about this. What do you think?
+//  I'm not sure the question on authentication between services was answered
+
   val registrationWithIdBaseUrl: String = generateBaseUrl("registration-with-id", "/dac6/dct70b/v1")
 
   val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
