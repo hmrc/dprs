@@ -49,6 +49,8 @@ class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, httpClient
 
 object RegistrationWithoutIdConnector {
 
+  val connectorPath: String = "/dac6/dct70a/v1"
+  val connectorName: String = "registration-without-id"
   final case class Request(common: Request.Common, detail: Request.Detail)
 
   object Request {

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.dprs.config
 
+import uk.gov.hmrc.dprs.connectors.{CreateSubscriptionConnector, RegistrationWithIdConnector, RegistrationWithoutIdConnector}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
@@ -23,16 +24,11 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
-//  From my days of writing Java and C#, there's usually a contention against 'magic strings' or 'magic numbers' in code.
-//  Dev teams usually preach declaring all your strings and numbers as constants at the top of the class.
-//  I've found most Scala codebase seem not to really be bothered about this. What do you think?
-//  I'm not sure the question on authentication between services was answered
+  val registrationWithIdBaseUrl: String = generateBaseUrl(RegistrationWithIdConnector.connectorName, RegistrationWithIdConnector.connectorPath)
 
-  val registrationWithIdBaseUrl: String = generateBaseUrl("registration-with-id", "/dac6/dct70b/v1")
+  val registrationWithoutIdBaseUrl: String = generateBaseUrl(RegistrationWithoutIdConnector.connectorName, RegistrationWithoutIdConnector.connectorPath)
 
-  val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
-
-  val createSubscriptionBaseUrl: String = generateBaseUrl("create-subscription", "/dac6/dct70c/v1")
+  val createSubscriptionBaseUrl: String = generateBaseUrl(CreateSubscriptionConnector.connectorName, CreateSubscriptionConnector.connectorPath)
 
   private def generateBaseUrl(key: String, fallback: String): String =
     servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)

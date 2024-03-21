@@ -42,6 +42,8 @@ class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2:
 }
 
 object CreateSubscriptionConnector {
+  val connectorPath: String = "/dac6/dct70c/v1"
+  val connectorName: String = "create-subscription"
 
   object Requests {
 
