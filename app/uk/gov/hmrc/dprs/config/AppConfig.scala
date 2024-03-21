@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.dprs.config
 
+import uk.gov.hmrc.dprs.connectors.{CreateSubscriptionConnector, RegistrationWithIdConnector, RegistrationWithoutIdConnector}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
@@ -23,11 +24,11 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
-  val registrationWithIdBaseUrl: String = generateBaseUrl("registration-with-id", "/dac6/dct70b/v1")
+  val registrationWithIdBaseUrl: String = generateBaseUrl(RegistrationWithIdConnector.connectorName, RegistrationWithIdConnector.connectorPath)
 
-  val registrationWithoutIdBaseUrl: String = generateBaseUrl("registration-without-id", "/dac6/dct70a/v1")
+  val registrationWithoutIdBaseUrl: String = generateBaseUrl(RegistrationWithoutIdConnector.connectorName, RegistrationWithoutIdConnector.connectorPath)
 
-  val createSubscriptionBaseUrl: String = generateBaseUrl("create-subscription", "/dac6/dct70c/v1")
+  val createSubscriptionBaseUrl: String = generateBaseUrl(CreateSubscriptionConnector.connectorName, CreateSubscriptionConnector.connectorPath)
 
   private def generateBaseUrl(key: String, fallback: String): String =
     servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)

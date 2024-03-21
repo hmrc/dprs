@@ -48,6 +48,8 @@ class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, httpClientV2:
 
 object RegistrationWithIdConnector {
 
+  val connectorPath: String = "/dac6/dct70b/v1"
+  val connectorName: String = "registration-with-id"
   final case class Request(common: Request.Common, detail: Request.Detail)
 
   object Request {
