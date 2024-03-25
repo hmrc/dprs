@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services.subscription
+package uk.gov.hmrc.dprs.services.subscription.create
 
 import play.api.libs.json.{__, JsonValidationError}
 import uk.gov.hmrc.dprs.services.BaseSpec

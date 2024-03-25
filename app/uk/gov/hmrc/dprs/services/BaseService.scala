@@ -16,19 +16,15 @@
 
 package uk.gov.hmrc.dprs.services
 
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
 import play.api.libs.json.{JsPath, OWrites}
 import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
 
 abstract class BaseService {
 
-  protected def convert(errorStatusCode: Int): ErrorCodeWithStatus = errorStatusCode match {
-    case INTERNAL_SERVER_ERROR => ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-internal-server-error"))
-    case SERVICE_UNAVAILABLE   => ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some("eis-returned-service-unavailable"))
-    case CONFLICT              => ErrorCodeWithStatus(CONFLICT, Some("eis-returned-conflict"))
-    case BAD_REQUEST           => ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
-    case otherStatusCode       => ErrorCodeWithStatus(otherStatusCode)
-  }
+  def errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus]
+
+  protected def convert(errorStatusCode: Int): ErrorCodeWithStatus =
+    errorStatusCodeConversions.getOrElse(errorStatusCode, ErrorCodeWithStatus(errorStatusCode))
 
 }
 
@@ -41,6 +37,13 @@ object BaseService {
   object Error {
     implicit val writes: OWrites[Error] =
       (JsPath \ "code").write[String].contramap(_.code)
+  }
+
+  object ErrorCodes {
+    val internalServerError     = "eis-returned-internal-server-error"
+    val serviceUnavailableError = "eis-returned-service-unavailable"
+    val conflict                = "eis-returned-conflict"
+    val notFound                = "eis-returned-not-found"
   }
 
 }

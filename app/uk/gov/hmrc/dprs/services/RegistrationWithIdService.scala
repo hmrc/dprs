@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.dprs.services
 
+import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.connectors.{BaseConnector, RegistrationWithIdConnector}
-import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
+import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation.RequestId
 import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.IdType
@@ -40,6 +41,12 @@ class RegistrationWithIdService @Inject() (clock: Clock,
 ) extends BaseService {
 
   private val converter = new RegistrationWithIdService.Converter(clock, acknowledgementReferenceGenerator)
+  override val errorStatusCodeConversions = Map(
+    INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError)),
+    SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
+    CONFLICT              -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
+    BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
+  )
 
   def registerIndividual(
     request: Requests.Individual

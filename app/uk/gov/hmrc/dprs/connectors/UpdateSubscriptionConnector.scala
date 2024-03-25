@@ -20,9 +20,9 @@ import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Request
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
+import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Request
+import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
@@ -32,19 +32,19 @@ import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
+class UpdateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
 
   def call(request: Request)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Response]] =
     post[Request, Response](request)
 
-  override def url(): URL = url"${appConfig.createSubscriptionBaseUrl}"
+  override def url(): URL = url"${appConfig.updateSubscriptionBaseUrl}"
 
 }
 
-object CreateSubscriptionConnector {
+object UpdateSubscriptionConnector {
 
-  val connectorPath: String = "/dac6/dct70c/v1"
-  val connectorName: String = "create-subscription"
+  val connectorPath: String = "/dac6/dct70e/v1"
+  val connectorName: String = "update-subscription"
 
   object Requests {
 
@@ -54,8 +54,8 @@ object CreateSubscriptionConnector {
 
     object Request {
       implicit lazy val writes: OWrites[Request] =
-        ((JsPath \ "createSubscriptionForMDRRequest" \ "requestCommon").write[Common] and
-          (JsPath \ "createSubscriptionForMDRRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
+        ((JsPath \ "updateSubscriptionForMDRRequest" \ "requestCommon").write[Common] and
+          (JsPath \ "updateSubscriptionForMDRRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
     }
 
     object Common {
@@ -124,7 +124,7 @@ object CreateSubscriptionConnector {
 
     object Response {
       implicit lazy val reads: Reads[Response] =
-        (JsPath \ "createSubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String].map(Response(_))
+        (JsPath \ "updateSubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String].map(Response(_))
     }
 
   }

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services.subscription
+package uk.gov.hmrc.dprs.services.subscription.create
 
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Requests.Request
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.{Requests, Responses}
-import uk.gov.hmrc.dprs.services.{BaseSpec, CreateSubscriptionService}
+import uk.gov.hmrc.dprs.services.CreateSubscriptionService.{Converter, Requests, Responses}
 
 class CreateSubscriptionServiceConverterSpec extends BaseSpec {
 
-  private val converter = new CreateSubscriptionService.Converter(fixedClock, acknowledgementReferenceGenerator)
+  private val converter = new Converter(fixedClock, acknowledgementReferenceGenerator)
 
   "when converting from" - {
     "a service request to a connector request, expecting" - {

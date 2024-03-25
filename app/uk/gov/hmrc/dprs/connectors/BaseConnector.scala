@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.connectors
 
-import play.api.http.Status.BAD_REQUEST
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import play.api.libs.json.Json.toJson
 import play.api.libs.json.Writes
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Error
@@ -43,10 +43,12 @@ abstract class BaseConnector(httpClientV2: HttpClientV2) {
       .withBody(toJson(request))
       .execute[T]
       .transform {
-        case Success(response)                           => Success(Right(response))
-        case Failure(Upstream5xxResponse(errorResponse)) => Success(Left(Error(errorResponse.statusCode)))
-        case Failure(Upstream4xxResponse(errorResponse)) => Success(Left(Error(errorResponse.statusCode)))
-        case Failure(_)                                  => Success(Left(Error(BAD_REQUEST)))
+        case Success(response)                                => Success(Right(response))
+        case Failure(Upstream5xxResponse(errorResponse))      => Success(Left(Error(errorResponse.statusCode)))
+        case Failure(Upstream4xxResponse(errorResponse))      => Success(Left(Error(errorResponse.statusCode)))
+        case Failure(_: uk.gov.hmrc.http.NotFoundException)   => Success(Left(Error(NOT_FOUND)))
+        case Failure(_: uk.gov.hmrc.http.BadRequestException) => Success(Left(Error(BAD_REQUEST)))
+        case Failure(_)                                       => Success(Left(Error(INTERNAL_SERVER_ERROR)))
       }
 }
 

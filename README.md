@@ -273,6 +273,53 @@ curl 'http://localhost:20001/dprs/subscriptions' \
 
 To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/CreateSubscriptionSpec.scala).
 
+### Update Subscription
+
+Here's an example of a successful call:
+
+``` 
+curl -v 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Harold Winter",
+    "contacts": [
+        {
+            "type": "I",
+            "firstName": "Patrick",
+            "middleName": "John",
+            "lastName": "Dyson",
+            "landline": "747663966",
+            "mobile": "38390756243",
+            "emailAddress": "Patrick.Dyson@example.com"
+        },
+        {
+            "type": "O",
+            "name": "Dyson",
+            "landline": "847663966",
+            "mobile": "48390756243",
+            "emailAddress": "info@example.com"
+        }
+    ]
+}'
+```
+
+``` 
+> POST /dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec HTTP/1.1
+> Host: localhost:20001
+> User-Agent: curl/8.4.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 530
+> 
+< HTTP/1.1 204 No Content
+< Cache-Control: no-cache,no-store,max-age=0
+< Date: Tue, 19 Mar 2024 11:40:52 GMT
+< 
+```
+
+To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/UpdateSubscriptionSpec.scala).
+
+
 
 ## Demo ([Postman](https://www.postman.com/downloads/))
 
