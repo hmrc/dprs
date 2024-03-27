@@ -32,6 +32,8 @@ class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
   val updateSubscriptionBaseUrl: String = generateBaseUrl(UpdateSubscriptionConnector.connectorName, UpdateSubscriptionConnector.connectorPath)
 
+  val readSubscriptionBaseUrl: String = generateBaseUrl("read-subscription", "/dac6/dct70d/v1")
+
   private def generateBaseUrl(key: String, fallback: String): String =
     servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)
 
