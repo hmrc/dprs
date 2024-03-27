@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "a5c9e18c-9e9f-44e8-975a-7166b8bc283c",
+		"name": "Read Subscription",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5298634"
+	},
+	"item": [
+		{
+			"name": "Success",
+			"item": [
+				{
+					"name": "Id is Present",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20001",
+							"path": [
+								"dprs",
+								"subscriptions",
+								"a7405c8d-06ee-46a3-b5a0-5d65176360ec"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Failure",
+			"item": [
+				{
+					"name": "Downstream",
+					"item": [
+						{
+							"name": "Bad Request",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000400",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000400"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not Found",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000404",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000404"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Service Unavailable",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000503",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000503"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Internal Server Error",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Id is Absent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:20001/dprs/subscriptions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20001",
+							"path": [
+								"dprs",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

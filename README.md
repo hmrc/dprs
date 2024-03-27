@@ -1,20 +1,22 @@
-
 # Backend Service For DPRS (Digital Platforms Reporting Service)
 
 ## About
 
-This is the only backend of DPRS; it mostly acts as a conduit between the frontend and the integration layer: EIS (Enterprise Integration Services).
+This is the only backend of DPRS; it mostly acts as a conduit between the frontend and the integration layer: EIS (
+Enterprise Integration Services).
 
 By default, this service runs on port `20001`.
 
 ## Running
 
-In order to run the following examples, ensure you first have [dprs-stubs](https://github.com/hmrc/dprs-stubs) running; if using
+In order to run the following examples, ensure you first have [dprs-stubs](https://github.com/hmrc/dprs-stubs) running;
+if using
 service manager, it would simply be:
 
 ```
 sm -start DPRS_STUBS 
 ```
+
 Note that you also need to have MongoDb running, in whichever way you wish.
 
 You can then run this service in a variety of ways.
@@ -138,7 +140,9 @@ curl 'http://localhost:20001/dprs/registrations/withId/organisation' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnOrganisationSpec.scala).
+To get a sense of the various scenarios, you could look at the integration tests: one
+for [individuals](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnIndividualSpec.scala) and one
+for [organisations](it/test/uk/gov/hmrc/dprs/registration/withId/RegistrationWithIdForAnOrganisationSpec.scala).
 
 ### Registration (Without ID)
 
@@ -229,7 +233,10 @@ curl 'http://localhost:20001/dprs/registrations/withoutId/organisation' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at the integration tests: one for [individuals](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnIndividualSpec.scala) and one for [organisations](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnOrganisationSpec.scala).
+To get a sense of the various scenarios, you could look at the integration tests: one
+for [individuals](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnIndividualSpec.scala) and
+one
+for [organisations](it/test/uk/gov/hmrc/dprs/registration/withoutId/RegistrationWithoutIdForAnOrganisationSpec.scala).
 
 ### Create Subscription
 
@@ -271,7 +278,8 @@ curl 'http://localhost:20001/dprs/subscriptions' \
 }
 ```
 
-To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/CreateSubscriptionSpec.scala).
+To get a sense of the various scenarios, you could look
+at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/CreateSubscriptionSpec.scala).
 
 ### Update Subscription
 
@@ -317,21 +325,72 @@ curl -v 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d651
 < 
 ```
 
-To get a sense of the various scenarios, you could look at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/UpdateSubscriptionSpec.scala).
+To get a sense of the various scenarios, you could look
+at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/UpdateSubscriptionSpec.scala).
 
+### Read Subscription
 
+Here's an example of a successful call:
+
+``` 
+curl -v 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec' \
+--header 'Content-Type: application/json'
+```
+
+``` 
+> GET /dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec HTTP/1.1
+> Host: localhost:20001
+> User-Agent: curl/8.4.0
+> Accept: */*
+> Content-Type: application/json
+> 
+< HTTP/1.1 200 OK
+< Cache-Control: no-cache,no-store,max-age=0
+< Date: Wed, 10 Apr 2024 08:20:27 GMT
+< Content-Type: application/json
+< Content-Length: 363
+< 
+* Connection #0 to host localhost left intact
+{
+    "id": "XAMDR0000XE0000352129",
+    "name": "Baumbach-Waelchi",
+    "contacts": [
+        {
+            "type": "I",
+            "firstName": "Josefina",
+            "middleName": null,
+            "lastName": "Zieme",
+            "landline": "687394104",
+            "mobile": "73744443225",
+            "emailAddress": "christopher.wisoky@example.com"
+        },
+        {
+            "type": "O",
+            "name": "Daugherty, Mante and Rodriguez",
+            "landline": null,
+            "mobile": null,
+            "emailAddress": "cody.halvorson@example.com"
+        }
+    ]
+}
+```
+
+To get a sense of the various scenarios, you could look
+at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/ReadSubscriptionSpec.scala).
 
 ## Demo ([Postman](https://www.postman.com/downloads/))
 
 You can explore [the various Postman collections](etc/postman).
 
-If you want to run them on the CLI via [Newman](https://learning.postman.com/docs/collections/using-newman-cli/installing-running-newman/):
+If you want to run them on the CLI
+via [Newman](https://learning.postman.com/docs/collections/using-newman-cli/installing-running-newman/):
 
 ``` 
 npm install -g newman
 ```
 
-Assuming that `DPRS_STUBS` is already running, as well as this application. you can run any collections with, for example:
+Assuming that `DPRS_STUBS` is already running, as well as this application. you can run any collections with, for
+example:
 
 ``` 
 newman run ./etc/postman/RegistrationWithID.json
@@ -359,4 +418,5 @@ sbt "it/test"
 
 ### License
 
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
+This code is open source software licensed under
+the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
