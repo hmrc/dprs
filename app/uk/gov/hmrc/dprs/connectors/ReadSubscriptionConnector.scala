@@ -6,6 +6,7 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Requests.Request
+import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -59,9 +60,7 @@ object ReadSubscriptionConnector {
 
   object Responses {
 
-    final case class Response(detail: Detail)
-
-    final case class Detail(subscriptionID: String, tradingName: String, isGBUser: Boolean,
+    final case class Response(subscriptionID: String, tradingName: String, isGBUser: Boolean,
                               primaryContact: PrimaryContact, secondaryContact: SecondaryContact)
 
     final case class PrimaryContact(email: String, phone: String, mobile: String, individual: Individual)
@@ -73,9 +72,37 @@ object ReadSubscriptionConnector {
     final case class Organisation(organisationName: String)
 
     object Response {
-      implicit lazy val reads: Reads[Response] =
-        (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail").read[Detail])(Response.apply _)
+      implicit val reads: Reads[Response] =
+        ((JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String] and
+          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "tradingName").read[String] and
+          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "isGBUser").read[Boolean] and
+          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "primaryContact").read[PrimaryContact] and
+          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "secondaryContact").read[SecondaryContact])(Response.apply _)
     }
 
+    object Organisation {
+      implicit lazy val reads: Reads[Organisation] =
+        (JsPath \ "organisationName").read[String].map(Organisation(_))
+    }
+
+    object SecondaryContact {
+      implicit val reads: Reads[SecondaryContact] =
+        ((JsPath \ "email").read[String] and
+          (JsPath \ "organisation").read[Organisation])(SecondaryContact.apply _)
+    }
+
+    object Individual {
+      implicit val reads: Reads[Individual] =
+        ((JsPath \ "firstName").read[String] and
+          (JsPath \ "lastName").read[String])(Individual.apply _)
+    }
+
+    object PrimaryContact {
+      implicit val reads: Reads[PrimaryContact] =
+        ((JsPath \ "email").read[String] and
+          (JsPath \ "phone").read[String] and
+          (JsPath \ "mobile").read[String] and
+          (JsPath \ "individual").read[Individual])(PrimaryContact.apply _)
+    }
   }
 }
