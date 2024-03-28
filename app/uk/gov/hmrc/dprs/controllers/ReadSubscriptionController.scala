@@ -29,13 +29,9 @@ class ReadSubscriptionController @Inject()(cc: ControllerComponents, readSubscri
   extends BaseController(cc) {
 
   def call(id: String): Action[JsValue] = Action(parse.json).async { implicit request =>
-    request.body.validate[ReadSubscriptionService.Requests.Request] match {
-      case JsSuccess(serviceRequest, _) =>
-        readSubscriptionService.call(id, serviceRequest).map {
-          case Right(serviceResponse) => Ok(toJson(serviceResponse))
-          case Left(error) => handleServiceError(error)
-        }
-      case JsError(errors) => Future.successful(BadRequest(toJson(convert(errors))))
+    readSubscriptionService.call(id).map {
+      case Right(serviceResponse) => Ok(toJson(serviceResponse))
+      case Left(error) => handleServiceError(error)
     }
 
   }
