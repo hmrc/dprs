@@ -80,19 +80,18 @@ class UpdateSubscriptionServiceConverterSpec extends BaseSpec {
           )
         )
       }
+      "failure, when" - {
+        "there are no contacts" in {
+          val serviceRequest = Requests.Request(
+            name = Some("Harold Winter"),
+            contacts = Seq.empty
+          )
+
+          val connectorRequest = converter.convert("65bb78ba-baa8-46a2-809a-4747d46b381c", serviceRequest)
+
+          connectorRequest shouldBe empty
+        }
+      }
     }
   }
-  "failure, when" - {
-    "there are no contacts" in {
-      val serviceRequest = Requests.Request(
-        name = Some("Harold Winter"),
-        contacts = Seq.empty
-      )
-
-      val connectorRequest = converter.convert("65bb78ba-baa8-46a2-809a-4747d46b381c", serviceRequest)
-
-      connectorRequest shouldBe empty
-    }
-  }
-
 }
