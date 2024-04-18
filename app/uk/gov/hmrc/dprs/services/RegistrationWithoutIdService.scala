@@ -27,7 +27,6 @@ import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.{Requests, Respons
 import uk.gov.hmrc.dprs.support.ValidationSupport
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 import uk.gov.hmrc.dprs.support.ValidationSupport.isValidCountryCode
-import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{Clock, Instant}
 import javax.inject.Inject
@@ -51,23 +50,21 @@ class RegistrationWithoutIdService @Inject() (clock: Clock,
   def registerIndividual(
     request: Requests.Individual
   )(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorCodeWithStatus, Responses.Individual]] =
     registrationWithoutIdConnector.forIndividual(converter.convert(request)).map {
-      case Right(response)                       => Right(converter.convert(response))
-      case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
+      case Right(response)                                     => Right(converter.convert(response))
+      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
     }
 
   def registerOrganisation(
     request: Requests.Organisation
   )(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorCodeWithStatus, Responses.Organisation]] =
     registrationWithoutIdConnector.forOrganisation(converter.convert(request)).map {
-      case Right(response)                       => Right(converter.convert(response))
-      case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
+      case Right(response)                                     => Right(converter.convert(response))
+      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
     }
 
 }

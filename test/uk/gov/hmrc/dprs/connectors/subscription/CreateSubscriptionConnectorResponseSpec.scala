@@ -25,19 +25,13 @@ class CreateSubscriptionConnectorResponseSpec extends BaseSpec {
     val rawJson =
       """
         |{
-        |  "createSubscriptionForMDRResponse" : {
-        |    "responseCommon" : {
-        |      "status" : "OK",
-        |      "processingDate" : "2024-02-15T12:04:07.011Z"
-        |    },
-        |    "responseDetail" : {
-        |      "subscriptionID" : "5ac7862e-34d6-4491-b30d-6d823857e79a"
-        |    }
+        |  "success": {
+        |    "dprsReference": "XSP1234567890"
         |  }
         |}
         |""".stripMargin
 
-    rawJson should BaseSpec.beValid(Response("5ac7862e-34d6-4491-b30d-6d823857e79a"))
+    rawJson should BaseSpec.beValid(Response("XSP1234567890"))
   }
 
 }

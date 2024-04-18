@@ -342,15 +342,16 @@ class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withBody(s"""
                        |{
                        |    "errorDetail": {
-                       |    "timestamp": "$currentDateAndTime",
-                       |    "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                       |    "errorCode": "500",
-                       |    "errorMessage": "Internal Server Error",
-                       |    "source": "journey-dct70c-service-camel",
-                       |    "sourceFaultDetail": {
-                       |        "detail": [
-                       |            "Internal Server Error"
-                       |        ]
+                       |        "timestamp": "$currentDateAndTime",
+                       |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                       |        "errorCode": "500",
+                       |        "errorMessage": "Internal Server Error",
+                       |        "source": "journey-dct70c-service-camel",
+                       |        "sourceFaultDetail": {
+                       |            "detail": [
+                       |                "Internal Server Error"
+                       |            ]
+                       |        }
                        |    }
                        |}
                        |""".stripMargin)

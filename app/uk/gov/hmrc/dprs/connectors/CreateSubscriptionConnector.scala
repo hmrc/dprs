@@ -19,12 +19,12 @@ package uk.gov.hmrc.dprs.connectors
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Request
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Responses.Response
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
 import javax.inject.Inject
@@ -32,9 +32,11 @@ import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
+class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
-  def call(request: Request)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Response]] =
+  def call(
+    request: Request
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
     post[Request, Response](request)
 
   override def url(): URL = url"${appConfig.createSubscriptionBaseUrl}"
@@ -43,62 +45,44 @@ class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2:
 
 object CreateSubscriptionConnector {
 
-  val connectorPath: String = "/dac6/dct70c/v1"
+  val connectorPath: String = "/dac6/dprs0201/v1"
   val connectorName: String = "create-subscription"
 
   object Requests {
 
-    final case class Request(common: Requests.Common, detail: Requests.Detail)
-
-    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String, originatingSystem: String)
+    final case class Request(idType: String,
+                             idNumber: String,
+                             tradingName: Option[String],
+                             gbUser: Boolean,
+                             primaryContact: Contact,
+                             secondaryContact: Option[Contact]
+    )
 
     object Request {
       implicit lazy val writes: OWrites[Request] =
-        ((JsPath \ "createSubscriptionForMDRRequest" \ "requestCommon").write[Common] and
-          (JsPath \ "createSubscriptionForMDRRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
-    }
-
-    object Common {
-      implicit val writes: OWrites[Common] =
-        ((JsPath \ "receiptDate").write[String] and
-          (JsPath \ "regime").write[String] and
-          (JsPath \ "acknowledgementReference").write[String] and
-          (JsPath \ "originatingSystem").write[String])(unlift(Common.unapply))
-    }
-
-    final case class Detail(idType: String,
-                            idNumber: String,
-                            tradingName: Option[String],
-                            isGBUser: Boolean,
-                            primaryContact: Contact,
-                            secondaryContact: Option[Contact]
-    )
-
-    object Detail {
-      implicit lazy val writes: OWrites[Detail] =
-        ((JsPath \ "IDType").write[String] and
-          (JsPath \ "IDNumber").write[String] and
+        ((JsPath \ "idType").write[String] and
+          (JsPath \ "idNumber").write[String] and
           (JsPath \ "tradingName").writeNullable[String] and
-          (JsPath \ "isGBUser").write[Boolean] and
+          (JsPath \ "gbUser").write[Boolean] and
           (JsPath \ "primaryContact").write[Contact] and
-          (JsPath \ "secondaryContact").writeNullable[Contact])(unlift(Detail.unapply))
+          (JsPath \ "secondaryContact").writeNullable[Contact])(unlift(Request.unapply))
     }
 
     final case class Contact(
-      landline: Option[String],
-      mobile: Option[String],
-      emailAddress: String,
       individualDetails: Option[IndividualDetails],
-      organisationDetails: Option[OrganisationDetails]
+      organisationDetails: Option[OrganisationDetails],
+      emailAddress: String,
+      landline: Option[String],
+      mobile: Option[String]
     )
 
     object Contact {
       implicit lazy val writes: OWrites[Contact] =
-        ((JsPath \ "phone").writeNullable[String] and
-          (JsPath \ "mobile").writeNullable[String] and
+        ((JsPath \ "individual").writeNullable[IndividualDetails] and
+          (JsPath \ "organisation").writeNullable[OrganisationDetails] and
           (JsPath \ "email").write[String] and
-          (JsPath \ "individual").writeNullable[IndividualDetails] and
-          (JsPath \ "organisation").writeNullable[OrganisationDetails])(unlift(Contact.unapply))
+          (JsPath \ "mobile").writeNullable[String] and
+          (JsPath \ "phone").writeNullable[String])(unlift(Contact.unapply))
 
       final case class IndividualDetails(firstName: String, middleName: Option[String], lastName: String)
 
@@ -113,18 +97,26 @@ object CreateSubscriptionConnector {
 
       object OrganisationDetails {
         implicit lazy val writes: OWrites[OrganisationDetails] =
-          (JsPath \ "organisationName").write[String].contramap(_.name)
+          (JsPath \ "name").write[String].contramap(_.name)
       }
     }
   }
 
   object Responses {
-
-    final case class Response(id: String)
+    final case class Response(dprsReference: String)
 
     object Response {
       implicit lazy val reads: Reads[Response] =
-        (JsPath \ "createSubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String].map(Response(_))
+        (JsPath \ "success" \ "dprsReference").read[String].map(Response(_))
+    }
+
+    object ErrorCodes {
+      val malformedPayload    = "400"
+      val duplicateSubmission = "004"
+      val couldNotBeProcessed = "003"
+      val invalidId           = "016"
+      val unauthorised        = "403"
+      val forbidden           = "401"
     }
 
   }

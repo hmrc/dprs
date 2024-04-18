@@ -23,7 +23,7 @@ import uk.gov.hmrc.dprs.services.CreateSubscriptionService.{Converter, Requests,
 
 class CreateSubscriptionServiceConverterSpec extends BaseSpec {
 
-  private val converter = new Converter(fixedClock, acknowledgementReferenceGenerator)
+  private val converter = new Converter
 
   "when converting from" - {
     "a service request to a connector request, expecting" - {
@@ -62,34 +62,26 @@ class CreateSubscriptionServiceConverterSpec extends BaseSpec {
 
             connectorRequest shouldBe Some(
               CreateSubscriptionConnector.Requests.Request(
-                common = CreateSubscriptionConnector.Requests.Common(
-                  receiptDate = currentDateTime,
-                  regime = "MDR",
-                  acknowledgementReference = acknowledgementReference,
-                  originatingSystem = "MDTP"
-                ),
-                detail = CreateSubscriptionConnector.Requests.Detail(
-                  idType = expectedRawType,
-                  idNumber = "AA000000A",
-                  tradingName = Some("Harold Winter"),
-                  isGBUser = true,
-                  primaryContact = CreateSubscriptionConnector.Requests.Contact(
-                    landline = Some("747663966"),
-                    mobile = Some("38390756243"),
-                    emailAddress = "Patrick.Dyson@example.com",
-                    individualDetails = Some(
-                      CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
-                    ),
-                    organisationDetails = None
+                idType = expectedRawType,
+                idNumber = "AA000000A",
+                tradingName = Some("Harold Winter"),
+                gbUser = true,
+                primaryContact = CreateSubscriptionConnector.Requests.Contact(
+                  landline = Some("747663966"),
+                  mobile = Some("38390756243"),
+                  emailAddress = "Patrick.Dyson@example.com",
+                  individualDetails = Some(
+                    CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
                   ),
-                  secondaryContact = Some(
-                    CreateSubscriptionConnector.Requests.Contact(
-                      landline = Some("847663966"),
-                      mobile = Some("48390756243"),
-                      emailAddress = "info@dyson.com",
-                      individualDetails = None,
-                      organisationDetails = Some(CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson"))
-                    )
+                  organisationDetails = None
+                ),
+                secondaryContact = Some(
+                  CreateSubscriptionConnector.Requests.Contact(
+                    landline = Some("847663966"),
+                    mobile = Some("48390756243"),
+                    emailAddress = "info@dyson.com",
+                    individualDetails = None,
+                    organisationDetails = Some(CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson"))
                   )
                 )
               )
@@ -114,11 +106,11 @@ class CreateSubscriptionServiceConverterSpec extends BaseSpec {
       }
     }
     "a connector response to a service response" in {
-      val connectorResponse = CreateSubscriptionConnector.Responses.Response(id = "5d10d157-26d6-4355-857b-bc691ee3145b")
+      val connectorResponse = CreateSubscriptionConnector.Responses.Response(dprsReference = "XSP1234567890")
 
       val serviceResponse = converter.convert(connectorResponse)
 
-      serviceResponse shouldBe Responses.Response(id = "5d10d157-26d6-4355-857b-bc691ee3145b")
+      serviceResponse shouldBe Responses.Response(id = "XSP1234567890")
     }
   }
 

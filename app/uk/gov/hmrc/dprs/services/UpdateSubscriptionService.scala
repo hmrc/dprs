@@ -26,7 +26,6 @@ import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
 import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.Requests.Request.Contact
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
-import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{Clock, Instant}
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,15 +46,14 @@ class UpdateSubscriptionService @Inject() (clock: Clock,
     )
 
   def call(id: String, serviceRequest: UpdateSubscriptionService.Requests.Request)(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorCodeWithStatus, Unit]] =
     converter
       .convert(id, serviceRequest)
       .map {
         updateSubscriptionConnector.call(_).map {
-          case Right(_)                              => Right(())
-          case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
+          case Right(_)                                            => Right(())
+          case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
         }
       }
       .getOrElse(Future.successful(Left(convert(BAD_REQUEST))))
