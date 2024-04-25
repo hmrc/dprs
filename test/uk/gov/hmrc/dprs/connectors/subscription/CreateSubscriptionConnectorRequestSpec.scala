@@ -27,45 +27,30 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
     "is only a primary contact, which is an" - {
       "individual" in {
         val request = CreateSubscriptionConnector.Requests.Request(
-          common = CreateSubscriptionConnector.Requests.Common(receiptDate = "2024-02-15T11:32:43.364Z",
-                                                               regime = "MDR",
-                                                               acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                                                               originatingSystem = "MDTP"
-          ),
-          detail = CreateSubscriptionConnector.Requests.Detail(
-            idType = "NINO",
-            idNumber = "AA000000A",
-            tradingName = Some("Harold Winter"),
-            isGBUser = true,
-            primaryContact = CreateSubscriptionConnector.Requests.Contact(
-              landline = Some("747663966"),
-              mobile = Some("38390756243"),
-              emailAddress = "Patrick.Dyson@example.com",
-              individualDetails = Some(
-                CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
-              ),
-              organisationDetails = None
+          idType = "NINO",
+          idNumber = "AA000000A",
+          tradingName = Some("Harold Winter"),
+          gbUser = true,
+          primaryContact = CreateSubscriptionConnector.Requests.Contact(
+            landline = Some("747663966"),
+            mobile = Some("38390756243"),
+            emailAddress = "Patrick.Dyson@example.com",
+            individualDetails = Some(
+              CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
             ),
-            secondaryContact = None
-          )
+            organisationDetails = None
+          ),
+          secondaryContact = None
         )
 
         val json = toJson(request)
 
         json should beSameAs("""
-            |          {
-            |    "createSubscriptionForMDRRequest": {
-            |        "requestCommon": {
-            |            "regime": "MDR",
-            |            "receiptDate": "2024-02-15T11:32:43.364Z",
-            |            "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-            |            "originatingSystem": "MDTP"
-            |        },
-            |        "requestDetail": {
-            |            "IDType": "NINO",
-            |            "IDNumber": "AA000000A",
+            |{
+            |            "idType": "NINO",
+            |            "idNumber": "AA000000A",
             |            "tradingName": "Harold Winter",
-            |            "isGBUser": true,
+            |            "gbUser": true,
             |            "primaryContact": {
             |                "individual": {
             |                    "firstName": "Patrick",
@@ -73,67 +58,48 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
             |                    "lastName": "Dyson"
             |                },
             |                "email": "Patrick.Dyson@example.com",
-            |                "phone": "747663966",
-            |                "mobile": "38390756243"
+            |                "mobile" : "747663966",
+            |                "phone" : "38390756243"
             |            }
             |        }
-            |    }
-            |}
             |""".stripMargin)
 
       }
       "organisation" in {
         val request = CreateSubscriptionConnector.Requests.Request(
-          common = CreateSubscriptionConnector.Requests.Common(receiptDate = "2024-02-15T11:32:43.364Z",
-                                                               regime = "MDR",
-                                                               acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                                                               originatingSystem = "MDTP"
+          idType = "NINO",
+          idNumber = "AA000000A",
+          tradingName = Some("Harold Winter"),
+          gbUser = true,
+          primaryContact = CreateSubscriptionConnector.Requests.Contact(
+            landline = Some("847663966"),
+            mobile = Some("48390756243"),
+            emailAddress = "info@example.com",
+            individualDetails = None,
+            organisationDetails = Some(
+              CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson")
+            )
           ),
-          detail = CreateSubscriptionConnector.Requests.Detail(
-            idType = "NINO",
-            idNumber = "AA000000A",
-            tradingName = Some("Harold Winter"),
-            isGBUser = true,
-            primaryContact = CreateSubscriptionConnector.Requests.Contact(
-              landline = Some("847663966"),
-              mobile = Some("48390756243"),
-              emailAddress = "info@example.com",
-              individualDetails = None,
-              organisationDetails = Some(
-                CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson")
-              )
-            ),
-            secondaryContact = None
-          )
+          secondaryContact = None
         )
 
         val json = toJson(request)
 
         json should beSameAs("""
-                               |          {
-                               |    "createSubscriptionForMDRRequest": {
-                               |        "requestCommon": {
-                               |            "regime": "MDR",
-                               |            "receiptDate": "2024-02-15T11:32:43.364Z",
-                               |            "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                               |            "originatingSystem": "MDTP"
-                               |        },
-                               |        "requestDetail": {
-                               |            "IDType": "NINO",
-                               |            "IDNumber": "AA000000A",
+                               |{
+                               |            "idType": "NINO",
+                               |            "idNumber": "AA000000A",
                                |            "tradingName": "Harold Winter",
-                               |            "isGBUser": true,
+                               |            "gbUser": true,
                                |            "primaryContact": {
                                |                "organisation": {
-                               |                    "organisationName": "Dyson"
+                               |                    "name": "Dyson"
                                |                },
                                |                "email": "info@example.com",
-                               |                "phone": "847663966",
-                               |                "mobile": "48390756243"
+                               |                "mobile": "847663966",
+                               |                "phone": "48390756243"
                                |            }
                                |        }
-                               |    }
-                               |}
                                |""".stripMargin)
 
       }
@@ -141,35 +107,28 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
     "is a secondary contact, which is an" - {
       "individual" in {
         val request = CreateSubscriptionConnector.Requests.Request(
-          common = CreateSubscriptionConnector.Requests.Common(receiptDate = "2024-02-15T11:32:43.364Z",
-                                                               regime = "MDR",
-                                                               acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                                                               originatingSystem = "MDTP"
+          idType = "NINO",
+          idNumber = "AA000000A",
+          tradingName = Some("Harold Winter"),
+          gbUser = true,
+          primaryContact = CreateSubscriptionConnector.Requests.Contact(
+            landline = Some("747663966"),
+            mobile = Some("38390756243"),
+            emailAddress = "Patrick.Dyson@example.com",
+            individualDetails = Some(
+              CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
+            ),
+            organisationDetails = None
           ),
-          detail = CreateSubscriptionConnector.Requests.Detail(
-            idType = "NINO",
-            idNumber = "AA000000A",
-            tradingName = Some("Harold Winter"),
-            isGBUser = true,
-            primaryContact = CreateSubscriptionConnector.Requests.Contact(
-              landline = Some("747663966"),
-              mobile = Some("38390756243"),
-              emailAddress = "Patrick.Dyson@example.com",
+          secondaryContact = Some(
+            CreateSubscriptionConnector.Requests.Contact(
+              landline = Some("647663968"),
+              mobile = Some("28390756245"),
+              emailAddress = "Patricia.Dyson@example.com",
               individualDetails = Some(
-                CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
+                CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patricia", middleName = Some("Jane"), lastName = "Dyson")
               ),
               organisationDetails = None
-            ),
-            secondaryContact = Some(
-              CreateSubscriptionConnector.Requests.Contact(
-                landline = Some("647663968"),
-                mobile = Some("28390756245"),
-                emailAddress = "Patricia.Dyson@example.com",
-                individualDetails = Some(
-                  CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patricia", middleName = Some("Jane"), lastName = "Dyson")
-                ),
-                organisationDetails = None
-              )
             )
           )
         )
@@ -177,19 +136,11 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
         val json = toJson(request)
 
         json should beSameAs("""
-                               |          {
-                               |    "createSubscriptionForMDRRequest": {
-                               |        "requestCommon": {
-                               |            "regime": "MDR",
-                               |            "receiptDate": "2024-02-15T11:32:43.364Z",
-                               |            "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                               |            "originatingSystem": "MDTP"
-                               |        },
-                               |        "requestDetail": {
-                               |            "IDType": "NINO",
-                               |            "IDNumber": "AA000000A",
+                               |{
+                               |            "idType": "NINO",
+                               |            "idNumber": "AA000000A",
                                |            "tradingName": "Harold Winter",
-                               |            "isGBUser": true,
+                               |            "gbUser": true,
                                |            "primaryContact": {
                                |                "individual": {
                                |                    "firstName": "Patrick",
@@ -197,8 +148,8 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
                                |                    "lastName": "Dyson"
                                |                },
                                |                "email": "Patrick.Dyson@example.com",
-                               |                "phone": "747663966",
-                               |                "mobile": "38390756243"
+                               |                "mobile": "747663966",
+                               |                "phone": "38390756243"
                                |            },
                                |             "secondaryContact": {
                                |                "individual": {
@@ -207,44 +158,35 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
                                |                    "lastName": "Dyson"
                                |                },
                                |                "email": "Patricia.Dyson@example.com",
-                               |                "phone": "647663968",
-                               |                "mobile": "28390756245"
+                               |                "mobile": "647663968",
+                               |                "phone": "28390756245"
                                |            }
                                |        }
-                               |    }
-                               |}
                                |""".stripMargin)
       }
       "organisation" in {
         val request = CreateSubscriptionConnector.Requests.Request(
-          common = CreateSubscriptionConnector.Requests.Common(receiptDate = "2024-02-15T11:32:43.364Z",
-                                                               regime = "MDR",
-                                                               acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                                                               originatingSystem = "MDTP"
-          ),
-          detail = CreateSubscriptionConnector.Requests.Detail(
-            idType = "NINO",
-            idNumber = "AA000000A",
-            tradingName = Some("Harold Winter"),
-            isGBUser = true,
-            primaryContact = CreateSubscriptionConnector.Requests.Contact(
-              landline = Some("747663966"),
-              mobile = Some("38390756243"),
-              emailAddress = "Patrick.Dyson@example.com",
-              individualDetails = Some(
-                CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
-              ),
-              organisationDetails = None
+          idType = "NINO",
+          idNumber = "AA000000A",
+          tradingName = Some("Harold Winter"),
+          gbUser = true,
+          primaryContact = CreateSubscriptionConnector.Requests.Contact(
+            landline = Some("747663966"),
+            mobile = Some("38390756243"),
+            emailAddress = "Patrick.Dyson@example.com",
+            individualDetails = Some(
+              CreateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
             ),
-            secondaryContact = Some(
-              CreateSubscriptionConnector.Requests.Contact(
-                landline = Some("147663966"),
-                mobile = Some("28390756243"),
-                emailAddress = "info@example.com",
-                individualDetails = None,
-                organisationDetails = Some(
-                  CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson")
-                )
+            organisationDetails = None
+          ),
+          secondaryContact = Some(
+            CreateSubscriptionConnector.Requests.Contact(
+              landline = Some("147663966"),
+              mobile = Some("28390756243"),
+              emailAddress = "info@example.com",
+              individualDetails = None,
+              organisationDetails = Some(
+                CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson")
               )
             )
           )
@@ -253,19 +195,11 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
         val json = toJson(request)
 
         json should beSameAs("""
-                               | {
-                               |    "createSubscriptionForMDRRequest": {
-                               |        "requestCommon": {
-                               |            "regime": "MDR",
-                               |            "receiptDate": "2024-02-15T11:32:43.364Z",
-                               |            "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
-                               |            "originatingSystem": "MDTP"
-                               |        },
-                               |        "requestDetail": {
-                               |            "IDType": "NINO",
-                               |            "IDNumber": "AA000000A",
+                               |{
+                               |            "idType": "NINO",
+                               |            "idNumber": "AA000000A",
                                |            "tradingName": "Harold Winter",
-                               |            "isGBUser": true,
+                               |            "gbUser": true,
                                |            "primaryContact": {
                                |                "individual": {
                                |                    "firstName": "Patrick",
@@ -273,20 +207,18 @@ class CreateSubscriptionConnectorRequestSpec extends BaseSpec {
                                |                    "lastName": "Dyson"
                                |                },
                                |                "email": "Patrick.Dyson@example.com",
-                               |                "phone": "747663966",
-                               |                "mobile": "38390756243"
+                               |                "mobile": "747663966",
+                               |                "phone": "38390756243"
                                |            },
                                |            "secondaryContact": {
                                |                "organisation": {
-                               |                    "organisationName": "Dyson"
+                               |                    "name": "Dyson"
                                |                },
                                |                "email": "info@example.com",
-                               |                "phone": "147663966",
-                               |                "mobile": "28390756243"
+                               |                "mobile": "147663966",
+                               |                "phone": "28390756243"
                                |            }
                                |        }
-                               |    }
-                               |}
                                |""".stripMargin)
       }
     }

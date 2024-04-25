@@ -23,7 +23,6 @@ import play.api.libs.json.{JsPath, Json, OWrites}
 import uk.gov.hmrc.dprs.connectors.{BaseConnector, ReadSubscriptionConnector}
 import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
 import uk.gov.hmrc.dprs.services.ReadSubscriptionService.Converter
-import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.{Clock, Instant}
 import javax.inject.Inject
@@ -45,13 +44,12 @@ class ReadSubscriptionService @Inject() (clock: Clock,
     )
 
   def call(id: String)(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorCodeWithStatus, ReadSubscriptionService.Responses.Response]] = {
     val request = converter.convert(id)
     readSubscriptionConnector.call(request).map {
-      case Right(connectorResponse)              => Right(converter.convert(connectorResponse))
-      case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
+      case Right(connectorResponse)                            => Right(converter.convert(connectorResponse))
+      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
     }
   }
 }

@@ -19,11 +19,10 @@ package uk.gov.hmrc.dprs.connectors
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.RegistrationWithoutIdConnector.{Request, Responses}
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
 import javax.inject.Inject
@@ -31,16 +30,16 @@ import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
+class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
   def forIndividual(
     request: Request
-  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Responses.Individual]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Responses.Individual]] =
     post[RegistrationWithoutIdConnector.Request, Responses.Individual](request)
 
   def forOrganisation(
     request: Request
-  )(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Responses.Organisation]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Responses.Organisation]] =
     post[RegistrationWithoutIdConnector.Request, Responses.Organisation](request)
 
   override def url(): URL = url"${appConfig.registrationWithoutIdBaseUrl}"

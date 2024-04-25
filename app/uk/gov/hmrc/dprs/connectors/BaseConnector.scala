@@ -16,44 +16,75 @@
 
 package uk.gov.hmrc.dprs.connectors
 
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
+import play.api.http.Status.{CREATED, OK}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.Json.toJson
-import play.api.libs.json.Writes
-import uk.gov.hmrc.dprs.connectors.BaseConnector.Error
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.UpstreamErrorResponse.{Upstream4xxResponse, Upstream5xxResponse}
-import uk.gov.hmrc.http.client.HttpClientV2
+import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.ws.{WSClient, WSResponse}
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Errors
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Exceptions.ResponseParsingException
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
-abstract class BaseConnector(httpClientV2: HttpClientV2) {
+abstract class BaseConnector(wsClient: WSClient) {
 
   def url(): URL
 
+  /** We would have liked to use HttpClientV2, but when it encounters a 400 or 500 status code, the response body is inaccessible.
+    */
   def post[S, T](request: S)(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext,
     writes: Writes[S],
-    httpReads: uk.gov.hmrc.http.HttpReads[T]
-  ): Future[Either[Error, T]] =
-    httpClientV2
-      .post(url())
-      .withBody(toJson(request))
-      .execute[T]
+    reads: Reads[T]
+  ): Future[Either[Errors, T]] =
+    wsClient
+      .url(url().toString)
+      .post(toJson(request))
       .transform {
-        case Success(response)                                => Success(Right(response))
-        case Failure(Upstream5xxResponse(errorResponse))      => Success(Left(Error(errorResponse.statusCode)))
-        case Failure(Upstream4xxResponse(errorResponse))      => Success(Left(Error(errorResponse.statusCode)))
-        case Failure(_: uk.gov.hmrc.http.NotFoundException)   => Success(Left(Error(NOT_FOUND)))
-        case Failure(_: uk.gov.hmrc.http.BadRequestException) => Success(Left(Error(BAD_REQUEST)))
-        case Failure(_)                                       => Success(Left(Error(INTERNAL_SERVER_ERROR)))
+        case Success(wsResponse) =>
+          wsResponse.status match {
+            case OK | CREATED    => asResponse(wsResponse)
+            case otherStatusCode => asErrors(otherStatusCode, wsResponse)
+          }
+        case Failure(exception) => Failure(exception)
       }
+
+  private def asResponse[T](wsResponse: WSResponse)(implicit reads: Reads[T]): Try[Either[Errors, T]] =
+    wsResponse.json
+      .validate[T]
+      .map(response => Success(Right(response)))
+      .getOrElse(Failure(new ResponseParsingException()))
+
+  private def asErrors[T](statusCode: Int, wsResponse: WSResponse): Try[Either[Errors, T]] =
+    if (wsResponse.body.nonEmpty)
+      wsResponse.json
+        .validate[BaseConnector.Responses.ErrorDetail]
+        .map(errorDetail => Success(Left(Errors(statusCode, Some(errorDetail)))))
+        .getOrElse(Failure(new ResponseParsingException()))
+    else Success(Left(Errors(statusCode)))
+
 }
 
 object BaseConnector {
 
   final case class Error(statusCode: Int)
+
+  object Responses {
+
+    object Exceptions {
+      final class ResponseParsingException extends RuntimeException
+    }
+
+    final case class Errors(status: Int, errorDetail: Option[ErrorDetail] = None)
+
+    final case class ErrorDetail(errorCode: Option[String])
+
+    object ErrorDetail {
+      implicit lazy val reads: Reads[ErrorDetail] =
+        (JsPath \ "errorDetail" \ "errorCode").readNullable[String].map(ErrorDetail(_))
+    }
+  }
 
 }

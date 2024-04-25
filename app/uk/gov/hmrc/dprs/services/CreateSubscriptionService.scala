@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.services
 
 import com.google.inject.Inject
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
+import play.api.http.Status.{BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, UNAUTHORIZED, UNPROCESSABLE_ENTITY}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 import play.api.libs.json._
@@ -26,39 +26,57 @@ import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
 import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Requests.Request.{Contact, Id}
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
-import uk.gov.hmrc.http.HeaderCarrier
 
-import java.time.{Clock, Instant}
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateSubscriptionService @Inject() (clock: Clock,
-                                           acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
-                                           createSubscriptionConnector: CreateSubscriptionConnector
+class CreateSubscriptionService @Inject() (
+  createSubscriptionConnector: CreateSubscriptionConnector
 ) extends BaseService {
 
-  private val converter = new Converter(clock, acknowledgementReferenceGenerator)
+  private val converter = new Converter
   override val errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus] =
     Map(
-      INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError)),
+      BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR),
+      UNPROCESSABLE_ENTITY  -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
       SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
-      CONFLICT              -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
-      BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
+      UNAUTHORIZED          -> ErrorCodeWithStatus(UNAUTHORIZED, Some(ErrorCodes.unauthorised)),
+      FORBIDDEN             -> ErrorCodeWithStatus(FORBIDDEN, Some(ErrorCodes.forbidden)),
+      INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
     )
 
   def call(serviceRequest: CreateSubscriptionService.Requests.Request)(implicit
-    headerCarrier: HeaderCarrier,
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorCodeWithStatus, CreateSubscriptionService.Responses.Response]] =
     converter
       .convert(serviceRequest)
       .map { connectorRequest =>
         createSubscriptionConnector.call(connectorRequest).map {
-          case Right(connectorResponse)              => Right(converter.convert(connectorResponse))
-          case Left(BaseConnector.Error(statusCode)) => Left(convert(statusCode))
+          case Right(connectorResponse) => Right(converter.convert(connectorResponse))
+          case Left(BaseConnector.Responses.Errors(statusCode, errorDetail)) =>
+            errorDetail.flatMap(_.errorCode) match {
+              case Some(errorCode) =>
+                (statusCode, errorCode) match {
+                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.malformedPayload) =>
+                    Left(convert(BAD_REQUEST))
+                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.duplicateSubmission) =>
+                    Left(convert(UNPROCESSABLE_ENTITY))
+                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.couldNotBeProcessed) =>
+                    Left(convert(SERVICE_UNAVAILABLE))
+                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.invalidId) =>
+                    Left(convert(BAD_REQUEST))
+                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.unauthorised) =>
+                    Left(convert(UNAUTHORIZED))
+                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.forbidden) =>
+                    Left(convert(FORBIDDEN))
+                  case _ =>
+                    Left(convert(BAD_REQUEST))
+                }
+              case None =>
+                Left(convert(BAD_REQUEST))
+            }
         }
       }
       .getOrElse(Future.successful(Left(convert(BAD_REQUEST))))
-
 }
 
 object CreateSubscriptionService {
@@ -172,31 +190,23 @@ object CreateSubscriptionService {
 
   }
 
-  class Converter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
-
-    /** We're awaiting the specs for the underlying API; in the meantime, we'll use the one for MDR; this matches the expectations of the stub service.
-      */
-    private val regime            = "MDR"
-    private val originatingSystem = "MDTP"
+  class Converter {
 
     def convert(request: Requests.Request): Option[CreateSubscriptionConnector.Requests.Request] =
       request.contacts.headOption
         .map { primaryContact =>
           CreateSubscriptionConnector.Requests.Request(
-            common = generateRequestCommon(),
-            detail = CreateSubscriptionConnector.Requests.Detail(
-              idType = request.id.idType.toString,
-              idNumber = request.id.value,
-              tradingName = request.name,
-              isGBUser = true, // TODO: Determine this.
-              primaryContact = convert(primaryContact),
-              secondaryContact = request.contacts.tail.headOption.map(convert)
-            )
+            idType = request.id.idType.toString,
+            idNumber = request.id.value,
+            tradingName = request.name,
+            gbUser = true, // TODO: Determine this.
+            primaryContact = convert(primaryContact),
+            secondaryContact = request.contacts.tail.headOption.map(convert)
           )
         }
 
     def convert(response: CreateSubscriptionConnector.Responses.Response): Responses.Response =
-      Responses.Response(id = response.id)
+      Responses.Response(id = response.dprsReference)
 
     private def convert(contact: Requests.Request.Contact): CreateSubscriptionConnector.Requests.Contact =
       contact match {
@@ -218,12 +228,5 @@ object CreateSubscriptionService {
             organisationDetails = Some(CreateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = name))
           )
       }
-
-    private def generateRequestCommon() = CreateSubscriptionConnector.Requests.Common(
-      receiptDate = Instant.now(clock).toString,
-      regime = regime,
-      acknowledgementReference = acknowledgementReferenceGenerator.generate(),
-      originatingSystem = originatingSystem
-    )
   }
 }

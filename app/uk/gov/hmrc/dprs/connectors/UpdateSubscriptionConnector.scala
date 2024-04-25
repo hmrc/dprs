@@ -19,12 +19,12 @@ package uk.gov.hmrc.dprs.connectors
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Request
 import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Responses.Response
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
 import javax.inject.Inject
@@ -32,9 +32,11 @@ import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UpdateSubscriptionConnector @Inject() (appConfig: AppConfig, httpClientV2: HttpClientV2) extends BaseConnector(httpClientV2) {
+class UpdateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
-  def call(request: Request)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Either[BaseConnector.Error, Response]] =
+  def call(
+    request: Request
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
     post[Request, Response](request)
 
   override def url(): URL = url"${appConfig.updateSubscriptionBaseUrl}"
