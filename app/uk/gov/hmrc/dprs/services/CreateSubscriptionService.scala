@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.services
 
 import com.google.inject.Inject
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
+import play.api.http.Status.{BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, UNAUTHORIZED, UNPROCESSABLE_ENTITY}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 import play.api.libs.json._
@@ -39,6 +39,8 @@ class CreateSubscriptionService @Inject() (
       BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR),
       UNPROCESSABLE_ENTITY  -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
       SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
+      UNAUTHORIZED          -> ErrorCodeWithStatus(UNAUTHORIZED, Some(ErrorCodes.unauthorised)),
+      FORBIDDEN             -> ErrorCodeWithStatus(FORBIDDEN, Some(ErrorCodes.forbidden)),
       INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
     )
 
@@ -63,9 +65,9 @@ class CreateSubscriptionService @Inject() (
                   case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.invalidId) =>
                     Left(convert(BAD_REQUEST))
                   case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.unauthorised) =>
-                    Left(convert(INTERNAL_SERVER_ERROR))
+                    Left(convert(UNAUTHORIZED))
                   case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.forbidden) =>
-                    Left(convert(INTERNAL_SERVER_ERROR))
+                    Left(convert(FORBIDDEN))
                   case _ =>
                     Left(convert(BAD_REQUEST))
                 }

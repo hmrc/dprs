@@ -355,7 +355,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
-											"    pm.response.to.have.status(503);",
+											"    pm.response.to.have.status(401);",
 											"});",
 											"",
 											"",
@@ -364,7 +364,7 @@
 											"});",
 											"",
 											"pm.test(\"Error code is as expected\", function () {",
-											"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+											"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-unauthorised\");",
 											"});",
 											"",
 											""
@@ -406,7 +406,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
-											"    pm.response.to.have.status(503);",
+											"    pm.response.to.have.status(403);",
 											"});",
 											"",
 											"",
@@ -415,7 +415,7 @@
 											"});",
 											"",
 											"pm.test(\"Error code is as expected\", function () {",
-											"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+											"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-forbidden\");",
 											"});",
 											"",
 											""

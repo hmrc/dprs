@@ -44,6 +44,8 @@ object BaseService {
     val serviceUnavailableError = "eis-returned-service-unavailable"
     val conflict                = "eis-returned-conflict"
     val notFound                = "eis-returned-not-found"
+    val unauthorised            = "eis-returned-unauthorised"
+    val forbidden               = "eis-returned-forbidden"
   }
 
 }

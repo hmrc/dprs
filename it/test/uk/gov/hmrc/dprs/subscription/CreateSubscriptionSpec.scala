@@ -577,12 +577,12 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
           assertAsExpected(
             response,
-            SERVICE_UNAVAILABLE,
+            UNAUTHORIZED,
             Some(
               """
                 |[
                 |  {
-                |    "code": "eis-returned-internal-server-error"
+                |    "code": "eis-returned-unauthorised"
                 |  }
                 |]
                 |""".stripMargin
@@ -664,12 +664,12 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
           assertAsExpected(
             response,
-            SERVICE_UNAVAILABLE,
+            FORBIDDEN,
             Some(
               """
                 |[
                 |  {
-                |    "code": "eis-returned-internal-server-error"
+                |    "code": "eis-returned-forbidden"
                 |  }
                 |]
                 |""".stripMargin

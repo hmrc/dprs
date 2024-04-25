@@ -23,11 +23,10 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSResponse}
-import play.api.{Application, inject}
+import play.api.{inject, Application}
 import uk.gov.hmrc.dprs.BaseIntegrationSpec.CustomMatchers.{haveJsonBody, haveNoBody, haveStatus}
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
-import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.test.{HttpClientV2Support, WireMockSupport}
+import uk.gov.hmrc.http.test.WireMockSupport
 
 import java.time.{Clock, Instant, ZoneId}
 import java.util.UUID
@@ -38,20 +37,18 @@ abstract class BaseIntegrationSpec
     with ScalaFutures
     with IntegrationPatience
     with GuiceOneServerPerSuite
-    with WireMockSupport
-    with HttpClientV2Support {
+    with WireMockSupport {
 
   val wsClient: WSClient                      = app.injector.instanceOf[WSClient]
   val baseUrl: String                         = s"http://localhost:$port"
   lazy val fixedClock: Clock                  = Clock.fixed(Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS), ZoneId.systemDefault)
   lazy val fixedAcknowledgeReferenceGenerator = new FixedAcknowledgeReferenceGenerator(UUID.randomUUID().toString)
   lazy val currentDateAndTime: String         = Instant.now(fixedClock).toString
-  lazy val acknowledgementReference: String = fixedAcknowledgeReferenceGenerator.generate()
+  lazy val acknowledgementReference: String   = fixedAcknowledgeReferenceGenerator.generate()
 
   override def fakeApplication(): Application =
     baseApplicationBuilder()
       .configure(extraApplicationConfig)
-      .overrides(inject.bind[HttpClientV2].toInstance(httpClientV2))
       .overrides(inject.bind[Clock].toInstance(fixedClock))
       .overrides(inject.bind[AcknowledgementReferenceGenerator].toInstance(fixedAcknowledgeReferenceGenerator))
       .build()
