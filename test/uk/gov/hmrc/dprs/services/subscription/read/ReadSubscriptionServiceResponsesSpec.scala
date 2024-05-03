@@ -19,8 +19,8 @@ package uk.gov.hmrc.dprs.services.subscription.read
 import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService.Responses
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService.Responses.{Individual, Organisation}
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Responses
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Responses.{Individual, Organisation}
 
 class ReadSubscriptionServiceResponsesSpec extends BaseSpec {
 

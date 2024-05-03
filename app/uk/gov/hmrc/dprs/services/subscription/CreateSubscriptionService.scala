@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.subscription
 
 import com.google.inject.Inject
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, UNAUTHORIZED, UNPROCESSABLE_ENTITY}
+import play.api.http.Status._
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 import play.api.libs.json._
-import uk.gov.hmrc.dprs.connectors.{BaseConnector, CreateSubscriptionConnector}
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Converter
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Requests.Request.{Contact, Id}
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector
+import uk.gov.hmrc.dprs.services.BaseService
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Converter
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Requests.Request.{Contact, Id}
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,49 +36,35 @@ class CreateSubscriptionService @Inject() (
 ) extends BaseService {
 
   private val converter = new Converter
-  override val errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus] =
-    Map(
-      BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR),
-      UNPROCESSABLE_ENTITY  -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
-      SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
-      UNAUTHORIZED          -> ErrorCodeWithStatus(UNAUTHORIZED, Some(ErrorCodes.unauthorised)),
-      FORBIDDEN             -> ErrorCodeWithStatus(FORBIDDEN, Some(ErrorCodes.forbidden)),
-      INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
-    )
 
   def call(serviceRequest: CreateSubscriptionService.Requests.Request)(implicit
     executionContext: ExecutionContext
-  ): Future[Either[BaseService.ErrorCodeWithStatus, CreateSubscriptionService.Responses.Response]] =
+  ): Future[Either[BaseService.ErrorResponse, CreateSubscriptionService.Responses.Response]] =
     converter
       .convert(serviceRequest)
       .map { connectorRequest =>
         createSubscriptionConnector.call(connectorRequest).map {
           case Right(connectorResponse) => Right(converter.convert(connectorResponse))
-          case Left(BaseConnector.Responses.Errors(statusCode, errorDetail)) =>
-            errorDetail.flatMap(_.errorCode) match {
-              case Some(errorCode) =>
-                (statusCode, errorCode) match {
-                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.malformedPayload) =>
-                    Left(convert(BAD_REQUEST))
-                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.duplicateSubmission) =>
-                    Left(convert(UNPROCESSABLE_ENTITY))
-                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.couldNotBeProcessed) =>
-                    Left(convert(SERVICE_UNAVAILABLE))
-                  case (UNPROCESSABLE_ENTITY, CreateSubscriptionConnector.Responses.ErrorCodes.invalidId) =>
-                    Left(convert(BAD_REQUEST))
-                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.unauthorised) =>
-                    Left(convert(UNAUTHORIZED))
-                  case (INTERNAL_SERVER_ERROR, CreateSubscriptionConnector.Responses.ErrorCodes.forbidden) =>
-                    Left(convert(FORBIDDEN))
-                  case _ =>
-                    Left(convert(BAD_REQUEST))
-                }
-              case None =>
-                Left(convert(BAD_REQUEST))
-            }
+          case Left(error)              => Left(convert(error))
         }
       }
-      .getOrElse(Future.successful(Left(convert(BAD_REQUEST))))
+      .getOrElse(Future.successful(Left(convert(Error(INTERNAL_SERVER_ERROR)))))
+
+  override protected def convert(connectorError: Error): ErrorResponse = {
+    import BaseService.{ErrorCodes => ServiceErrorCodes}
+    import CreateSubscriptionConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    connectorError match {
+      case Error(INTERNAL_SERVER_ERROR, None) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.malformedPayload))   => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.duplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.couldNotBeProcessed)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.invalidId))     => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.unauthorised)) => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.forbidden))    => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case _                                                                    => ErrorResponse(connectorError.status)
+    }
+  }
 }
 
 object CreateSubscriptionService {

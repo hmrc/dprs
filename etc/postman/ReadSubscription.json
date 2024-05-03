@@ -1,16 +1,30 @@
 {
 	"info": {
-		"_postman_id": "a5c9e18c-9e9f-44e8-975a-7166b8bc283c",
+		"_postman_id": "0be6ff2d-cef3-44e5-8bb3-ef032302550e",
 		"name": "Read Subscription",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5298634"
+		"_exporter_id": "30217849"
 	},
 	"item": [
 		{
 			"name": "Success",
 			"item": [
 				{
-					"name": "Id is Present",
+					"name": "Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -51,7 +65,29 @@
 					"name": "Downstream",
 					"item": [
 						{
-							"name": "Bad Request",
+							"name": "Could Not Be Processed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(503);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -68,7 +104,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000400",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000422_003",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -77,14 +113,36 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000400"
+										"000000422_003"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Not Found",
+							"name": "Create Or Amend In Progress",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(503);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -101,7 +159,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000404",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000422_201",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -110,14 +168,36 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000404"
+										"000000422_201"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Service Unavailable",
+							"name": "Duplicate Submission",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-conflict\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -134,7 +214,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000503",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000422_004",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -143,7 +223,62 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000503"
+										"000000422_004"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forbidden",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_403",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500_403"
 									]
 								}
 							},
@@ -151,6 +286,28 @@
 						},
 						{
 							"name": "Internal Server Error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(503);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -167,7 +324,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000500",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_500",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -176,7 +333,170 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000500"
+										"000000500_500"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000422_016",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000422_016"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "No Subscription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-not-found\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000422_202",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000422_202"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unauthorised",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-unauthorised\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_401",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500_401"
 									]
 								}
 							},
@@ -185,7 +505,21 @@
 					]
 				},
 				{
-					"name": "Id is Absent",
+					"name": "Missing ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},

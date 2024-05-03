@@ -17,20 +17,18 @@
 package uk.gov.hmrc.dprs.services
 
 import play.api.libs.json.{JsPath, OWrites}
-import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
+import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 
 abstract class BaseService {
 
-  def errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus]
-
-  protected def convert(errorStatusCode: Int): ErrorCodeWithStatus =
-    errorStatusCodeConversions.getOrElse(errorStatusCode, ErrorCodeWithStatus(errorStatusCode))
+  protected def convert(connectorError: BaseConnector.Responses.Error): ErrorResponse
 
 }
 
 object BaseService {
 
-  final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String] = None)
+  final case class ErrorResponse(statusCode: Int, code: Option[String] = None)
 
   final case class Error(code: String)
 

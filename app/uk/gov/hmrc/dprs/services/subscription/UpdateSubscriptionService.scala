@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.subscription
 
 import com.google.inject.Inject
 import play.api.http.Status._
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.maxLength
 import play.api.libs.json._
-import uk.gov.hmrc.dprs.connectors.{BaseConnector, UpdateSubscriptionConnector}
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
-import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.Converter
-import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.Requests.Request.Contact
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
+import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector
+import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodes, ErrorResponse}
+import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Converter
+import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Request.Contact
+import uk.gov.hmrc.dprs.services.{AcknowledgementReferenceGenerator, BaseService}
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 
 import java.time.{Clock, Instant}
@@ -36,27 +38,28 @@ class UpdateSubscriptionService @Inject() (clock: Clock,
 ) extends BaseService {
 
   private val converter = new Converter(clock, acknowledgementReferenceGenerator)
-  override val errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus] =
-    Map(
-      INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError)),
-      SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
-      CONFLICT              -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR),
-      NOT_FOUND             -> ErrorCodeWithStatus(NOT_FOUND, Some(ErrorCodes.notFound)),
-      BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
-    )
 
   def call(id: String, serviceRequest: UpdateSubscriptionService.Requests.Request)(implicit
     executionContext: ExecutionContext
-  ): Future[Either[BaseService.ErrorCodeWithStatus, Unit]] =
+  ): Future[Either[BaseService.ErrorResponse, Unit]] =
     converter
       .convert(id, serviceRequest)
       .map {
         updateSubscriptionConnector.call(_).map {
-          case Right(_)                                            => Right(())
-          case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
+          case Right(_)    => Right(())
+          case Left(error) => Left(convert(error))
         }
       }
-      .getOrElse(Future.successful(Left(convert(BAD_REQUEST))))
+      .getOrElse(Future.successful(Left(ErrorResponse(SERVICE_UNAVAILABLE))))
+
+  override protected def convert(connectorError: Error): ErrorResponse = connectorError match {
+    case Error(INTERNAL_SERVER_ERROR, Some("500")) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
+    case Error(SERVICE_UNAVAILABLE, Some("503"))   => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError))
+    case Error(CONFLICT, _)                        => ErrorResponse(INTERNAL_SERVER_ERROR)
+    case Error(NOT_FOUND, Some("404"))             => ErrorResponse(NOT_FOUND, Some(ErrorCodes.notFound))
+    case Error(BAD_REQUEST, _)                     => ErrorResponse(INTERNAL_SERVER_ERROR)
+    case _                                         => ErrorResponse(connectorError.status)
+  }
 
 }
 

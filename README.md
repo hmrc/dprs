@@ -122,7 +122,7 @@ curl 'http://localhost:20001/dprs/registrations/withId/organisation' \
     }
   ],
   "name": "Dyson",
-  "type": "UnincorporatedBody",
+  "type": "CorporateBody",
   "address": {
     "lineOne": "2627 Gus Hill",
     "lineTwo": "Apt. 898",
@@ -272,9 +272,9 @@ curl 'http://localhost:20001/dprs/subscriptions' \
 }'
 ```
 
-``` 
+```json 
 {
-  "id": "XAMDR0000XE0000526017"
+  "id": "XSP1234567890"
 }
 ```
 
@@ -312,17 +312,7 @@ curl -v 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d651
 ```
 
 ``` 
-> POST /dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec HTTP/1.1
-> Host: localhost:20001
-> User-Agent: curl/8.4.0
-> Accept: */*
-> Content-Type: application/json
-> Content-Length: 530
-> 
 < HTTP/1.1 204 No Content
-< Cache-Control: no-cache,no-store,max-age=0
-< Date: Tue, 19 Mar 2024 11:40:52 GMT
-< 
 ```
 
 To get a sense of the various scenarios, you could look
@@ -333,45 +323,33 @@ at [this integration test](it/test/uk/gov/hmrc/dprs/subscription/UpdateSubscript
 Here's an example of a successful call:
 
 ``` 
-curl -v 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec' \
---header 'Content-Type: application/json'
+curl 'http://localhost:20001/dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec'
 ```
 
-``` 
-> GET /dprs/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec HTTP/1.1
-> Host: localhost:20001
-> User-Agent: curl/8.4.0
-> Accept: */*
-> Content-Type: application/json
-> 
-< HTTP/1.1 200 OK
-< Cache-Control: no-cache,no-store,max-age=0
-< Date: Wed, 10 Apr 2024 08:20:27 GMT
-< Content-Type: application/json
-< Content-Length: 363
-< 
-* Connection #0 to host localhost left intact
+```json 
 {
-    "id": "XAMDR0000XE0000352129",
-    "name": "Baumbach-Waelchi",
-    "contacts": [
-        {
-            "type": "I",
-            "firstName": "Josefina",
-            "middleName": null,
-            "lastName": "Zieme",
-            "landline": "687394104",
-            "mobile": "73744443225",
-            "emailAddress": "christopher.wisoky@example.com"
-        },
-        {
-            "type": "O",
-            "name": "Daugherty, Mante and Rodriguez",
-            "landline": null,
-            "mobile": null,
-            "emailAddress": "cody.halvorson@example.com"
-        }
-    ]
+  "id": "XLD1234567891",
+  "name": "James Hank",
+  "contacts": [
+    {
+      "type": "I",
+      "firstName": "Mark",
+      "middleName": "Jacob",
+      "lastName": "Robinson",
+      "landline": "0202731454",
+      "mobile": "07896543333",
+      "emailAddress": "markrobinson@hmrc.gov.uk"
+    },
+    {
+      "type": "I",
+      "firstName": "Leo",
+      "middleName": "Jason",
+      "lastName": "Smith",
+      "landline": "0209231454",
+      "mobile": "07896547777",
+      "emailAddress": "leosmith@hmrc.gov.uk"
+    }
+  ]
 }
 ```
 
@@ -395,6 +373,14 @@ example:
 ``` 
 newman run ./etc/postman/RegistrationWithID.json
 ```
+
+Finally, to verify that all assertions for all collections are passing:
+
+``` 
+./run_postman.sh
+```
+
+It will stop at the first failure.
 
 ## Dev
 

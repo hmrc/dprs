@@ -17,8 +17,10 @@
 package uk.gov.hmrc.dprs.services.registration.withId
 
 import play.api.libs.json._
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.{beInvalid, beValid}
-import uk.gov.hmrc.dprs.services.{BaseSpec, RegistrationWithIdService}
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Requests.Organisation.Type.CorporateBody
 
 import scala.collection.immutable
 
@@ -464,7 +466,6 @@ class RegistrationWithIdServiceRequestsSpec extends BaseSpec {
       import RegistrationWithIdService.Requests.Organisation
       import RegistrationWithIdService.Requests.Organisation.RequestId
       import RegistrationWithIdService.Requests.Organisation.RequestIdType._
-      import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation.Type._
       "valid" - {
         "with a recognised id type" in {
           val types =

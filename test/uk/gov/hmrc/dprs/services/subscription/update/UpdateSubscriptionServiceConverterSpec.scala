@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.dprs.services.subscription.update
 
-import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector
+import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector
 import uk.gov.hmrc.dprs.services.BaseSpec
-import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.Requests.Request
-import uk.gov.hmrc.dprs.services.UpdateSubscriptionService.{Converter, Requests}
+import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Request
+import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.{Converter, Requests}
 
 class UpdateSubscriptionServiceConverterSpec extends BaseSpec {
 

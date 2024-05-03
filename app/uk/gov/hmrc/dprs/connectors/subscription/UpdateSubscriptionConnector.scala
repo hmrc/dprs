@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors
+package uk.gov.hmrc.dprs.connectors.subscription
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
-import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Requests.Request
-import uk.gov.hmrc.dprs.connectors.UpdateSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
+import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector.Requests.Request
+import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
@@ -36,10 +37,10 @@ class UpdateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
   def call(
     request: Request
-  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
     post[Request, Response](request)
 
-  override def url(): URL = url"${appConfig.updateSubscriptionBaseUrl}"
+  override def baseUrl(): URL = url"${appConfig.updateSubscriptionBaseUrl}"
 
 }
 

@@ -22,14 +22,14 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 abstract class BaseIntegrationWithConnectorSpec extends BaseIntegrationSpec {
 
-  def connectorPath: String
+  def baseConnectorPath: String
 
   def connectorName: String
 
   override def extraApplicationConfig: Map[String, Any] = Map(
     s"microservice.services.$connectorName.host"    -> wireMockHost,
     s"microservice.services.$connectorName.port"    -> wireMockPort,
-    s"microservice.services.$connectorName.context" -> connectorPath
+    s"microservice.services.$connectorName.context" -> baseConnectorPath
   )
 
   def verifyThatDownstreamApiWasCalled(): Unit = {
@@ -39,5 +39,5 @@ abstract class BaseIntegrationWithConnectorSpec extends BaseIntegrationSpec {
   }
 
   def verifyThatDownstreamApiWasNotCalled(): Unit =
-    verify(0, postRequestedFor(urlEqualTo(connectorPath)))
+    verify(0, postRequestedFor(urlEqualTo(baseConnectorPath)))
 }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors
+package uk.gov.hmrc.dprs.connectors.registration
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.{Request, Responses}
+import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector.{Request, Responses}
 import uk.gov.hmrc.http.StringContextOps
 
 import javax.inject.Inject
@@ -33,15 +34,15 @@ class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
   def forIndividual(
     request: Request
-  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Responses.Individual]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Responses.Individual]] =
     post[RegistrationWithIdConnector.Request, Responses.Individual](request)
 
   def forOrganisation(
     request: Request
-  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Responses.Organisation]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Responses.Organisation]] =
     post[RegistrationWithIdConnector.Request, Responses.Organisation](request)
 
-  override def url() = url"${appConfig.registrationWithIdBaseUrl}"
+  override def baseUrl() = url"${appConfig.registrationWithIdBaseUrl}"
 
 }
 

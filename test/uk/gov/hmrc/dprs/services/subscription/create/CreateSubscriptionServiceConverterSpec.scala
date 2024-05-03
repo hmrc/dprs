@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.dprs.services.subscription.create
 
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector
 import uk.gov.hmrc.dprs.services.BaseSpec
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Requests.Request
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.{Converter, Requests, Responses}
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Requests.Request
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.{Converter, Requests, Responses}
 
 class CreateSubscriptionServiceConverterSpec extends BaseSpec {
 

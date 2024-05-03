@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.dprs.services.registration.withId
 
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Individual
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.{Requests, Responses}
-import uk.gov.hmrc.dprs.services.{BaseSpec, RegistrationWithIdService}
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector
+import uk.gov.hmrc.dprs.services.BaseSpec
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Requests.Individual
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.{Requests, Responses}
 
 class RegistrationWithIdServiceConverterSpec extends BaseSpec {
 

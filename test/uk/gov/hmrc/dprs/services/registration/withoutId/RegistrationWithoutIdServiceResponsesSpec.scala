@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.services.registration.withoutId
 import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
-import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.Responses.{Id, Individual, Organisation}
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithoutIdService.Responses.{Id, Individual, Organisation}
 
 class RegistrationWithoutIdServiceResponsesSpec extends BaseSpec {
 

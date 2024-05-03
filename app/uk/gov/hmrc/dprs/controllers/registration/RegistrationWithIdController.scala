@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.controllers
+package uk.gov.hmrc.dprs.controllers.registration
 
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import play.api.mvc.{Action, ControllerComponents}
-import uk.gov.hmrc.dprs.services.{BaseService, RegistrationWithIdService}
+import uk.gov.hmrc.dprs.controllers.BaseController
+import uk.gov.hmrc.dprs.services.BaseService
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

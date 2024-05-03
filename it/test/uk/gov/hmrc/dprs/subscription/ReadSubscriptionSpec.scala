@@ -17,78 +17,58 @@
 package uk.gov.hmrc.dprs.subscription
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath: String      = "/dac6/dct70d/v1"
+  override val baseConnectorPath: String  = "/dac6/dprs0202/v1"
   override lazy val connectorName: String = "read-subscription"
 
   "attempting to read a subscription, when" - {
     "the request is" - {
       "valid" in {
         stubFor(
-          post(urlEqualTo(connectorPath))
-            .withRequestBody(
-              equalToJson(
-                s"""
-                 |{
-                 |    "displaySubscriptionForMDRRequest": {
-                 |        "requestCommon": {
-                 |            "regime": "MDR",
-                 |            "receiptDate": "$currentDateAndTime",
-                 |            "acknowledgementReference": "$acknowledgementReference",
-                 |            "originatingSystem": "MDTP"
-                 |        },
-                 |        "requestDetail": {
-                 |            "IDType": "MDR",
-                 |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                 |        }
-                 |    }
-                 |}
-                 |""".stripMargin
-              )
-            )
+          get(urlEqualTo(baseConnectorPath + "/" + "XLD1234567891"))
             .willReturn(
               aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withStatus(OK)
                 .withBody(s"""
-                     |{
-                     |    "displaySubscriptionForMDRResponse": {
-                     |        "responseCommon": {
-                     |            "status": "OK",
-                     |            "processingDate": "2020-09-12T18:03:45Z"
-                     |        },
-                     |        "responseDetail": {
-                     |            "subscriptionID": "XAMDR0000XE0000352129",
-                     |            "tradingName": "Baumbach-Waelchi",
-                     |            "isGBUser": true,
-                     |            "primaryContact": {
-                     |                "email": "christopher.wisoky@example.com",
-                     |                "phone": "687394104",
-                     |                "mobile": "73744443225",
-                     |                "individual": {
-                     |                    "firstName": "Josefina",
-                     |                    "lastName": "Zieme"
-                     |                }
-                     |            },
-                     |            "secondaryContact": {
-                     |                "email": "cody.halvorson@example.com",
-                     |                "organisation": {
-                     |                    "organisationName": "Daugherty, Mante and Rodriguez"
-                     |                }
-                     |            }
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin)
+                 |{
+                 |  "success": {
+                 |    "processingDate": "2024-01-25T09:26:17Z",
+                 |    "customer": {
+                 |      "id": "XLD1234567891",
+                 |      "tradingName": "James Hank",
+                 |      "gbUser": true,
+                 |      "primaryContact": {
+                 |        "individual": {
+                 |          "firstName": "Mark",
+                 |          "middleName": "Jacob",
+                 |          "lastName": "Robinson"
+                 |        },
+                 |        "email": "markrobinson@hmrc.gov.uk",
+                 |        "phone": "0202731454",
+                 |        "mobile": "07896543333"
+                 |      },
+                 |      "secondaryContact": {
+                 |        "organisation": {
+                 |          "organisationName": "Tools for Traders"
+                 |        },
+                 |        "email": "toolsfortraders@example.com",
+                 |        "phone": "+44 020 39898980",
+                 |        "mobile": "+44 07896542228"
+                 |      }
+                 |    }
+                 |  }
+                 |}
+                 |""".stripMargin)
             )
         )
 
         val response = wsClient
-          .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+          .url(fullUrl("/subscriptions/XLD1234567891"))
           .withHttpHeaders(("Content-Type", "application/json"))
           .get()
           .futureValue
@@ -99,24 +79,24 @@ class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           jsonBodyOpt = Some(
             """
               |{
-              |    "id": "XAMDR0000XE0000352129",
-              |    "name": "Baumbach-Waelchi",
+              |    "id": "XLD1234567891",
+              |    "name": "James Hank",
               |    "contacts": [
               |        {
               |            "type": "I",
-              |            "firstName": "Josefina",
-              |            "middleName": null,
-              |            "lastName": "Zieme",
-              |            "landline": "687394104",
-              |            "mobile": "73744443225",
-              |            "emailAddress": "christopher.wisoky@example.com"
+              |            "firstName": "Mark",
+              |            "middleName": "Jacob",
+              |            "lastName": "Robinson",
+              |            "landline": "0202731454",
+              |            "mobile": "07896543333",
+              |            "emailAddress": "markrobinson@hmrc.gov.uk"
               |        },
               |        {
               |            "type": "O",
-              |            "name": "Daugherty, Mante and Rodriguez",
-              |            "landline": null,
-              |            "mobile": null,
-              |            "emailAddress": "cody.halvorson@example.com"
+              |            "name": "Tools for Traders",
+              |            "landline": "+44 020 39898980",
+              |            "mobile": "+44 07896542228",
+              |            "emailAddress": "toolsfortraders@example.com"
               |        }
               |    ]
               |}
@@ -126,215 +106,9 @@ class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         verifyThatDownstreamApiWasCalled()
       }
       "valid but the integration call fails with response:" - {
-        "bad request" in {
-          stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(
-                equalToJson(
-                  s"""
-                     |{
-                     |    "displaySubscriptionForMDRRequest": {
-                     |        "requestCommon": {
-                     |            "regime": "MDR",
-                     |            "receiptDate": "$currentDateAndTime",
-                     |            "acknowledgementReference": "$acknowledgementReference",
-                     |            "originatingSystem": "MDTP"
-                     |        },
-                     |        "requestDetail": {
-                     |            "IDType": "MDR",
-                     |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin
-                )
-              )
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(BAD_REQUEST)
-                  .withBody(s"""
-                       |{
-                       |    "errorDetail": {
-                       |        "timestamp": "$currentDateAndTime",
-                       |        "correlationId": "566297cf-78a7-4bf5-9f1a-f3632bda7e12",
-                       |        "errorCode": "400",
-                       |        "errorMessage": "Invalid message",
-                       |        "source": "JSON validation",
-                       |        "sourceFaultDetail": {
-                       |            "detail": [
-                       |                "object has missing required parameters (['regime'])"
-                       |            ]
-                       |        }
-                       |    }
-                       |}
-                       |""".stripMargin)
-              )
-          )
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .get()
-            .futureValue
-
-          assertAsExpected(response, INTERNAL_SERVER_ERROR)
-          verifyThatDownstreamApiWasCalled()
-        }
-        "not found" in {
-          stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(
-                equalToJson(
-                  s"""
-                     |{
-                     |    "displaySubscriptionForMDRRequest": {
-                     |        "requestCommon": {
-                     |            "regime": "MDR",
-                     |            "receiptDate": "$currentDateAndTime",
-                     |            "acknowledgementReference": "$acknowledgementReference",
-                     |            "originatingSystem": "MDTP"
-                     |        },
-                     |        "requestDetail": {
-                     |            "IDType": "MDR",
-                     |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin
-                )
-              )
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(NOT_FOUND)
-                  .withBody(s"""
-                       |{
-                       |    "errorDetail": {
-                       |    "timestamp": "$currentDateAndTime",
-                       |    "correlationId": "1e8cff35-854e-4972-b64a-b585ee499f41",
-                       |    "errorCode": "404",
-                       |    "errorMessage": "Record not found",
-                       |    "source": "Back End",
-                       |    "sourceFaultDetail": {
-                       |        "detail": [
-                       |            "Record not found"
-                       |        ]
-                       |    }
-                       |}
-                       |}
-                       |""".stripMargin)
-              )
-          )
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .get()
-            .futureValue
-
-          assertAsExpected(
-            response,
-            NOT_FOUND,
-            Some(
-              """
-              |[
-              |  {
-              |    "code": "eis-returned-not-found"
-              |  }
-              |]
-              |""".stripMargin
-            )
-          )
-          verifyThatDownstreamApiWasCalled()
-        }
-        "service unavailable" in {
-          stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(
-                equalToJson(
-                  s"""
-                     |{
-                     |    "displaySubscriptionForMDRRequest": {
-                     |        "requestCommon": {
-                     |            "regime": "MDR",
-                     |            "receiptDate": "$currentDateAndTime",
-                     |            "acknowledgementReference": "$acknowledgementReference",
-                     |            "originatingSystem": "MDTP"
-                     |        },
-                     |        "requestDetail": {
-                     |            "IDType": "MDR",
-                     |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin
-                )
-              )
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(SERVICE_UNAVAILABLE)
-                  .withBody(s"""
-                       |{
-                       |    "errorDetail": {
-                       |    "timestamp": "$currentDateAndTime",
-                       |    "correlationId": "a40a8a76-7b7a-4b00-ab2b-7cfba64aa820",
-                       |    "errorCode": "503",
-                       |    "errorMessage": "Request could not be processed",
-                       |    "source": "Back End",
-                       |    "sourceFaultDetail": {
-                       |        "detail": [
-                       |            "003 - Request could not be processed"
-                       |        ]
-                       |    }
-                       |}
-                       |}
-                       |""".stripMargin)
-              )
-          )
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .get()
-            .futureValue
-
-          assertAsExpected(
-            response,
-            SERVICE_UNAVAILABLE,
-            Some(
-              """
-                |[
-                |  {
-                |    "code": "eis-returned-service-unavailable"
-                |  }
-                |]
-                |""".stripMargin
-            )
-          )
-          verifyThatDownstreamApiWasCalled()
-        }
         "internal server error" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(
-                equalToJson(
-                  s"""
-                     |{
-                     |    "displaySubscriptionForMDRRequest": {
-                     |        "requestCommon": {
-                     |            "regime": "MDR",
-                     |            "receiptDate": "$currentDateAndTime",
-                     |            "acknowledgementReference": "$acknowledgementReference",
-                     |            "originatingSystem": "MDTP"
-                     |        },
-                     |        "requestDetail": {
-                     |            "IDType": "MDR",
-                     |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin
-                )
-              )
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
@@ -378,70 +152,320 @@ class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           )
           verifyThatDownstreamApiWasCalled()
         }
+        "could not be processed" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "003",
+                               |        "errorMessage": "Request could not be processed",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Request could not be processed"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            SERVICE_UNAVAILABLE,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-service-unavailable"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "duplicate submission" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "004",
+                               |        "errorMessage": "Duplicate Submission",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Duplicate Submission"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            CONFLICT,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-conflict"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "invalid ID" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "016",
+                               |        "errorMessage": "Invalid ID",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Invalid ID"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(response, INTERNAL_SERVER_ERROR)
+          verifyThatDownstreamApiWasCalled()
+        }
+        "create or amend in progress" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "201",
+                               |        "errorMessage": "Create/amend is in progress",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Create/amend is in progress"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            SERVICE_UNAVAILABLE,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-service-unavailable"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "no subscription" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "202",
+                               |        "errorMessage": "No Subscription data found",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "No Subscription data found"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            NOT_FOUND,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-not-found"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "forbidden" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "403",
+                               |        "errorMessage": "Unexpected backend application error",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Unexpected backend application error"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            FORBIDDEN,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-forbidden"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "unauthorised" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "timestamp": "$currentDateAndTime",
+                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
+                               |        "errorCode": "401",
+                               |        "errorMessage": "Unexpected backend application error",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Unexpected backend application error"
+                               |            ]
+                               |        }
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            UNAUTHORIZED,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-unauthorised"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
       }
       "invalid" in {
-        stubFor(
-          post(urlEqualTo(connectorPath))
-            .withRequestBody(
-              equalToJson(
-                s"""
-                   |{
-                   |    "displaySubscriptionForMDRRequest": {
-                   |        "requestCommon": {
-                   |            "regime": "MDR",
-                   |            "receiptDate": "$currentDateAndTime",
-                   |            "acknowledgementReference": "$acknowledgementReference",
-                   |            "originatingSystem": "MDTP"
-                   |        },
-                   |        "requestDetail": {
-                   |            "IDType": "MDR",
-                   |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                   |        }
-                   |    }
-                   |}
-                   |""".stripMargin
-              )
-            )
-            .willReturn(
-              aResponse()
-                .withHeader("Content-Type", "application/json")
-                .withStatus(OK)
-                .withBody(
-                  s"""
-                     |{
-                     |    "displaySubscriptionForMDRResponse": {
-                     |        "responseCommon": {
-                     |            "status": "OK",
-                     |            "processingDate": "2020-09-12T18:03:45Z"
-                     |        },
-                     |        "responseDetail": {
-                     |            "subscriptionID": "XAMDR0000XE0000352129",
-                     |            "tradingName": "Baumbach-Waelchi",
-                     |            "isGBUser": true,
-                     |            "primaryContact": {
-                     |                "email": "christopher.wisoky@example.com",
-                     |                "phone": "687394104",
-                     |                "mobile": "73744443225",
-                     |                "individual": {
-                     |                    "firstName": "Josefina",
-                     |                    "lastName": "Zieme"
-                     |                }
-                     |            },
-                     |            "secondaryContact": {
-                     |                "email": "cody.halvorson@example.com",
-                     |                "organisation": {
-                     |                    "organisationName": "Daugherty, Mante and Rodriguez"
-                     |                }
-                     |            }
-                     |        }
-                     |    }
-                     |}
-                     |""".stripMargin)
-            )
-        )
-
         val response = wsClient
-          .url(fullUrl("/subscriptions"))
+          .url(fullUrl("/subscriptions/"))
           .withHttpHeaders(("Content-Type", "application/json"))
           .get()
           .futureValue
@@ -454,7 +478,7 @@ class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
               |{
               |    "statusCode": 404,
               |    "message": "URI not found",
-              |    "requested": "/dprs/subscriptions"
+              |    "requested": "/dprs/subscriptions/"
               |}
               |""".stripMargin
           )

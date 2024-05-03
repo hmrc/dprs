@@ -19,8 +19,8 @@ package uk.gov.hmrc.dprs.services.registration.withId
 import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.Individual
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Responses
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Responses.Individual
 
 class RegistrationWithIdServiceResponsesSpec extends BaseSpec {
 

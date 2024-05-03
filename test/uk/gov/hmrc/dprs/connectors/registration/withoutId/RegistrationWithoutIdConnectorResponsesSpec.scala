@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.connectors.registration.withoutId
 
-import uk.gov.hmrc.dprs.connectors.RegistrationWithoutIdConnector.Responses
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithoutIdConnector.Responses
 import uk.gov.hmrc.dprs.services.BaseSpec
 
 class RegistrationWithoutIdConnectorResponsesSpec extends BaseSpec {

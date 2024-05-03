@@ -17,7 +17,6 @@
 package uk.gov.hmrc.dprs.connectors.subscription
 
 import play.api.libs.json.Json.toJson
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
 

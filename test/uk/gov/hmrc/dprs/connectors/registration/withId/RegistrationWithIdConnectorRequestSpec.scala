@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.connectors.registration.withId
 
 import play.api.libs.json.Json.toJson
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.Request
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector.Request
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
 
