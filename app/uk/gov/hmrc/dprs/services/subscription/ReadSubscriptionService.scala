@@ -44,18 +44,18 @@ class ReadSubscriptionService @Inject() (readSubscriptionConnector: ReadSubscrip
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import ReadSubscriptionConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
     connectorError match {
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.couldNotBeProcessed)) =>
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CouldNotBeProcessed)) =>
         ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.duplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.invalidId))           => ErrorResponse(SERVICE_UNAVAILABLE)
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.createOfAmendInProgress)) =>
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.DuplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.InvalidId))           => ErrorResponse(SERVICE_UNAVAILABLE)
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CreateOrAmendInProgress)) =>
         ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.noSubscription)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.forbidden))     => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.unauthorised))  => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.internalServerError)) =>
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.NoSubscription)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Forbidden))     => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Unauthorised))  => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
         ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
       case _ => ErrorResponse(connectorError.status)
     }

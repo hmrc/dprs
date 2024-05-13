@@ -52,16 +52,17 @@ class CreateSubscriptionService @Inject() (
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import CreateSubscriptionConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
     connectorError match {
       case Error(INTERNAL_SERVER_ERROR, None) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.malformedPayload))   => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.duplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.couldNotBeProcessed)) =>
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.CouldNotBeProcessed)) => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.MalformedPayload))    => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.DuplicateSubmission))  => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CouldNotBeProcessed)) =>
         ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.invalidId))     => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.unauthorised)) => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.forbidden))    => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.InvalidId))     => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Unauthorised)) => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Forbidden))    => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
       case _                                                                    => ErrorResponse(connectorError.status)
     }
   }

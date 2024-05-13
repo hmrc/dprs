@@ -23,7 +23,7 @@ import play.api.libs.json.Reads.maxLength
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodes, ErrorResponse}
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Request.Contact
 import uk.gov.hmrc.dprs.services.{AcknowledgementReferenceGenerator, BaseService}
@@ -52,13 +52,21 @@ class UpdateSubscriptionService @Inject() (clock: Clock,
       }
       .getOrElse(Future.successful(Left(ErrorResponse(SERVICE_UNAVAILABLE))))
 
-  override protected def convert(connectorError: Error): ErrorResponse = connectorError match {
-    case Error(INTERNAL_SERVER_ERROR, Some("500")) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
-    case Error(SERVICE_UNAVAILABLE, Some("503"))   => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError))
-    case Error(CONFLICT, _)                        => ErrorResponse(INTERNAL_SERVER_ERROR)
-    case Error(NOT_FOUND, Some("404"))             => ErrorResponse(NOT_FOUND, Some(ErrorCodes.notFound))
-    case Error(BAD_REQUEST, _)                     => ErrorResponse(INTERNAL_SERVER_ERROR)
-    case _                                         => ErrorResponse(connectorError.status)
+  override protected def convert(connectorError: Error): ErrorResponse = {
+    import BaseService.{ErrorCodes => ServiceErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    connectorError match {
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.MalformedPayload)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(SERVICE_UNAVAILABLE, Some(ConnectorErrorCodes.ServiceUnavailable)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(CONFLICT, _)                                   => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(NOT_FOUND, Some(ConnectorErrorCodes.NotFound)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(BAD_REQUEST, _)                                => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case _                                                    => ErrorResponse(connectorError.status)
+    }
   }
 
 }

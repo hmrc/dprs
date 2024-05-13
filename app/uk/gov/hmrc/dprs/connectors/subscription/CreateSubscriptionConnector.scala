@@ -110,15 +110,5 @@ object CreateSubscriptionConnector {
       implicit lazy val reads: Reads[Response] =
         (JsPath \ "success" \ "dprsReference").read[String].map(Response(_))
     }
-
-    object ErrorCodes {
-      val malformedPayload    = "400"
-      val duplicateSubmission = "004"
-      val couldNotBeProcessed = "003"
-      val invalidId           = "016"
-      val unauthorised        = "403"
-      val forbidden           = "401"
-    }
-
   }
 }

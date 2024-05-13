@@ -90,15 +90,51 @@ object BaseConnector {
     final case class Error(status: Int, errorDetail: Option[ErrorDetail] = None)
 
     object Error {
-      def unapply(error: Error): Option[(Int, Option[String])] = Some((error.status, error.errorDetail.flatMap(_.errorCode)))
+      def unapply(error: Error): Option[(Int, Option[ErrorCode])] = Some((error.status, error.errorDetail.flatMap(_.errorCode)))
     }
 
-    final case class ErrorDetail(errorCode: Option[String])
+    final case class ErrorDetail(errorCode: Option[ErrorCode])
 
     object ErrorDetail {
       implicit lazy val reads: Reads[ErrorDetail] =
-        (JsPath \ "errorDetail" \ "errorCode").readNullable[String].map(ErrorDetail(_))
+        (JsPath \ "errorDetail" \ "errorCode")
+          .readNullable[String]
+          .map(rawErrorCodeOpt => ErrorDetail(rawErrorCodeOpt.map(ErrorCodes.findByRawCode)))
     }
+
+    sealed trait ErrorCode
+
+    object ErrorCodes {
+      private val byRawCode = Map(
+        "003" -> CouldNotBeProcessed,
+        "004" -> DuplicateSubmission,
+        "016" -> InvalidId,
+        "201" -> CreateOrAmendInProgress,
+        "202" -> NoSubscription,
+        "400" -> MalformedPayload,
+        "401" -> Unauthorised,
+        "403" -> Forbidden,
+        "404" -> NotFound,
+        "500" -> InternalServerError,
+        "503" -> ServiceUnavailable
+      )
+
+      def findByRawCode(rawCode: String): ErrorCode = byRawCode.getOrElse(rawCode.trim, Unknown)
+
+      case object CouldNotBeProcessed extends ErrorCode
+      case object DuplicateSubmission extends ErrorCode
+      case object InvalidId extends ErrorCode
+      case object CreateOrAmendInProgress extends ErrorCode
+      case object NoSubscription extends ErrorCode
+      case object MalformedPayload extends ErrorCode
+      case object Unauthorised extends ErrorCode
+      case object Forbidden extends ErrorCode
+      case object NotFound extends ErrorCode
+      case object InternalServerError extends ErrorCode
+      case object ServiceUnavailable extends ErrorCode
+      case object Unknown extends ErrorCode
+    }
+
   }
 
 }

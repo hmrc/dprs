@@ -22,7 +22,7 @@ import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithoutIdConnector
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodes, ErrorResponse}
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.registration.RegistrationWithoutIdService.Responses.IdType
 import uk.gov.hmrc.dprs.services.registration.RegistrationWithoutIdService.{Requests, Responses}
 import uk.gov.hmrc.dprs.services.{AcknowledgementReferenceGenerator, BaseService}
@@ -62,12 +62,18 @@ class RegistrationWithoutIdService @Inject() (clock: Clock,
       case Left(error)     => Left(convert(error))
     }
 
-  override protected def convert(connectorError: Error): ErrorResponse = connectorError match {
-    case Error(INTERNAL_SERVER_ERROR, Some("500")) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError))
-    case Error(SERVICE_UNAVAILABLE, Some("503"))   => ErrorResponse(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError))
-    case Error(CONFLICT, _)                        => ErrorResponse(CONFLICT, Some(ErrorCodes.conflict))
-    case Error(BAD_REQUEST, _)                     => ErrorResponse(INTERNAL_SERVER_ERROR)
-    case _                                         => ErrorResponse(connectorError.status)
+  override protected def convert(connectorError: Error): ErrorResponse = {
+    import BaseService.{ErrorCodes => ServiceErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    connectorError match {
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(SERVICE_UNAVAILABLE, Some(ConnectorErrorCodes.ServiceUnavailable)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(CONFLICT, _)    => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(BAD_REQUEST, _) => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case _                     => ErrorResponse(connectorError.status)
+    }
   }
 }
 

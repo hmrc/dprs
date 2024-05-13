@@ -95,16 +95,5 @@ object ReadSubscriptionConnector {
           (JsPath \ "organisationName").read[String].map(OrganisationDetails(_))
       }
     }
-
-    object ErrorCodes {
-      val couldNotBeProcessed     = "003"
-      val duplicateSubmission     = "004"
-      val invalidId               = "016"
-      val createOfAmendInProgress = "201"
-      val noSubscription          = "202"
-      val unauthorised            = "401"
-      val forbidden               = "403"
-      val internalServerError     = "500"
-    }
   }
 }

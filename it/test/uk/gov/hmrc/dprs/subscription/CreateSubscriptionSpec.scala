@@ -531,7 +531,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withBody(s"""
                                |{
                                |    "errorDetail": {
-                               |        "errorCode": "403",
+                               |        "errorCode": "401",
                                |        "errorMessage": "Unexpected backend application error",
                                |        "source": "ETMP",
                                |        "sourceFaultDetail": {
@@ -615,7 +615,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withBody(s"""
                        |{
                        |    "errorDetail": {
-                       |        "errorCode": "401",
+                       |        "errorCode": "403",
                        |        "errorMessage": "Unexpected backend application error",
                        |        "source": "ETMP",
                        |        "sourceFaultDetail": {
