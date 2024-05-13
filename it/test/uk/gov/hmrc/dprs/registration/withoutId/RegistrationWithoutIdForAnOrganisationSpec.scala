@@ -26,7 +26,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
       "valid, when" - {
         "the country is inside United Kingdom and related territories" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -135,7 +135,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
         }
         "the country is outside United Kingdom and related territories" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -242,7 +242,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
       "valid but the integration call fails with response:" - {
         "internal server error" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -330,7 +330,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
         }
         "bad request" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -411,7 +411,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
         }
         "service unavailable" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -504,7 +504,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
         }
         "conflict" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -597,7 +597,7 @@ class RegistrationWithoutIdForAnOrganisationSpec extends BaseRegistrationWithout
         }
         "i'm a teapot" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {

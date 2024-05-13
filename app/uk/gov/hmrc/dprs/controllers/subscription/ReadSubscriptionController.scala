@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.controllers
+package uk.gov.hmrc.dprs.controllers.subscription
 
 import play.api.libs.json.Json.toJson
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService
+import uk.gov.hmrc.dprs.controllers.BaseController
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -27,7 +28,7 @@ class ReadSubscriptionController @Inject() (cc: ControllerComponents, readSubscr
   executionContext: ExecutionContext
 ) extends BaseController(cc) {
 
-  def call(id: String): Action[AnyContent] = Action.async { implicit request =>
+  def call(id: String): Action[AnyContent] = Action.async {
     readSubscriptionService.call(id).map {
       case Right(serviceResponse) => Ok(toJson(serviceResponse))
       case Left(error)            => handleServiceError(error)

@@ -16,13 +16,8 @@
 
 package uk.gov.hmrc.dprs.config
 
-import uk.gov.hmrc.dprs.connectors.{
-  CreateSubscriptionConnector,
-  ReadSubscriptionConnector,
-  RegistrationWithIdConnector,
-  RegistrationWithoutIdConnector,
-  UpdateSubscriptionConnector
-}
+import uk.gov.hmrc.dprs.connectors.registration.{RegistrationWithIdConnector, RegistrationWithoutIdConnector}
+import uk.gov.hmrc.dprs.connectors.subscription.{CreateSubscriptionConnector, ReadSubscriptionConnector, UpdateSubscriptionConnector}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}

@@ -22,7 +22,7 @@ import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath: String      = "/dac6/dprs0201/v1"
+  override val baseConnectorPath: String  = "/dac6/dprs0201/v1"
   override lazy val connectorName: String = "create-subscription"
 
   "attempting to create a subscription, when" - {
@@ -30,7 +30,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
       "valid, when" - {
         "containing a single contact" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               |{
                                               |    "idType": "NINO",
@@ -104,7 +104,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "containing multiple contacts" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |            "idType": "NINO",
@@ -195,9 +195,8 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
       "valid but the integration call fails with response:" - {
         "bad request" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(equalToJson(
-                s"""
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
                    |{
                    |    "idType": "NINO",
                    |    "idNumber": "AA000000A",
@@ -219,8 +218,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                 aResponse()
                   .withHeader("Content-Type", "application/json")
                   .withStatus(INTERNAL_SERVER_ERROR)
-                  .withBody(
-                    s"""
+                  .withBody(s"""
                        |{
                        |    "errorDetail": {
                        |        "errorCode": "400",
@@ -242,8 +240,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           val response = wsClient
             .url(fullUrl("/subscriptions"))
             .withHttpHeaders(("Content-Type", "application/json"))
-            .post(
-              """
+            .post("""
                 |{
                 |    "id": {
                 |        "type": "NINO",
@@ -270,7 +267,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "could not be processed" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "idType": "NINO",
@@ -352,7 +349,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "duplicate submission" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               |{
                                               |    "idType": "NINO",
@@ -436,7 +433,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "invalid ID" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               |{
                                               |    "idType": "NINO",
@@ -508,7 +505,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "unauthorized" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               |{
                                               |    "idType": "NINO",
@@ -534,7 +531,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withBody(s"""
                                |{
                                |    "errorDetail": {
-                               |        "errorCode": "403",
+                               |        "errorCode": "401",
                                |        "errorMessage": "Unexpected backend application error",
                                |        "source": "ETMP",
                                |        "sourceFaultDetail": {
@@ -592,9 +589,8 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "forbidden" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
-              .withRequestBody(equalToJson(
-                s"""
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
                    |{
                    |    "idType": "NINO",
                    |    "idNumber": "AA000000A",
@@ -616,11 +612,10 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                 aResponse()
                   .withHeader("Content-Type", "application/json")
                   .withStatus(INTERNAL_SERVER_ERROR)
-                  .withBody(
-                    s"""
+                  .withBody(s"""
                        |{
                        |    "errorDetail": {
-                       |        "errorCode": "401",
+                       |        "errorCode": "403",
                        |        "errorMessage": "Unexpected backend application error",
                        |        "source": "ETMP",
                        |        "sourceFaultDetail": {
@@ -639,8 +634,7 @@ class CreateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           val response = wsClient
             .url(fullUrl("/subscriptions"))
             .withHttpHeaders(("Content-Type", "application/json"))
-            .post(
-              """
+            .post("""
                 |{
                 |    "id": {
                 |        "type": "NINO",

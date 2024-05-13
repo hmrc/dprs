@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e449888b-cdbb-43d2-a0fb-e806f6015b31",
+		"_postman_id": "d5b3410b-c9f5-4480-8947-f605d27c28ca",
 		"name": "Registration Without ID",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30217849"
@@ -21,9 +21,15 @@
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
 											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has the expected SAFE ID\", function () {",
+											"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+											"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE2986131148578\");",
 											"});"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -62,9 +68,15 @@
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
 											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has the expected SAFE ID\", function () {",
+											"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+											"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE2986131148578\");",
 											"});"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -113,18 +125,18 @@
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
 													"});",
 													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
-													"});",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -211,18 +223,18 @@
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
 													"});",
 													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
-													"});",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -263,17 +275,19 @@
 													"    pm.response.to.have.status(409);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-conflict\");",
 													"});",
 													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-conflict\");",
-													"});",
+													"",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -318,21 +332,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -369,21 +380,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -420,21 +428,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -476,21 +481,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-middle-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -527,21 +529,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-middle-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -583,21 +582,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -634,21 +630,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -685,21 +678,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -744,18 +734,15 @@
 															"pm.test(\"Status code as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
-															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"    ",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -795,18 +782,15 @@
 															"pm.test(\"Status code as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
-															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"    ",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -846,17 +830,15 @@
 															"pm.test(\"Status code as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
-															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"});",
-															"",
-															""
+															"    ",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -896,18 +878,15 @@
 															"pm.test(\"Status code as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
-															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"    ",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -955,18 +934,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1006,18 +983,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1057,18 +1032,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1113,18 +1086,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1164,18 +1135,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1215,18 +1184,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1271,18 +1238,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1322,18 +1287,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1373,18 +1336,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1429,18 +1390,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-four\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1480,18 +1439,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-four\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1536,18 +1493,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1587,18 +1542,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1638,18 +1591,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1689,18 +1640,16 @@
 																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
-																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"    ",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1746,17 +1695,15 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1797,17 +1744,15 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1848,17 +1793,15 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
-																	"});",
-																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1909,17 +1852,16 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -1960,17 +1902,16 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2011,17 +1952,16 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2063,21 +2003,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2114,21 +2054,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2165,21 +2105,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2225,17 +2165,17 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2276,17 +2216,17 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2327,17 +2267,17 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2383,18 +2323,17 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-email-address\");",
 																	"});",
 																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2435,17 +2374,17 @@
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-email-address\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -2454,7 +2393,7 @@
 														"header": [],
 														"body": {
 															"mode": "raw",
-															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example\"\n    }\n}",
+															"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"747663966\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"@example.com\"\n    }\n}",
 															"options": {
 																"raw": {
 																	"language": "json"
@@ -2500,9 +2439,15 @@
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
 											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has the expected SAFE ID\", function () {",
+											"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+											"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE2986131148578\");",
 											"});"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -2541,9 +2486,15 @@
 										"exec": [
 											"pm.test(\"Status code as expected\", function () {",
 											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Has the expected SAFE ID\", function () {",
+											"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+											"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE2986131148578\");",
 											"});"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -2592,18 +2543,18 @@
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
 													"});",
 													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
-													"});",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -2690,18 +2641,18 @@
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
 													"});",
 													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
-													"});",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -2742,17 +2693,16 @@
 													"    pm.response.to.have.status(409);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
-													"});",
-													"",
-													"pm.test(\"Error code is as expected\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-conflict\");",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-conflict\");",
 													"});",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -2797,21 +2747,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2848,21 +2795,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2899,21 +2843,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code as expected\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is as expected\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2958,21 +2899,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3009,21 +2949,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3060,21 +2999,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-one\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3116,21 +3054,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3167,21 +3104,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3218,21 +3154,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-two\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3274,21 +3209,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3325,21 +3259,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3376,21 +3309,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-three\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3432,21 +3364,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-four\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3483,21 +3414,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-line-four\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-four\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3539,21 +3469,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3590,21 +3519,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3641,21 +3569,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3692,21 +3619,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-country-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3748,21 +3674,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3799,21 +3724,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3850,21 +3774,20 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
-																	"});",
-																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
 																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3911,21 +3834,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -3962,21 +3885,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4013,21 +3936,21 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-landline\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-landline\");",
-																	"});",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4069,21 +3992,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4120,21 +4044,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4171,21 +4096,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code is 400\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-mobile\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-mobile\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4227,21 +4153,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4278,21 +4205,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4329,21 +4257,22 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-fax\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-fax\");",
-																	"});",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4385,22 +4314,23 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-email-address\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
-																	"});",
+																	"",
 																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],
@@ -4437,21 +4367,23 @@
 															"listen": "test",
 															"script": {
 																"exec": [
-																	"pm.test(\"Status code as expected\", function () {",
+																	"pm.test(\"Status code is as expected\", function () {",
 																	"    pm.response.to.have.status(400);",
 																	"});",
 																	"",
-																	"pm.test(\"Has only one error code\", function () {",
-																	"    pm.expect(pm.response.json().length).to.equal(1);",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-details-email-address\");",
 																	"});",
 																	"",
-																	"pm.test(\"Error code is as expected\", function () {",
-																	"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-contact-details-email-address\");",
-																	"});",
+																	"",
+																	"",
 																	"",
 																	""
 																],
-																"type": "text/javascript"
+																"type": "text/javascript",
+																"packages": {}
 															}
 														}
 													],

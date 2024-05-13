@@ -26,7 +26,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
       "valid, when" - {
         "the country is inside the UK or related territories" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -142,7 +142,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
         "the country is outside UK and related territories" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -257,7 +257,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
       "valid but the integration call fails with response:" - {
         "internal server error" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -351,7 +351,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
         "bad request" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -438,7 +438,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
         "service unavailable" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -537,7 +537,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
         "conflict" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {
@@ -636,7 +636,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
         "i'm a teapot" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "registerWithoutIDRequest": {

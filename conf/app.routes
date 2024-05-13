@@ -1,11 +1,11 @@
 # microservice specific routes
 
-POST        /registrations/withId/individual             uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forIndividual()
-POST        /registrations/withId/organisation           uk.gov.hmrc.dprs.controllers.RegistrationWithIdController.forOrganisation()
+POST        /registrations/withId/individual             uk.gov.hmrc.dprs.controllers.registration.RegistrationWithIdController.forIndividual()
+POST        /registrations/withId/organisation           uk.gov.hmrc.dprs.controllers.registration.RegistrationWithIdController.forOrganisation()
 
-POST        /registrations/withoutId/individual          uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forIndividual()
-POST        /registrations/withoutId/organisation        uk.gov.hmrc.dprs.controllers.RegistrationWithoutIdController.forOrganisation()
+POST        /registrations/withoutId/individual          uk.gov.hmrc.dprs.controllers.registration.RegistrationWithoutIdController.forIndividual()
+POST        /registrations/withoutId/organisation        uk.gov.hmrc.dprs.controllers.registration.RegistrationWithoutIdController.forOrganisation()
 
-POST        /subscriptions                               uk.gov.hmrc.dprs.controllers.CreateSubscriptionController.call()
-POST        /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.UpdateSubscriptionController.call(id)
-GET         /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.ReadSubscriptionController.call(id)
+POST        /subscriptions                               uk.gov.hmrc.dprs.controllers.subscription.CreateSubscriptionController.call()
+POST        /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.subscription.UpdateSubscriptionController.call(id)
+GET         /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.subscription.ReadSubscriptionController.call(id)

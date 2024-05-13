@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.services.registration.withoutId
 import play.api.libs.json.{__, JsonValidationError}
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.{beInvalid, beValid}
-import uk.gov.hmrc.dprs.services.RegistrationWithoutIdService.Requests.{Address, ContactDetails, Individual, Organisation}
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithoutIdService.Requests.{Address, ContactDetails, Individual, Organisation}
 
 import scala.collection.immutable
 

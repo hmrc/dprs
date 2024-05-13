@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "19fa232a-a8de-47a3-8179-5df53bae0d90",
+		"_postman_id": "90479c76-9861-4106-9ab2-156685bdc878",
 		"name": "Registration With ID",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30217849"
@@ -16,11 +16,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
+									"pm.test(\"Status code is as expected\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"pm.test(\"Has the expected SAFE ID\", function () {",
+									"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+									"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE0000200775706\");",
+									"});",
+									"",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -57,11 +65,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
+									"pm.test(\"Status code is as expected\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"pm.test(\"Has the expected SAFE ID\", function () {",
+									"    pm.expect(pm.response.json().ids[1].type).to.eql(\"SAFE\");",
+									"    pm.expect(pm.response.json().ids[1].value).to.eql(\"XE0000586571722\");",
+									"});",
+									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -109,22 +124,20 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 503\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
-													"});",
-													"",
-													"pm.test(\"Error code is 'eis-returned-internal-server-error'\", function () {",
+													"pm.test(\"Single error code is as expected\", function () {",
 													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
 													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
 													"});",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -161,15 +174,19 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 500\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(500);",
 													"});",
 													"",
 													"pm.test(\"Body is empty\", function () {",
 													"    pm.response.to.have.body(\"\");",
-													"});"
+													"});",
+													"",
+													"",
+													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -206,22 +223,22 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 503\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
-													"});",
-													"",
-													"pm.test(\"Error code is 'eis-returned-service-unavailable'\", function () {",
+													"pm.test(\"Single error code is as expected\", function () {",
 													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
 													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
 													"});",
 													"",
+													"",
+													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -266,21 +283,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -317,21 +334,20 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -368,21 +384,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -424,21 +437,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -475,21 +485,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -526,21 +533,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -582,21 +586,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -633,21 +634,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -684,21 +682,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-first-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-first-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-first-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -740,21 +735,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-middle-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-middle-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -791,21 +783,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-middle-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-middle-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-middle-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -847,21 +836,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -898,21 +884,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -949,21 +932,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-last-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-last-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-last-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1005,21 +985,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1056,21 +1033,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1107,21 +1081,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1158,21 +1129,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-date-of-birth'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-date-of-birth\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-date-of-birth\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1221,21 +1189,20 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 503\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
-													"});",
-													"",
-													"pm.test(\"Error code is 'eis-returned-internal-server-error'\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-internal-server-error\");",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
 													"});",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -1272,15 +1239,19 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 500\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(500);",
 													"});",
 													"",
 													"pm.test(\"Body is empty\", function () {",
 													"    pm.response.to.have.body(\"\");",
-													"});"
+													"});",
+													"",
+													"",
+													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -1317,21 +1288,24 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"pm.test(\"Status code is 503\", function () {",
+													"pm.test(\"Status code is as expected\", function () {",
 													"    pm.response.to.have.status(503);",
 													"});",
 													"",
-													"pm.test(\"Has only one error code\", function () {",
-													"    pm.expect(pm.response.json().length).to.equal(1);",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
 													"});",
 													"",
-													"pm.test(\"Error code is 'eis-returned-service-unavailable'\", function () {",
-													"    pm.expect(pm.response.json()[0].code).to.eql(\"eis-returned-service-unavailable\");",
-													"});",
+													"",
+													"",
+													"",
 													"",
 													""
 												],
-												"type": "text/javascript"
+												"type": "text/javascript",
+												"packages": {}
 											}
 										}
 									],
@@ -1376,21 +1350,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1427,21 +1401,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1478,21 +1452,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1529,21 +1503,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-type\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-type\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1585,21 +1559,21 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
 															"});",
 															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
 															"",
 															""
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1636,21 +1610,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1687,21 +1658,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-id-value'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-id-value\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-value\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1743,21 +1711,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1794,21 +1759,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1845,21 +1807,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-name'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-name\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-name\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1901,21 +1860,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-type\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -1952,21 +1908,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-type\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],
@@ -2003,21 +1956,18 @@
 													"listen": "test",
 													"script": {
 														"exec": [
-															"pm.test(\"Status code is 400\", function () {",
+															"pm.test(\"Status code is as expected\", function () {",
 															"    pm.response.to.have.status(400);",
 															"});",
 															"",
-															"pm.test(\"Has only one error code\", function () {",
-															"    pm.expect(pm.response.json().length).to.equal(1);",
-															"});",
-															"",
-															"pm.test(\"Error code is 'invalid-type'\", function () {",
-															"    pm.expect(pm.response.json()[0].code).to.eql(\"invalid-type\");",
-															"});",
-															"",
-															""
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-type\");",
+															"});"
 														],
-														"type": "text/javascript"
+														"type": "text/javascript",
+														"packages": {}
 													}
 												}
 											],

@@ -16,36 +16,18 @@
 
 package uk.gov.hmrc.dprs.services.subscription.read
 
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Responses.Contact
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Contact
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.services.BaseSpec
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService.{Converter, Responses}
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService.Responses.{Individual, Organisation}
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Responses.{Individual, Organisation}
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.{Converter, Responses}
 
 class ReadSubscriptionServiceConverterSpec extends BaseSpec {
 
-  private val converter = new Converter(fixedClock, acknowledgementReferenceGenerator)
+  private val converter = new Converter
 
   "when converting from" - {
-    "a service request to a connector request, expecting" - {
-      "success" in {
-        val connectorRequest = converter.convert("cfea3248-0df1-4588-b34d-08500f6b46f5")
-
-        connectorRequest shouldBe ReadSubscriptionConnector.Requests.Request(
-          common = ReadSubscriptionConnector.Requests.Common(
-            receiptDate = currentDateTime,
-            regime = "MDR",
-            acknowledgementReference = acknowledgementReference,
-            originatingSystem = "MDTP"
-          ),
-          detail = ReadSubscriptionConnector.Requests.Detail(
-            idType = "MDR",
-            idNumber = "cfea3248-0df1-4588-b34d-08500f6b46f5"
-          )
-        )
-      }
-    }
     "a connector response to a service response, expecting" - {
       "success when" - {
         "primary contact with individualDetails and secondary contact exists" in {

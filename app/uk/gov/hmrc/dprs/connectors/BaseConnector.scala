@@ -17,11 +17,10 @@
 package uk.gov.hmrc.dprs.connectors
 
 import play.api.http.Status.{CREATED, OK}
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.Json.toJson
-import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
-import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Errors
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Exceptions.ResponseParsingException
 
 import java.net.URL
@@ -30,61 +29,112 @@ import scala.util.{Failure, Success, Try}
 
 abstract class BaseConnector(wsClient: WSClient) {
 
-  def url(): URL
+  def baseUrl(): URL
 
   /** We would have liked to use HttpClientV2, but when it encounters a 400 or 500 status code, the response body is inaccessible.
     */
-  def post[S, T](request: S)(implicit
+  def post[REQUEST, RESPONSE](request: REQUEST)(implicit
     executionContext: ExecutionContext,
-    writes: Writes[S],
-    reads: Reads[T]
-  ): Future[Either[Errors, T]] =
+    writes: Writes[REQUEST],
+    reads: Reads[RESPONSE]
+  ): Future[Either[Error, RESPONSE]] =
     wsClient
-      .url(url().toString)
+      .url(baseUrl().toString)
       .post(toJson(request))
       .transform {
-        case Success(wsResponse) =>
-          wsResponse.status match {
-            case OK | CREATED    => asResponse(wsResponse)
-            case otherStatusCode => asErrors(otherStatusCode, wsResponse)
-          }
-        case Failure(exception) => Failure(exception)
+        case Success(wsResponse) => handleResponse(wsResponse)
+        case Failure(exception)  => Failure(exception)
       }
 
-  private def asResponse[T](wsResponse: WSResponse)(implicit reads: Reads[T]): Try[Either[Errors, T]] =
-    wsResponse.json
-      .validate[T]
-      .map(response => Success(Right(response)))
-      .getOrElse(Failure(new ResponseParsingException()))
+  def get[RESPONSE](path: String)(implicit
+    executionContext: ExecutionContext,
+    reads: Reads[RESPONSE]
+  ): Future[Either[Error, RESPONSE]] =
+    wsClient
+      .url(baseUrl().toString + "/" + path)
+      .get()
+      .transform {
+        case Success(wsResponse) => handleResponse(wsResponse)
+        case Failure(exception)  => Failure(exception)
+      }
 
-  private def asErrors[T](statusCode: Int, wsResponse: WSResponse): Try[Either[Errors, T]] =
+  private def handleResponse[RESPONSE](wsResponse: WSResponse)(implicit reads: Reads[RESPONSE]): Try[Either[Error, RESPONSE]] = wsResponse.status match {
+    case OK | CREATED    => asSuccessfulResponse(wsResponse)
+    case otherStatusCode => asErrors(otherStatusCode, wsResponse)
+  }
+
+  private def asSuccessfulResponse[RESPONSE](wsResponse: WSResponse)(implicit reads: Reads[RESPONSE]): Try[Either[Error, RESPONSE]] =
+    wsResponse.json
+      .validate[RESPONSE]
+      .map(response => Success(Right(response)))
+      .getOrElse(Failure(new ResponseParsingException(wsResponse.body)))
+
+  private def asErrors[RESPONSE](statusCode: Int, wsResponse: WSResponse): Try[Either[Error, RESPONSE]] =
     if (wsResponse.body.nonEmpty)
-      wsResponse.json
-        .validate[BaseConnector.Responses.ErrorDetail]
-        .map(errorDetail => Success(Left(Errors(statusCode, Some(errorDetail)))))
-        .getOrElse(Failure(new ResponseParsingException()))
-    else Success(Left(Errors(statusCode)))
+      Try(wsResponse.json.validate[BaseConnector.Responses.ErrorDetail] match {
+        case JsSuccess(errorDetail, _) => Success(Left(Error(statusCode, Some(errorDetail))))
+        case JsError(_)                => Failure(new ResponseParsingException(wsResponse.body))
+      }).getOrElse(Failure(new ResponseParsingException(wsResponse.body)))
+    else Success(Left(Error(statusCode)))
 
 }
 
 object BaseConnector {
 
-  final case class Error(statusCode: Int)
-
   object Responses {
 
     object Exceptions {
-      final class ResponseParsingException extends RuntimeException
+      final class ResponseParsingException(body: String) extends RuntimeException(body)
     }
 
-    final case class Errors(status: Int, errorDetail: Option[ErrorDetail] = None)
+    final case class Error(status: Int, errorDetail: Option[ErrorDetail] = None)
 
-    final case class ErrorDetail(errorCode: Option[String])
+    object Error {
+      def unapply(error: Error): Option[(Int, Option[ErrorCode])] = Some((error.status, error.errorDetail.flatMap(_.errorCode)))
+    }
+
+    final case class ErrorDetail(errorCode: Option[ErrorCode])
 
     object ErrorDetail {
       implicit lazy val reads: Reads[ErrorDetail] =
-        (JsPath \ "errorDetail" \ "errorCode").readNullable[String].map(ErrorDetail(_))
+        (JsPath \ "errorDetail" \ "errorCode")
+          .readNullable[String]
+          .map(rawErrorCodeOpt => ErrorDetail(rawErrorCodeOpt.map(ErrorCodes.findByRawCode)))
     }
+
+    sealed trait ErrorCode
+
+    object ErrorCodes {
+      private val byRawCode = Map(
+        "003" -> CouldNotBeProcessed,
+        "004" -> DuplicateSubmission,
+        "016" -> InvalidId,
+        "201" -> CreateOrAmendInProgress,
+        "202" -> NoSubscription,
+        "400" -> MalformedPayload,
+        "401" -> Unauthorised,
+        "403" -> Forbidden,
+        "404" -> NotFound,
+        "500" -> InternalServerError,
+        "503" -> ServiceUnavailable
+      )
+
+      def findByRawCode(rawCode: String): ErrorCode = byRawCode.getOrElse(rawCode.trim, Unknown)
+
+      case object CouldNotBeProcessed extends ErrorCode
+      case object DuplicateSubmission extends ErrorCode
+      case object InvalidId extends ErrorCode
+      case object CreateOrAmendInProgress extends ErrorCode
+      case object NoSubscription extends ErrorCode
+      case object MalformedPayload extends ErrorCode
+      case object Unauthorised extends ErrorCode
+      case object Forbidden extends ErrorCode
+      case object NotFound extends ErrorCode
+      case object InternalServerError extends ErrorCode
+      case object ServiceUnavailable extends ErrorCode
+      case object Unknown extends ErrorCode
+    }
+
   }
 
 }

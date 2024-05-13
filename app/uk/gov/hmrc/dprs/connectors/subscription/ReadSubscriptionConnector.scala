@@ -14,68 +14,36 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors
+package uk.gov.hmrc.dprs.connectors.subscription
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.Format.GenericFormat
-import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.json.{JsPath, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Requests.Request
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
-import uk.gov.hmrc.dprs.connectors.ReadSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
 import javax.inject.Inject
-import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
-  def call(
-    request: Request
-  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
-    post[Request, Response](request)
+  def call(id: String)(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
+    get[Response](id)
 
-  override def url(): URL = url"${appConfig.readSubscriptionBaseUrl}"
+  override def baseUrl(): URL = url"${appConfig.readSubscriptionBaseUrl}"
 }
 
 object ReadSubscriptionConnector {
 
-  val connectorPath: String = "/dac6/dct70d/v1"
+  val connectorPath: String = "/dac6/dprs0202/v1"
   val connectorName: String = "read-subscription"
-
-  object Requests {
-
-    final case class Request(common: Requests.Common, detail: Requests.Detail)
-
-    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String, originatingSystem: String)
-
-    final case class Detail(idType: String, idNumber: String)
-
-    object Request {
-      implicit lazy val writes: OWrites[Request] =
-        ((JsPath \ "displaySubscriptionForMDRRequest" \ "requestCommon").write[Common] and
-          (JsPath \ "displaySubscriptionForMDRRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
-    }
-
-    object Common {
-      implicit val writes: OWrites[Common] =
-        ((JsPath \ "receiptDate").write[String] and
-          (JsPath \ "regime").write[String] and
-          (JsPath \ "acknowledgementReference").write[String] and
-          (JsPath \ "originatingSystem").write[String])(unlift(Common.unapply))
-    }
-
-    object Detail {
-      implicit lazy val writes: OWrites[Detail] =
-        ((JsPath \ "IDType").write[String] and
-          (JsPath \ "IDNumber").write[String])(unlift(Detail.unapply))
-    }
-  }
 
   object Responses {
 
@@ -96,11 +64,11 @@ object ReadSubscriptionConnector {
 
     object Response {
       implicit val reads: Reads[Response] =
-        ((JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String] and
-          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "tradingName").readNullable[String] and
-          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "isGBUser").read[Boolean] and
-          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "primaryContact").readNullable[Contact] and
-          (JsPath \ "displaySubscriptionForMDRResponse" \ "responseDetail" \ "secondaryContact").readNullable[Contact])(Response.apply _)
+        ((JsPath \ "success" \ "customer" \ "id").read[String] and
+          (JsPath \ "success" \ "customer" \ "tradingName").readNullable[String] and
+          (JsPath \ "success" \ "customer" \ "gbUser").read[Boolean] and
+          (JsPath \ "success" \ "customer" \ "primaryContact").readNullable[Contact] and
+          (JsPath \ "success" \ "customer" \ "secondaryContact").readNullable[Contact])(Response.apply _)
     }
 
     object Contact {

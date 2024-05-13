@@ -14,42 +14,50 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.subscription
 
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.{JsPath, Json, OWrites}
-import uk.gov.hmrc.dprs.connectors.{BaseConnector, ReadSubscriptionConnector}
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
-import uk.gov.hmrc.dprs.services.ReadSubscriptionService.Converter
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector
+import uk.gov.hmrc.dprs.services.BaseService
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Converter
 
-import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReadSubscriptionService @Inject() (clock: Clock,
-                                         acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
-                                         readSubscriptionConnector: ReadSubscriptionConnector
-) extends BaseService {
+class ReadSubscriptionService @Inject() (readSubscriptionConnector: ReadSubscriptionConnector) extends BaseService {
 
-  private val converter = new Converter(clock, acknowledgementReferenceGenerator)
-  override val errorStatusCodeConversions: Map[Int, ErrorCodeWithStatus] =
-    Map(
-      INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError)),
-      SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
-      NOT_FOUND             -> ErrorCodeWithStatus(NOT_FOUND, Some(ErrorCodes.notFound)),
-      BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
-    )
+  private val converter = new Converter
 
   def call(id: String)(implicit
     executionContext: ExecutionContext
-  ): Future[Either[BaseService.ErrorCodeWithStatus, ReadSubscriptionService.Responses.Response]] = {
-    val request = converter.convert(id)
-    readSubscriptionConnector.call(request).map {
-      case Right(connectorResponse)                            => Right(converter.convert(connectorResponse))
-      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
+  ): Future[Either[BaseService.ErrorResponse, ReadSubscriptionService.Responses.Response]] =
+    readSubscriptionConnector.call(id).map {
+      case Right(connectorResponse) => Right(converter.convert(connectorResponse))
+      case Left(connectorError)     => Left(convert(connectorError))
+    }
+
+  override protected def convert(connectorError: Error): ErrorResponse = {
+    import BaseService.{ErrorCodes => ServiceErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    connectorError match {
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CouldNotBeProcessed)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.DuplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.InvalidId))           => ErrorResponse(SERVICE_UNAVAILABLE)
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CreateOrAmendInProgress)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.NoSubscription)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Forbidden))     => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Unauthorised))  => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case _ => ErrorResponse(connectorError.status)
     }
   }
 }
@@ -111,20 +119,7 @@ object ReadSubscriptionService {
     }
   }
 
-  class Converter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
-
-    /** We're awaiting the specs for the underlying API; in the meantime, we'll use the one for MDR; this matches the expectations of the stub service.
-      */
-    private val regime            = "MDR"
-    private val originatingSystem = "MDTP"
-
-    def convert(id: String): ReadSubscriptionConnector.Requests.Request = ReadSubscriptionConnector.Requests.Request(
-      common = generateRequestCommon(),
-      detail = ReadSubscriptionConnector.Requests.Detail(
-        idType = "MDR",
-        idNumber = id
-      )
-    )
+  class Converter {
 
     def convert(response: ReadSubscriptionConnector.Responses.Response): Responses.Response =
       Responses.Response(
@@ -165,12 +160,5 @@ object ReadSubscriptionService {
         case _ =>
           None
       }
-
-    private def generateRequestCommon() = ReadSubscriptionConnector.Requests.Common(
-      receiptDate = Instant.now(clock).toString,
-      regime = regime,
-      acknowledgementReference = acknowledgementReferenceGenerator.generate(),
-      originatingSystem = originatingSystem
-    )
   }
 }

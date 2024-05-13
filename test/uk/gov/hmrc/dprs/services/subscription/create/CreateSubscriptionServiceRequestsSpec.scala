@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.services.subscription.create
 import play.api.libs.json.{__, JsonValidationError}
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.{beInvalid, beValid}
-import uk.gov.hmrc.dprs.services.CreateSubscriptionService.Requests._
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Requests._
 
 import scala.collection.immutable
 

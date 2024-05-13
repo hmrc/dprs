@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.connectors.registration.withId
 
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector.Responses
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector.Responses
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beValid
 

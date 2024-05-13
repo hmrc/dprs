@@ -25,7 +25,7 @@ class RegistrationWithIdForAnOrganisationSpec extends BaseRegistrationWithIdSpec
     "the request is" - {
       "valid" in {
         stubFor(
-          post(urlEqualTo(connectorPath))
+          post(urlEqualTo(baseConnectorPath))
             .withRequestBody(equalToJson(s"""
                    |{
                    |  "registerWithIDRequest": {
@@ -154,7 +154,7 @@ class RegistrationWithIdForAnOrganisationSpec extends BaseRegistrationWithIdSpec
       "valid, the integration call fails with response:" - {
         "internal server error" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                      |{
                      |  "registerWithIDRequest": {
@@ -226,7 +226,7 @@ class RegistrationWithIdForAnOrganisationSpec extends BaseRegistrationWithIdSpec
         }
         "bad request" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                      |{
                      |  "registerWithIDRequest": {
@@ -289,7 +289,7 @@ class RegistrationWithIdForAnOrganisationSpec extends BaseRegistrationWithIdSpec
         }
         "service unavailable" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                      |{
                      |  "registerWithIDRequest": {
@@ -361,7 +361,7 @@ class RegistrationWithIdForAnOrganisationSpec extends BaseRegistrationWithIdSpec
         }
         "i'm a teapot" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                      |{
                      |  "registerWithIDRequest": {

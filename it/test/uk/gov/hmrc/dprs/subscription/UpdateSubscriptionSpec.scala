@@ -22,7 +22,7 @@ import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath: String      = "/dac6/dct70e/v1"
+  override val baseConnectorPath: String      = "/dac6/dct70e/v1"
   override lazy val connectorName: String = "update-subscription"
 
   "attempting to update a subscription, when" - {
@@ -30,7 +30,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
       "valid, when" - {
         "containing a single contact" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -105,7 +105,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "containing multiple contacts" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -197,7 +197,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
       "valid but the integration call fails with response:" - {
         "internal server error" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -280,7 +280,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "bad request" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -356,7 +356,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "service unavailable" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -444,7 +444,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "conflict" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -520,7 +520,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "not found" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {
@@ -610,7 +610,7 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
         "i'm a teapot" in {
           stubFor(
-            post(urlEqualTo(connectorPath))
+            post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
                                               {
                                               |    "updateSubscriptionForMDRRequest": {

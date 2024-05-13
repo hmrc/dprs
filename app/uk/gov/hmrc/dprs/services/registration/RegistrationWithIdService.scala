@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services
+package uk.gov.hmrc.dprs.services.registration
 
 import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json.{JsPath, OWrites, Reads}
-import uk.gov.hmrc.dprs.connectors.{BaseConnector, RegistrationWithIdConnector}
-import uk.gov.hmrc.dprs.services.BaseService.{ErrorCodeWithStatus, ErrorCodes}
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Requests.Organisation.RequestId
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService.Responses.IdType
-import uk.gov.hmrc.dprs.services.RegistrationWithIdService._
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector
+import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Requests.Organisation
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Requests.Organisation.RequestId
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService.Responses.IdType
+import uk.gov.hmrc.dprs.services.registration.RegistrationWithIdService._
+import uk.gov.hmrc.dprs.services.{AcknowledgementReferenceGenerator, BaseService}
 import uk.gov.hmrc.dprs.support.ValidationSupport
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.lengthBetween
 
@@ -40,33 +42,39 @@ class RegistrationWithIdService @Inject() (clock: Clock,
 ) extends BaseService {
 
   private val converter = new RegistrationWithIdService.Converter(clock, acknowledgementReferenceGenerator)
-  override val errorStatusCodeConversions = Map(
-    INTERNAL_SERVER_ERROR -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.internalServerError)),
-    SERVICE_UNAVAILABLE   -> ErrorCodeWithStatus(SERVICE_UNAVAILABLE, Some(ErrorCodes.serviceUnavailableError)),
-    CONFLICT              -> ErrorCodeWithStatus(CONFLICT, Some(ErrorCodes.conflict)),
-    BAD_REQUEST           -> ErrorCodeWithStatus(INTERNAL_SERVER_ERROR)
-  )
 
   def registerIndividual(
     request: Requests.Individual
   )(implicit
     executionContext: ExecutionContext
-  ): Future[Either[ErrorCodeWithStatus, Responses.Individual]] =
+  ): Future[Either[ErrorResponse, Responses.Individual]] =
     registrationWithIdConnector.forIndividual(converter.convert(request)).map {
-      case Right(response)                                     => Right(converter.convert(response))
-      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
+      case Right(response) => Right(converter.convert(response))
+      case Left(error)     => Left(convert(error))
     }
 
   def registerOrganisation(
     request: Requests.Organisation
   )(implicit
     executionContext: ExecutionContext
-  ): Future[Either[ErrorCodeWithStatus, Responses.Organisation]] =
+  ): Future[Either[ErrorResponse, Responses.Organisation]] =
     registrationWithIdConnector.forOrganisation(converter.convert(request)).map {
-      case Right(response)                                     => Right(converter.convert(response))
-      case Left(BaseConnector.Responses.Errors(statusCode, _)) => Left(convert(statusCode))
+      case Right(response) => Right(converter.convert(response))
+      case Left(error)     => Left(convert(error))
     }
 
+  override protected def convert(connectorError: Error): ErrorResponse = {
+    import BaseService.{ErrorCodes => ServiceErrorCodes}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    connectorError match {
+      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
+        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(SERVICE_UNAVAILABLE, _) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(CONFLICT, _)            => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(BAD_REQUEST, _)         => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case _                             => ErrorResponse(connectorError.status)
+    }
+  }
 }
 
 object RegistrationWithIdService {

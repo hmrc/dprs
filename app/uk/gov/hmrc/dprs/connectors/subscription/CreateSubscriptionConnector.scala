@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors
+package uk.gov.hmrc.dprs.connectors.subscription
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Request
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Requests.Request
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
@@ -36,10 +37,10 @@ class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
   def call(
     request: Request
-  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
+  )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
     post[Request, Response](request)
 
-  override def url(): URL = url"${appConfig.createSubscriptionBaseUrl}"
+  override def baseUrl(): URL = url"${appConfig.createSubscriptionBaseUrl}"
 
 }
 
@@ -109,15 +110,5 @@ object CreateSubscriptionConnector {
       implicit lazy val reads: Reads[Response] =
         (JsPath \ "success" \ "dprsReference").read[String].map(Response(_))
     }
-
-    object ErrorCodes {
-      val malformedPayload    = "400"
-      val duplicateSubmission = "004"
-      val couldNotBeProcessed = "003"
-      val invalidId           = "016"
-      val unauthorised        = "403"
-      val forbidden           = "401"
-    }
-
   }
 }

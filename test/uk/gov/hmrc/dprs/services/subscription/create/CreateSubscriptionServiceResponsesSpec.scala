@@ -17,8 +17,9 @@
 package uk.gov.hmrc.dprs.services.subscription.create
 
 import play.api.libs.json.Json.toJson
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.beSameAs
-import uk.gov.hmrc.dprs.services.{BaseSpec, CreateSubscriptionService}
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService
 
 class CreateSubscriptionServiceResponsesSpec extends BaseSpec {
 

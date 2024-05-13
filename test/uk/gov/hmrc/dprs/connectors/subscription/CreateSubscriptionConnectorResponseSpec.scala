@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.connectors.subscription
 
-import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.dprs.services.BaseSpec
 
 class CreateSubscriptionConnectorResponseSpec extends BaseSpec {

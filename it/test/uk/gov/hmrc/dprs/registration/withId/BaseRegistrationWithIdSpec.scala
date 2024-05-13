@@ -17,11 +17,11 @@
 package uk.gov.hmrc.dprs.registration.withId
 
 import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
-import uk.gov.hmrc.dprs.connectors.RegistrationWithIdConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector
 
 class BaseRegistrationWithIdSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val connectorPath         = RegistrationWithIdConnector.connectorPath
+  override val baseConnectorPath: String  = RegistrationWithIdConnector.connectorPath
   override lazy val connectorName: String = RegistrationWithIdConnector.connectorName
 
 }

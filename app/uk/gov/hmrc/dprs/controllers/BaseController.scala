@@ -20,15 +20,15 @@ import play.api.libs.json.Json.toJson
 import play.api.libs.json.{JsPath, JsonValidationError}
 import play.api.mvc.{ControllerComponents, Result}
 import uk.gov.hmrc.dprs.services.BaseService
-import uk.gov.hmrc.dprs.services.BaseService.{Error, ErrorCodeWithStatus}
+import uk.gov.hmrc.dprs.services.BaseService.{Error, ErrorResponse}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 abstract class BaseController(cc: ControllerComponents) extends BackendController(cc) {
 
-  protected def handleServiceError(errorCodeWithStatus: ErrorCodeWithStatus): Result =
-    errorCodeWithStatus match {
-      case ErrorCodeWithStatus(_, None)                => InternalServerError
-      case ErrorCodeWithStatus(statusCode, Some(code)) => Status(statusCode)(toJson(Seq(Error(code))))
+  protected def handleServiceError(errorResponse: ErrorResponse): Result =
+    errorResponse match {
+      case ErrorResponse(_, None)                => InternalServerError
+      case ErrorResponse(statusCode, Some(code)) => Status(statusCode)(toJson(Seq(Error(code))))
     }
 
   protected def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
