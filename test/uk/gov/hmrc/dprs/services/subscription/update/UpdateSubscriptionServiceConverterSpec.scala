@@ -23,7 +23,7 @@ import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.{Convert
 
 class UpdateSubscriptionServiceConverterSpec extends BaseSpec {
 
-  private val converter = new Converter(fixedClock, acknowledgementReferenceGenerator)
+  private val converter = new Converter
 
   "when converting from" - {
     "a service request to a connector request, expecting" - {
@@ -47,34 +47,26 @@ class UpdateSubscriptionServiceConverterSpec extends BaseSpec {
 
         connectorRequest shouldBe Some(
           UpdateSubscriptionConnector.Requests.Request(
-            common = UpdateSubscriptionConnector.Requests.Common(
-              receiptDate = currentDateTime,
-              regime = "MDR",
-              acknowledgementReference = acknowledgementReference,
-              originatingSystem = "MDTP"
-            ),
-            detail = UpdateSubscriptionConnector.Requests.Detail(
-              idType = "MDR",
-              idNumber = "cfea3248-0df1-4588-b34d-08500f6b46f5",
-              tradingName = Some("Harold Winter"),
-              isGBUser = true,
-              primaryContact = UpdateSubscriptionConnector.Requests.Contact(
-                landline = Some("747663966"),
-                mobile = Some("38390756243"),
-                emailAddress = "Patrick.Dyson@example.com",
-                individualDetails = Some(
-                  UpdateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
-                ),
-                organisationDetails = None
+            idType = "DPRS",
+            idNumber = "cfea3248-0df1-4588-b34d-08500f6b46f5",
+            tradingName = Some("Harold Winter"),
+            isGBUser = true,
+            primaryContact = UpdateSubscriptionConnector.Requests.Contact(
+              landline = Some("747663966"),
+              mobile = Some("38390756243"),
+              emailAddress = "Patrick.Dyson@example.com",
+              individualDetails = Some(
+                UpdateSubscriptionConnector.Requests.Contact.IndividualDetails(firstName = "Patrick", middleName = Some("John"), lastName = "Dyson")
               ),
-              secondaryContact = Some(
-                UpdateSubscriptionConnector.Requests.Contact(
-                  landline = Some("847663966"),
-                  mobile = Some("48390756243"),
-                  emailAddress = "info@dyson.com",
-                  individualDetails = None,
-                  organisationDetails = Some(UpdateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson"))
-                )
+              organisationDetails = None
+            ),
+            secondaryContact = Some(
+              UpdateSubscriptionConnector.Requests.Contact(
+                landline = Some("847663966"),
+                mobile = Some("48390756243"),
+                emailAddress = "info@dyson.com",
+                individualDetails = None,
+                organisationDetails = Some(UpdateSubscriptionConnector.Requests.Contact.OrganisationDetails(name = "Dyson"))
               )
             )
           )

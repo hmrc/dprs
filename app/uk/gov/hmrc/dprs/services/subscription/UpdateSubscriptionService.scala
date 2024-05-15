@@ -23,21 +23,17 @@ import play.api.libs.json.Reads.maxLength
 import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.connectors.subscription.UpdateSubscriptionConnector
+import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Request.Contact
-import uk.gov.hmrc.dprs.services.{AcknowledgementReferenceGenerator, BaseService}
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 
-import java.time.{Clock, Instant}
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpdateSubscriptionService @Inject() (clock: Clock,
-                                           acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
-                                           updateSubscriptionConnector: UpdateSubscriptionConnector
-) extends BaseService {
+class UpdateSubscriptionService @Inject() (updateSubscriptionConnector: UpdateSubscriptionConnector) extends BaseService {
 
-  private val converter = new Converter(clock, acknowledgementReferenceGenerator)
+  private val converter = new Converter
 
   def call(id: String, serviceRequest: UpdateSubscriptionService.Requests.Request)(implicit
     executionContext: ExecutionContext
@@ -53,19 +49,17 @@ class UpdateSubscriptionService @Inject() (clock: Clock,
       .getOrElse(Future.successful(Left(ErrorResponse(SERVICE_UNAVAILABLE))))
 
   override protected def convert(connectorError: Error): ErrorResponse = {
-    import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import BaseService.{ErrorCodes => Service}
+    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => Connector}
     connectorError match {
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.MalformedPayload)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(SERVICE_UNAVAILABLE, Some(ConnectorErrorCodes.ServiceUnavailable)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(CONFLICT, _)                                   => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(NOT_FOUND, Some(ConnectorErrorCodes.NotFound)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
-      case Error(BAD_REQUEST, _)                                => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case _                                                    => ErrorResponse(connectorError.status)
+      case Error(INTERNAL_SERVER_ERROR, Some(Connector.InternalServerError))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, Some(Connector.Unauthorised))           => ErrorResponse(UNAUTHORIZED, Some(Service.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(Connector.Forbidden))              => ErrorResponse(FORBIDDEN, Some(Service.forbidden))
+      case Error(UNPROCESSABLE_ENTITY, Some(Connector.CouldNotBeProcessed))     => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(Connector.CreateOrAmendInProgress)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(Connector.DuplicateSubmission))     => ErrorResponse(CONFLICT, Some(Service.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(Connector.NoSubscription))          => ErrorResponse(NOT_FOUND, Some(Service.notFound))
+      case _                                                                    => ErrorResponse(INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -141,26 +135,18 @@ object UpdateSubscriptionService {
     }
   }
 
-  class Converter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
-
-    /** We're awaiting the specs for the underlying API; in the meantime, we'll use the one for MDR; this matches the expectations of the stub service.
-      */
-    private val regime            = "MDR"
-    private val originatingSystem = "MDTP"
+  class Converter {
 
     def convert(id: String, request: Requests.Request): Option[UpdateSubscriptionConnector.Requests.Request] =
       request.contacts.headOption
         .map { primaryContact =>
           UpdateSubscriptionConnector.Requests.Request(
-            common = generateRequestCommon(),
-            detail = UpdateSubscriptionConnector.Requests.Detail(
-              idType = "MDR",
-              idNumber = id,
-              tradingName = request.name,
-              isGBUser = true, // TODO: Determine this.
-              primaryContact = convert(primaryContact),
-              secondaryContact = request.contacts.tail.headOption.map(convert)
-            )
+            idType = "DPRS",
+            idNumber = id,
+            tradingName = request.name,
+            isGBUser = true, // TODO: Determine this.
+            primaryContact = convert(primaryContact),
+            secondaryContact = request.contacts.tail.headOption.map(convert)
           )
         }
 
@@ -185,11 +171,5 @@ object UpdateSubscriptionService {
           )
       }
 
-    private def generateRequestCommon() = UpdateSubscriptionConnector.Requests.Common(
-      receiptDate = Instant.now(clock).toString,
-      regime = regime,
-      acknowledgementReference = acknowledgementReferenceGenerator.generate(),
-      originatingSystem = originatingSystem
-    )
   }
 }
