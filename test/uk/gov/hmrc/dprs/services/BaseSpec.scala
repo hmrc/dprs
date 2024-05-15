@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.services
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{MatchResult, Matcher}
-import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json._
@@ -39,6 +39,10 @@ class BaseSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks 
 
   def await[T](awaitable: Awaitable[T]): T = Await.result(awaitable, 1.second)
 
+  protected final def assert[A, B](action: A => B, expectations: TableFor2[A, B]): Unit =
+    forAll(expectations) { (value, expected) =>
+      action(value) shouldBe expected
+    }
 }
 
 object BaseSpec {

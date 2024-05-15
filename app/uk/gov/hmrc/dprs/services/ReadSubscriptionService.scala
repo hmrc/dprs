@@ -29,6 +29,11 @@ import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
+/*
+ * Again, I would have just one SubscriptionService class and have all operations
+ * for subscriptions here.
+ */
+
 class ReadSubscriptionService @Inject() (clock: Clock,
                                          acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator,
                                          readSubscriptionConnector: ReadSubscriptionConnector
@@ -74,7 +79,7 @@ object ReadSubscriptionService {
       implicit val writes: OWrites[Contact] = {
         case individual: Individual =>
           Json.obj(
-            "type"         -> "I",
+            "type"         -> "I", // Sealed trait here?
             "firstName"    -> individual.firstName,
             "middleName"   -> individual.middleName,
             "lastName"     -> individual.lastName,
@@ -84,7 +89,7 @@ object ReadSubscriptionService {
           )
         case organisation: Organisation =>
           Json.obj(
-            "type"         -> "O",
+            "type"         -> "O", // Sealed trait here?
             "name"         -> organisation.name,
             "landline"     -> organisation.landline,
             "mobile"       -> organisation.mobile,
@@ -99,7 +104,12 @@ object ReadSubscriptionService {
                                 landline: Option[String],
                                 mobile: Option[String],
                                 emailAddress: String
+                                // Why not store those on Contact?
     ) extends Contact
+    /*
+     * Why are firstName and lastName optional?
+     * You always set them so Some(...)
+     */
 
     final case class Organisation(name: String, landline: Option[String], mobile: Option[String], emailAddress: String) extends Contact
 
@@ -162,8 +172,9 @@ object ReadSubscriptionService {
           )
         case (_, _) =>
           None
+        // Isn't this redundant?
         case _ =>
-          None
+          None // Shouldn't be error here?
       }
 
     private def generateRequestCommon() = ReadSubscriptionConnector.Requests.Common(

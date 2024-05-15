@@ -86,9 +86,4 @@ class ValidationSupportSpec extends BaseSpec {
       )
     }
   }
-
-  private def assert(validator: String => Boolean, expectations: TableFor2[String, Boolean]): Unit =
-    forAll(expectations) { (value, expectedVerdict) =>
-      validator(value) shouldBe expectedVerdict
-    }
 }

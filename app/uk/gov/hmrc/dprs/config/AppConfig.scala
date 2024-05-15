@@ -31,6 +31,7 @@ import javax.inject.{Inject, Singleton}
 class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
   val registrationWithIdBaseUrl: String = generateBaseUrl(RegistrationWithIdConnector.connectorName, RegistrationWithIdConnector.connectorPath)
+  // Will we need to change any URLs when this gets deployed to various environments?
 
   val registrationWithoutIdBaseUrl: String = generateBaseUrl(RegistrationWithoutIdConnector.connectorName, RegistrationWithoutIdConnector.connectorPath)
 

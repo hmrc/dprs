@@ -41,7 +41,7 @@ class CreateSubscriptionController @Inject() (cc: ControllerComponents, createSu
 
   private def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): Seq[BaseService.Error] =
     convert(
-      errors,
+      errors, // You are ignoring the JSON errors in there, what#s the reason?
       Map(
         "/id/type"                  -> "invalid-id-type",
         "/id/value"                 -> "invalid-id-value",

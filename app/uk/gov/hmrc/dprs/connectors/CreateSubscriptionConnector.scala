@@ -18,8 +18,9 @@ package uk.gov.hmrc.dprs.connectors
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.json.{JsPath, OFormat, OWrites, Reads}
 import play.api.libs.ws.WSClient
+import play.libs.Json
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.CreateSubscriptionConnector.Requests.Request
@@ -31,6 +32,11 @@ import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
+/*
+ * I would have created one SubscriptionConnector and put all the subscription
+ * operations in there.
+ */
+
 @Singleton
 class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
@@ -38,6 +44,11 @@ class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSC
     request: Request
   )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Errors, Response]] =
     post[Request, Response](request)
+  /*
+   * Not too clear what URL you post to unless you go into BaseConnector.
+   * I would pass the URL as a parameter. That way you could have several
+   * operations in the same class.
+   */
 
   override def url(): URL = url"${appConfig.createSubscriptionBaseUrl}"
 
@@ -59,6 +70,12 @@ object CreateSubscriptionConnector {
     )
 
     object Request {
+      /*
+       * Why not use the below to read/write the object in JSON?
+       * Seems simpler that the reads and writes that you defined.
+       */
+      // implicit val format: OFormat[Request] = Json.format[Request]
+
       implicit lazy val writes: OWrites[Request] =
         ((JsPath \ "idType").write[String] and
           (JsPath \ "idNumber").write[String] and

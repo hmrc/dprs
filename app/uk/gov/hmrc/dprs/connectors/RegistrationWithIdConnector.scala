@@ -28,6 +28,11 @@ import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
+/*
+ * I would have created one RegistrationConnector and put all the registration
+ * operations in there.
+ */
+
 @Singleton
 class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
 
@@ -43,6 +48,9 @@ class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
   override def url() = url"${appConfig.registrationWithIdBaseUrl}"
 
+  /*
+   * So here you have two operations that you post to the same URL.
+   */
 }
 
 object RegistrationWithIdConnector {

@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.dprs.services
 
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites}
 import uk.gov.hmrc.dprs.services.BaseService.ErrorCodeWithStatus
+
+import scala.Function.unlift
 
 abstract class BaseService {
 
@@ -32,11 +35,12 @@ object BaseService {
 
   final case class ErrorCodeWithStatus(statusCode: Int, code: Option[String] = None)
 
-  final case class Error(code: String)
+  final case class Error(code: String, detail: Option[String] = None)
 
   object Error {
     implicit val writes: OWrites[Error] =
-      (JsPath \ "code").write[String].contramap(_.code)
+      ((JsPath \ "code").write[String] and
+        (JsPath \ "detail").writeNullable[String])(unlift(Error.unapply))
   }
 
   object ErrorCodes {

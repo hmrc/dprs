@@ -21,6 +21,7 @@ import play.api.libs.json.{JsPath, JsonValidationError}
 import play.api.mvc.{ControllerComponents, Result}
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.{Error, ErrorCodeWithStatus}
+import uk.gov.hmrc.dprs.support.JsonErrors
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 abstract class BaseController(cc: ControllerComponents) extends BackendController(cc) {
@@ -31,18 +32,21 @@ abstract class BaseController(cc: ControllerComponents) extends BackendControlle
       case ErrorCodeWithStatus(statusCode, Some(code)) => Status(statusCode)(toJson(Seq(Error(code))))
     }
 
-  protected def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
+  // I changed the code to return error messages as well as codes
+
+  protected final def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
                         fieldToErrorCode: Map[String, String]
   ): Seq[BaseService.Error] =
-    extractSimplePaths(errors)
-      .map(fieldToErrorCode.get(_).map(BaseService.Error(_)))
+    extractPathsAndDetails(errors)
+      .map(t => fieldToErrorCode.get(t._1).map(BaseService.Error(_, t._2)))
       .toSeq
       .flatten
 
-  private def extractSimplePaths(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): collection.Seq[String] =
-    errors
-      .map(_._1)
-      .map(_.path)
-      .map(_.mkString)
+  private def extractPathsAndDetails(errors: scala.collection.Seq[(JsPath, scala.collection.Seq[JsonValidationError])]): scala.collection.Seq[(String, Option[String])] =
+    errors.map { e =>
+      val path = e._1.path.mkString
+      val errors = e._2
+      (path, if (errors.isEmpty) None else Some(JsonErrors.get(path, errors.head.message, errors.head.args)))
+    }
 
 }
