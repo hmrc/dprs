@@ -28,36 +28,36 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference"
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "middleName": "John",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "Patrick.Dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(

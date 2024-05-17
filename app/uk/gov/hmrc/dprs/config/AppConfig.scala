@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.dprs.config
 
-import uk.gov.hmrc.dprs.connectors.registration.{RegistrationWithIdConnector, RegistrationWithoutIdConnector}
+import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector
+import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
 import uk.gov.hmrc.dprs.connectors.subscription.{CreateSubscriptionConnector, ReadSubscriptionConnector, UpdateSubscriptionConnector}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 

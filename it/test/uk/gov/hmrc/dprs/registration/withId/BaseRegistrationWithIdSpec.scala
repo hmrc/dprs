@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.registration.withId
 
 import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
-import uk.gov.hmrc.dprs.connectors.registration.RegistrationWithIdConnector
+import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
 
 class BaseRegistrationWithIdSpec extends BaseIntegrationWithConnectorSpec {
 
