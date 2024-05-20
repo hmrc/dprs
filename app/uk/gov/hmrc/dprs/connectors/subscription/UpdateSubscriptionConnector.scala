@@ -18,7 +18,7 @@ package uk.gov.hmrc.dprs.connectors.subscription
 
 import com.google.inject.Singleton
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, OWrites, Reads}
+import play.api.libs.json.{JsPath, JsSuccess, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.BaseConnector
@@ -46,45 +46,27 @@ class UpdateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
 object UpdateSubscriptionConnector {
 
-  val connectorPath: String = "/dac6/dct70e/v1"
+  val connectorPath: String = "/dac6/dprs0203/v1"
   val connectorName: String = "update-subscription"
 
   object Requests {
 
-    final case class Request(common: Requests.Common, detail: Requests.Detail)
-
-    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String, originatingSystem: String)
+    final case class Request(idType: String,
+                             idNumber: String,
+                             tradingName: Option[String],
+                             isGBUser: Boolean,
+                             primaryContact: Contact,
+                             secondaryContact: Option[Contact]
+    )
 
     object Request {
       implicit lazy val writes: OWrites[Request] =
-        ((JsPath \ "updateSubscriptionForMDRRequest" \ "requestCommon").write[Common] and
-          (JsPath \ "updateSubscriptionForMDRRequest" \ "requestDetail").write[Detail])(unlift(Request.unapply))
-    }
-
-    object Common {
-      implicit val writes: OWrites[Common] =
-        ((JsPath \ "receiptDate").write[String] and
-          (JsPath \ "regime").write[String] and
-          (JsPath \ "acknowledgementReference").write[String] and
-          (JsPath \ "originatingSystem").write[String])(unlift(Common.unapply))
-    }
-
-    final case class Detail(idType: String,
-                            idNumber: String,
-                            tradingName: Option[String],
-                            isGBUser: Boolean,
-                            primaryContact: Contact,
-                            secondaryContact: Option[Contact]
-    )
-
-    object Detail {
-      implicit lazy val writes: OWrites[Detail] =
-        ((JsPath \ "IDType").write[String] and
-          (JsPath \ "IDNumber").write[String] and
+        ((JsPath \ "idType").write[String] and
+          (JsPath \ "idNumber").write[String] and
           (JsPath \ "tradingName").writeNullable[String] and
-          (JsPath \ "isGBUser").write[Boolean] and
+          (JsPath \ "gbUser").write[Boolean] and
           (JsPath \ "primaryContact").write[Contact] and
-          (JsPath \ "secondaryContact").writeNullable[Contact])(unlift(Detail.unapply))
+          (JsPath \ "secondaryContact").writeNullable[Contact])(unlift(Request.unapply))
     }
 
     final case class Contact(
@@ -123,11 +105,10 @@ object UpdateSubscriptionConnector {
 
   object Responses {
 
-    final case class Response(id: String)
+    final case class Response()
 
     object Response {
-      implicit lazy val reads: Reads[Response] =
-        (JsPath \ "updateSubscriptionForMDRResponse" \ "responseDetail" \ "subscriptionID").read[String].map(Response(_))
+      implicit lazy val reads: Reads[Response] = Reads(_ => JsSuccess(Response()))
     }
 
   }

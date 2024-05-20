@@ -22,7 +22,7 @@ import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
 
 class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val baseConnectorPath: String      = "/dac6/dct70e/v1"
+  override val baseConnectorPath: String  = "/dac6/dprs0203/v1"
   override lazy val connectorName: String = "update-subscription"
 
   "attempting to update a subscription, when" - {
@@ -32,31 +32,21 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -65,14 +55,8 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withStatus(OK)
                   .withBody(s"""
                                |{
-                               |  "updateSubscriptionForMDRResponse" : {
-                               |    "responseCommon" : {
-                               |      "status" : "OK",
-                               |      "processingDate" : "$currentDateAndTime"
-                               |    },
-                               |    "responseDetail" : {
-                               |      "subscriptionID" : "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                               |    }
+                               |  "success": {
+                               |    "processingDate": "$currentDateAndTime"
                                |  }
                                |}
                                |""".stripMargin)
@@ -107,39 +91,29 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            },
-                                              |            "secondaryContact": {
-                                              |                "organisation": {
-                                              |                    "organisationName": "Dyson"
-                                              |                },
-                                              |                "email": "info@example.com",
-                                              |                "phone": "847663966",
-                                              |                "mobile": "48390756243"
-                                              |            }
-                                              |        }
-                                              |    }
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  },
+                                              |  "secondaryContact": {
+                                              |    "organisation": {
+                                              |      "organisationName": "Dyson"
+                                              |    },
+                                              |    "email": "info@example.com",
+                                              |    "phone": "847663966",
+                                              |    "mobile": "48390756243"
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -148,14 +122,8 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                   .withStatus(OK)
                   .withBody(s"""
                                |{
-                               |  "updateSubscriptionForMDRResponse" : {
-                               |    "responseCommon" : {
-                               |      "status" : "OK",
-                               |      "processingDate" : "$currentDateAndTime"
-                               |    },
-                               |    "responseDetail" : {
-                               |      "subscriptionID" : "a7405c8d-06ee-46a3-b5a0-5d65176360ec"
-                               |    }
+                               |  "success": {
+                               |    "processingDate": "$currentDateAndTime"
                                |  }
                                |}
                                |""".stripMargin)
@@ -195,35 +163,388 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
         }
       }
       "valid but the integration call fails with response:" - {
+        "could not be processed" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |  "errorDetail": {
+                               |    "timestamp": "2023-09-07T14:02:47.029Z",
+                               |    "correlationId": "7696103f-d917-4840-84fa-1af26ad4defa",
+                               |    "errorCode": "003",
+                               |    "errorMessage": "Request could not be processed",
+                               |    "source": "ct-api",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "Request could not be processed"
+                               |      ]
+                               |    }
+                               |  }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Harold Winter",
+                    |    "contacts": [
+                    |        {
+                    |            "type": "I",
+                    |            "firstName": "Patrick",
+                    |            "middleName": "John",
+                    |            "lastName": "Dyson",
+                    |            "landline": "747663966",
+                    |            "mobile": "38390756243",
+                    |            "emailAddress": "Patrick.Dyson@example.com"
+                    |        }
+                    |    ]
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            SERVICE_UNAVAILABLE,
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-service-unavailable"
+                   |  }
+                   |]
+                   |""".stripMargin)
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "create/amend request is in progress" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |  "errorDetail": {
+                               |    "timestamp": "2023-09-07T14:02:47.029Z",
+                               |    "correlationId": "7696103f-d917-4840-84fa-1af26ad4defa",
+                               |    "errorCode": "201",
+                               |    "errorMessage": "Create/amend is in progress",
+                               |    "source": "ct-api",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "Create/amend is in progress"
+                               |      ]
+                               |    }
+                               |  }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Harold Winter",
+                    |    "contacts": [
+                    |        {
+                    |            "type": "I",
+                    |            "firstName": "Patrick",
+                    |            "middleName": "John",
+                    |            "lastName": "Dyson",
+                    |            "landline": "747663966",
+                    |            "mobile": "38390756243",
+                    |            "emailAddress": "Patrick.Dyson@example.com"
+                    |        }
+                    |    ]
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            SERVICE_UNAVAILABLE,
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-service-unavailable"
+                   |  }
+                   |]
+                   |""".stripMargin)
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "duplicate submission" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |  "errorDetail": {
+                               |    "errorCode": "004",
+                               |    "errorMessage": "Duplicate Submission",
+                               |    "source": "ETMP",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "Duplicate Submission"
+                               |      ]
+                               |    },
+                               |    "timestamp": "2023-08-31T13:00:21.655Z",
+                               |    "correlationId": "d60de98c-f499-47f5-b2d6-e80966e8d19e"
+                               |  }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Harold Winter",
+                    |    "contacts": [
+                    |        {
+                    |            "type": "I",
+                    |            "firstName": "Patrick",
+                    |            "middleName": "John",
+                    |            "lastName": "Dyson",
+                    |            "landline": "747663966",
+                    |            "mobile": "38390756243",
+                    |            "emailAddress": "Patrick.Dyson@example.com"
+                    |        }
+                    |    ]
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            CONFLICT,
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-conflict"
+                   |  }
+                   |]
+                   |""".stripMargin)
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "forbidden" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |  "errorDetail": {
+                               |    "timestamp": "2023-09-07T14:02:47.029Z",
+                               |    "correlationId": "7696103f-d917-4840-84fa-1af26ad4defa",
+                               |    "errorCode": "403",
+                               |    "errorMessage": "Invalid Token",
+                               |    "source": "ct-api",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "Invalid Token"
+                               |      ]
+                               |    }
+                               |  }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Harold Winter",
+                    |    "contacts": [
+                    |        {
+                    |            "type": "I",
+                    |            "firstName": "Patrick",
+                    |            "middleName": "John",
+                    |            "lastName": "Dyson",
+                    |            "landline": "747663966",
+                    |            "mobile": "38390756243",
+                    |            "emailAddress": "Patrick.Dyson@example.com"
+                    |        }
+                    |    ]
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            FORBIDDEN,
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-forbidden"
+                   |  }
+                   |]
+                   |""".stripMargin)
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "i'm a teapot" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                                |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(IM_A_TEAPOT)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                      |{
+                      |    "name": "Harold Winter",
+                      |    "contacts": [
+                      |        {
+                      |            "type": "I",
+                      |            "firstName": "Patrick",
+                      |            "middleName": "John",
+                      |            "lastName": "Dyson",
+                      |            "landline": "747663966",
+                      |            "mobile": "38390756243",
+                      |            "emailAddress": "Patrick.Dyson@example.com"
+                      |        }
+                      |    ]
+                      |}
+                      |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(response, INTERNAL_SERVER_ERROR)
+        }
         "internal server error" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -278,292 +599,110 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           )
           verifyThatDownstreamApiWasCalled()
         }
-        "bad request" in {
+        "invalid ID" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
-                  .withStatus(BAD_REQUEST)
-                  .withBody(s"""
-                               |{
-                               |  "errorDetail" : {
-                               |    "timestamp" : "2023-12-13T11:50:35Z",
-                               |    "correlationId" : "d102b24f-767c-4620-826b-d068f86e4abc",
-                               |    "errorCode" : "400",
-                               |    "errorMessage" : "Invalid ID",
-                               |    "source" : "Back End",
-                               |    "sourceFaultDetail" : {
-                               |      "detail" : [ "001 - Regime missing or invalid" ]
-                               |    }
-                               |  }
-                               |}
-                               |""".stripMargin)
-              )
-          )
-
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .post("""
-                    |{
-                    |    "name": "Harold Winter",
-                    |    "contacts": [
-                    |        {
-                    |            "type": "I",
-                    |            "firstName": "Patrick",
-                    |            "middleName": "John",
-                    |            "lastName": "Dyson",
-                    |            "landline": "747663966",
-                    |            "mobile": "38390756243",
-                    |            "emailAddress": "Patrick.Dyson@example.com"
-                    |        }
-                    |    ]
-                    |}
-                    |""".stripMargin)
-            .futureValue
-
-          assertAsExpected(response, INTERNAL_SERVER_ERROR)
-          verifyThatDownstreamApiWasCalled()
-        }
-        "service unavailable" in {
-          stubFor(
-            post(urlEqualTo(baseConnectorPath))
-              .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
-                                              |}
-                                              |""".stripMargin))
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(SERVICE_UNAVAILABLE)
-                  .withBody(s"""
-                               |{
-                               |  "errorDetail" : {
-                               |    "timestamp" : "2023-12-13T11:50:35Z",
-                               |    "correlationId" : "3b560e67-1a0d-47ca-b0c4-6dcbf013203b",
-                               |    "errorCode" : "503",
-                               |    "errorMessage" : "Request could not be processed",
-                               |    "source" : "Back End",
-                               |    "sourceFaultDetail" : {
-                               |      "detail" : [ "001 - Request could not be processed" ]
-                               |    }
-                               |  }
-                               |}
-                               |""".stripMargin)
-              )
-          )
-
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .post("""
-                    |{
-                    |    "name": "Harold Winter",
-                    |    "contacts": [
-                    |        {
-                    |            "type": "I",
-                    |            "firstName": "Patrick",
-                    |            "middleName": "John",
-                    |            "lastName": "Dyson",
-                    |            "landline": "747663966",
-                    |            "mobile": "38390756243",
-                    |            "emailAddress": "Patrick.Dyson@example.com"
-                    |        }
-                    |    ]
-                    |}
-                    |""".stripMargin)
-            .futureValue
-
-          assertAsExpected(
-            response,
-            SERVICE_UNAVAILABLE,
-            Some(
-              """
-                |[
-                |  {
-                |    "code": "eis-returned-service-unavailable"
-                |  }
-                |]
-                |""".stripMargin
-            )
-          )
-          verifyThatDownstreamApiWasCalled()
-        }
-        "conflict" in {
-          stubFor(
-            post(urlEqualTo(baseConnectorPath))
-              .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
-                                              |}
-                                              |""".stripMargin))
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(CONFLICT)
-                  .withBody(s"""
-                               |{
-                               |  "errorDetail" : {
-                               |    "timestamp" : "2023-12-13T11:50:35Z",
-                               |    "correlationId" : "3b560e67-1a0d-47ca-b0c4-6dcbf013203b",
-                               |    "errorCode" : "409",
-                               |    "errorMessage" : "Request could not be processed",
-                               |    "source" : "Back End",
-                               |    "sourceFaultDetail" : {
-                               |      "detail" : [ "Duplicate submission" ]
-                               |    }
-                               |  }
-                               |}
-                               |""".stripMargin)
-              )
-          )
-
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .post("""
-                    |{
-                    |    "name": "Harold Winter",
-                    |    "contacts": [
-                    |        {
-                    |            "type": "I",
-                    |            "firstName": "Patrick",
-                    |            "middleName": "John",
-                    |            "lastName": "Dyson",
-                    |            "landline": "747663966",
-                    |            "mobile": "38390756243",
-                    |            "emailAddress": "Patrick.Dyson@example.com"
-                    |        }
-                    |    ]
-                    |}
-                    |""".stripMargin)
-            .futureValue
-
-          assertAsExpected(response, INTERNAL_SERVER_ERROR)
-          verifyThatDownstreamApiWasCalled()
-        }
-        "not found" in {
-          stubFor(
-            post(urlEqualTo(baseConnectorPath))
-              .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
-                                              |}
-                                              |""".stripMargin))
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(NOT_FOUND)
+                  .withStatus(UNPROCESSABLE_ENTITY)
                   .withBody(s"""
                                |{
                                |  "errorDetail": {
-                               |    "timestamp" : "2023-12-13T11:50:35Z",
-                               |    "correlationId" : "3b560e67-1a0d-47ca-b0c4-6dcbf013203b",
-                               |    "errorCode": "404",
-                               |    "errorMessage": "Record not found",
+                               |    "timestamp": "2023-09-07T14:02:47.029Z",
+                               |    "correlationId": "7696103f-d917-4840-84fa-1af26ad4defa",
+                               |    "errorCode": "016",
+                               |    "errorMessage": "Invalid Token",
                                |    "source": "ct-api",
                                |    "sourceFaultDetail": {
                                |      "detail": [
-                               |        "Record not found"
+                               |        "Invalid Token"
+                               |      ]
+                               |    }
+                               |  }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Harold Winter",
+                    |    "contacts": [
+                    |        {
+                    |            "type": "I",
+                    |            "firstName": "Patrick",
+                    |            "middleName": "John",
+                    |            "lastName": "Dyson",
+                    |            "landline": "747663966",
+                    |            "mobile": "38390756243",
+                    |            "emailAddress": "Patrick.Dyson@example.com"
+                    |        }
+                    |    ]
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(response, INTERNAL_SERVER_ERROR)
+          verifyThatDownstreamApiWasCalled()
+        }
+        "no subscription" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNPROCESSABLE_ENTITY)
+                  .withBody(s"""
+                               |{
+                               |  "errorDetail": {
+                               |    "timestamp": "2023-08-31T13:00:21.655Z",
+                               |    "correlationId": "d60de98c-f499-47f5-b2d6-e80966e8d19e",
+                               |    "errorCode": "202",
+                               |    "errorMessage": "No Subscription",
+                               |    "source": "ETMP",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "No Subscription"
                                |      ]
                                |    }
                                |  }
@@ -596,63 +735,53 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
           assertAsExpected(
             response,
             NOT_FOUND,
-            Some(
-              """
-                |[
-                |  {
-                |    "code": "eis-returned-not-found"
-                |  }
-                |]
-                |""".stripMargin
-            )
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-not-found"
+                   |  }
+                   |]
+                   |""".stripMargin)
           )
           verifyThatDownstreamApiWasCalled()
         }
-        "i'm a teapot" in {
+        "unauthorized" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "updateSubscriptionForMDRRequest": {
-                                              |        "requestCommon": {
-                                              |            "regime": "MDR",
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "acknowledgementReference": "$acknowledgementReference",
-                                              |            "originatingSystem": "MDTP"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "IDType": "MDR",
-                                              |            "IDNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
-                                              |            "tradingName": "Harold Winter",
-                                              |            "isGBUser": true,
-                                              |            "primaryContact": {
-                                              |                "individual": {
-                                              |                    "firstName": "Patrick",
-                                              |                    "middleName": "John",
-                                              |                    "lastName": "Dyson"
-                                              |                },
-                                              |                "email": "Patrick.Dyson@example.com",
-                                              |                "phone": "747663966",
-                                              |                "mobile": "38390756243"
-                                              |            }
-                                              |        }
-                                              |    }
+                                              |{
+                                              |  "idType": "DPRS",
+                                              |  "idNumber": "a7405c8d-06ee-46a3-b5a0-5d65176360ec",
+                                              |  "tradingName": "Harold Winter",
+                                              |  "gbUser": true,
+                                              |  "primaryContact": {
+                                              |    "individual": {
+                                              |      "firstName": "Patrick",
+                                              |      "middleName": "John",
+                                              |      "lastName": "Dyson"
+                                              |    },
+                                              |    "email": "Patrick.Dyson@example.com",
+                                              |    "phone": "747663966",
+                                              |    "mobile": "38390756243"
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
-                  .withStatus(IM_A_TEAPOT)
+                  .withStatus(INTERNAL_SERVER_ERROR)
                   .withBody(s"""
                                |{
-                               |  "errorDetail" : {
-                               |    "timestamp" : "2023-12-13T11:50:35Z",
-                               |    "correlationId" : "3b560e67-1a0d-47ca-b0c4-6dcbf013203b",
-                               |    "errorCode" : "418",
-                               |    "errorMessage" : "I'm a little teapot",
-                               |    "source" : "Back End",
-                               |    "sourceFaultDetail" : {
-                               |      "detail" : [ "Earl Grey" ]
+                               |  "errorDetail": {
+                               |    "timestamp": "2023-09-07T14:02:47.029Z",
+                               |    "correlationId": "7696103f-d917-4840-84fa-1af26ad4defa",
+                               |    "errorCode": "401",
+                               |    "errorMessage": "Unauthorised",
+                               |    "source": "ct-api",
+                               |    "sourceFaultDetail": {
+                               |      "detail": [
+                               |        "Unauthorised"
+                               |      ]
                                |    }
                                |  }
                                |}
@@ -681,7 +810,17 @@ class UpdateSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
                     |""".stripMargin)
             .futureValue
 
-          assertAsExpected(response, INTERNAL_SERVER_ERROR)
+          assertAsExpected(
+            response,
+            UNAUTHORIZED,
+            Some("""
+                   |[
+                   |  {
+                   |    "code": "eis-returned-unauthorised"
+                   |  }
+                   |]
+                   |""".stripMargin)
+          )
           verifyThatDownstreamApiWasCalled()
         }
       }
