@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.registration.withoutId
+package uk.gov.hmrc.dprs.connectors.registration
 
-import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
-import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{JsPath, OWrites}
 
-class BaseRegistrationWithoutIdSpec extends BaseIntegrationWithConnectorSpec {
+import scala.Function.unlift
 
-  override val baseConnectorPath: String  = RegistrationWithoutIdConnector.connectorPath
-  override lazy val connectorName: String = RegistrationWithoutIdConnector.connectorName
+object RegistrationConnector {
+
+  object Request {
+
+    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String)
+
+    object Common {
+      implicit val writes: OWrites[Common] =
+        ((JsPath \ "receiptDate").write[String] and
+          (JsPath \ "regime").write[String] and
+          (JsPath \ "acknowledgementReference").write[String])(unlift(Common.unapply))
+    }
+
+  }
 
 }
