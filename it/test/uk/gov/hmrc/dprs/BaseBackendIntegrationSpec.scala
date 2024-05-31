@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.registration.withId
+package uk.gov.hmrc.dprs
 
-import uk.gov.hmrc.dprs.BaseBackendIntegrationSpec
-import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 
-class BaseRegistrationWithIdSpec extends BaseBackendIntegrationSpec {
+abstract class BaseBackendIntegrationSpec extends BaseIntegrationWithConnectorSpec {
 
-  override val baseConnectorPath: String = RegistrationWithIdConnector.connectorPath
+  override lazy val connectorName: String = BaseBackendConnector.connectorName
 
 }

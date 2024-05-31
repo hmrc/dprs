@@ -19,7 +19,7 @@ package uk.gov.hmrc.dprs.registration.withId
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status._
 
-class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
+class RegistrationWithIdForIndividualSpec extends BaseRegistrationWithIdSpec {
 
   "attempting to register with an ID, as an individual, when" - {
     "the request is" - {
@@ -31,8 +31,14 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
                   |  "registerWithIDRequest": {
                   |    "requestCommon": {
                   |      "receiptDate": "$currentDateAndTime",
-                  |      "regime": "MDR",
-                  |      "acknowledgementReference": "$acknowledgementReference"
+                  |      "regime": "DPRS",
+                  |      "acknowledgementReference": "$acknowledgementReference",
+                  |      "requestParameters": [
+                  |        {
+                  |          "paramName": "REGIME",
+                  |          "paramValue": "DPRS"
+                  |        }
+                  |      ]
                   |    },
                   |    "requestDetail": {
                   |      "IDType": "NINO",
@@ -160,7 +166,7 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
         verifyThatDownstreamApiWasCalled()
       }
       "valid but the integration call fails with response:" - {
-        "internal server error" in {
+        "internal error" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
@@ -168,8 +174,14 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
                      |  "registerWithIDRequest": {
                      |    "requestCommon": {
                      |      "receiptDate": "$currentDateAndTime",
-                     |      "regime": "MDR",
-                     |      "acknowledgementReference": "$acknowledgementReference"
+                     |      "regime": "DPRS",
+                     |      "acknowledgementReference": "$acknowledgementReference",
+                     |      "requestParameters": [
+                     |        {
+                     |          "paramName": "REGIME",
+                     |          "paramValue": "DPRS"
+                     |        }
+                     |      ]
                      |    },
                      |    "requestDetail": {
                      |      "IDType": "NINO",
@@ -188,18 +200,22 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
-                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withStatus(SERVICE_UNAVAILABLE)
                   .withBody("""
-                        |{
-                        |  "errorDetail" : {
-                        |    "timestamp" : "2023-12-13T11:50:35Z",
-                        |    "correlationId" : "eac14118-57cf-44c5-83f9-63f50c5ff712",
-                        |    "errorCode" : "500",
-                        |    "errorMessage" : "Internal error",
-                        |    "source" : "Internal error"
-                        |  }
-                        |}
-                        |""".stripMargin)
+                              |{
+                              |  "errorDetail": {
+                              |    "timestamp": "2023-12-13T11:50:35Z",
+                              |    "correlationId": "eac14118-57cf-44c5-83f9-63f50c5ff712",
+                              |    "errorCode": "500",
+                              |    "errorMessage": "Internal error",
+                              |    "sourceFaultDetail": {
+                              |      "detail": [
+                              |        "Internal error"
+                              |      ]
+                              |    }
+                              |  }
+                              |}
+                              |""".stripMargin)
               )
           )
 
@@ -226,7 +242,7 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
               """
                   |[
                   |  {
-                  |    "code": "eis-returned-internal-server-error"
+                  |    "code": "eis-returned-internal-error"
                   |  }
                   |]
                   |""".stripMargin
@@ -238,27 +254,33 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                     |{
-                     |  "registerWithIDRequest": {
-                     |    "requestCommon": {
-                     |      "receiptDate": "$currentDateAndTime",
-                     |      "regime": "MDR",
-                     |      "acknowledgementReference": "$acknowledgementReference"
-                     |    },
-                     |    "requestDetail": {
-                     |      "IDType": "NINO",
-                     |      "IDNumber": "AA000000A",
-                     |      "requiresNameMatch": true,
-                     |      "isAnAgent": false,
-                     |      "individual": {
-                     |        "firstName": "Patrick",
-                     |        "lastName": "Dyson",
-                     |        "dateOfBirth": "1970-10-04"
-                     |      }
-                     |    }
-                     |  }
-                     |}
-                     |""".stripMargin))
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
@@ -299,49 +321,57 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
           assertAsExpected(response, INTERNAL_SERVER_ERROR)
           verifyThatDownstreamApiWasCalled()
         }
-        "service unavailable" in {
+        "could not be processed" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                     |{
-                     |  "registerWithIDRequest": {
-                     |    "requestCommon": {
-                     |      "receiptDate": "$currentDateAndTime",
-                     |      "regime": "MDR",
-                     |      "acknowledgementReference": "$acknowledgementReference"
-                     |    },
-                     |    "requestDetail": {
-                     |      "IDType": "NINO",
-                     |      "IDNumber": "AA000000A",
-                     |      "requiresNameMatch": true,
-                     |      "isAnAgent": false,
-                     |      "individual": {
-                     |        "firstName": "Patrick",
-                     |        "lastName": "Dyson",
-                     |        "dateOfBirth": "1970-10-04"
-                     |      }
-                     |    }
-                     |  }
-                     |}
-                     |""".stripMargin))
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
                   .withStatus(SERVICE_UNAVAILABLE)
                   .withBody("""
-                        |{
-                        |  "errorDetail" : {
-                        |    "timestamp" : "2023-12-13T11:50:35Z",
-                        |    "correlationId" : "3b560e67-1a0d-47ca-b0c4-6dcbf013203b",
-                        |    "errorCode" : "503",
-                        |    "errorMessage" : "Request could not be processed",
-                        |    "source" : "Back End",
-                        |    "sourceFaultDetail" : {
-                        |      "detail" : [ "001 - Request could not be processed" ]
-                        |    }
-                        |  }
-                        |}
-                        |""".stripMargin)
+                              |{
+                              |  "errorDetail": {
+                              |    "timestamp": "2023-12-13T11:50:35Z",
+                              |    "correlationId": "d102b24f-767c-4620-826b-d068f86e4abc",
+                              |    "errorCode": "503",
+                              |    "errorMessage": "Request could not be processed",
+                              |    "source": "Back End",
+                              |    "sourceFaultDetail": {
+                              |      "detail": [
+                              |        "001 - Request could not be processed"
+                              |      ]
+                              |    }
+                              |  }
+                              |}
+                              |""".stripMargin)
               )
           )
 
@@ -349,16 +379,16 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
             .url(fullUrl("/registrations/withId/individual"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
-                  |{
-                  |  "id": {
-                  |    "type": "NINO",
-                  |    "value": "AA000000A"
-                  |  },
-                  |  "firstName": "Patrick",
-                  |  "lastName": "Dyson",
-                  |  "dateOfBirth": "1970-10-04"
-                  |}
-                  |""".stripMargin)
+                    |{
+                    |  "id": {
+                    |    "type": "NINO",
+                    |    "value": "AA000000A"
+                    |  },
+                    |  "firstName": "Patrick",
+                    |  "lastName": "Dyson",
+                    |  "dateOfBirth": "1970-10-04"
+                    |}
+                    |""".stripMargin)
             .futureValue
 
           assertAsExpected(
@@ -368,7 +398,161 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
               """
                 |[
                 |  {
-                |    "code": "eis-returned-service-unavailable"
+                |    "code": "eis-returned-could-not-be-processed"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "duplicate submission" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(CONFLICT)
+                  .withBody("""
+                              |{
+                              |  "errorDetail": {
+                              |    "timestamp": "2023-12-13T11:50:35Z",
+                              |    "correlationId": "d102b24f-767c-4620-826b-d068f86e4abc",
+                              |    "errorCode": "409",
+                              |    "errorMessage": "Duplicate submission",
+                              |    "source": "Back End",
+                              |    "sourceFaultDetail": {
+                              |      "detail": [
+                              |        "Duplicate submission"
+                              |      ]
+                              |    }
+                              |  }
+                              |}
+                              |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/registrations/withId/individual"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |  "id": {
+                    |    "type": "NINO",
+                    |    "value": "AA000000A"
+                    |  },
+                    |  "firstName": "Patrick",
+                    |  "lastName": "Dyson",
+                    |  "dateOfBirth": "1970-10-04"
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            CONFLICT,
+            Some(
+              """
+                |[
+                |  {
+                |    "code": "eis-returned-duplicate-submission"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "forbidden" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(FORBIDDEN)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/registrations/withId/individual"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |  "id": {
+                    |    "type": "NINO",
+                    |    "value": "AA000000A"
+                    |  },
+                    |  "firstName": "Patrick",
+                    |  "lastName": "Dyson",
+                    |  "dateOfBirth": "1970-10-04"
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            FORBIDDEN,
+            Some(
+              """
+                |[
+                |  {
+                |    "code": "eis-returned-forbidden"
                 |  }
                 |]
                 |""".stripMargin
@@ -380,27 +564,33 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                     |{
-                     |  "registerWithIDRequest": {
-                     |    "requestCommon": {
-                     |      "receiptDate": "$currentDateAndTime",
-                     |      "regime": "MDR",
-                     |      "acknowledgementReference": "$acknowledgementReference"
-                     |    },
-                     |    "requestDetail": {
-                     |      "IDType": "NINO",
-                     |      "IDNumber": "AA000000A",
-                     |      "requiresNameMatch": true,
-                     |      "isAnAgent": false,
-                     |      "individual": {
-                     |        "firstName": "Patrick",
-                     |        "lastName": "Dyson",
-                     |        "dateOfBirth": "1970-10-04"
-                     |      }
-                     |    }
-                     |  }
-                     |}
-                     |""".stripMargin))
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
@@ -442,6 +632,160 @@ class RegistrationWithIdForAnIndividualSpec extends BaseRegistrationWithIdSpec {
             response,
             INTERNAL_SERVER_ERROR,
             None
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "no match" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(NOT_FOUND)
+                  .withBody("""
+                              |{
+                              |  "errorDetail": {
+                              |    "timestamp": "2023-12-13T11:50:35Z",
+                              |    "correlationId": "d102b24f-767c-4620-826b-d068f86e4abc",
+                              |    "errorCode": "404",
+                              |    "errorMessage": "Record not found",
+                              |    "source": "journey-DPRS0102-service-camel",
+                              |    "sourceFaultDetail": {
+                              |      "detail": [
+                              |        "Record not found"
+                              |      ]
+                              |    }
+                              |  }
+                              |}
+                              |""".stripMargin)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/registrations/withId/individual"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |  "id": {
+                    |    "type": "NINO",
+                    |    "value": "AA000000A"
+                    |  },
+                    |  "firstName": "Patrick",
+                    |  "lastName": "Dyson",
+                    |  "dateOfBirth": "1970-10-04"
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            NOT_FOUND,
+            Some(
+              """
+                |[
+                |  {
+                |    "code": "eis-returned-not-found"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "unauthorised" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "registerWithIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "IDType": "NINO",
+                                              |      "IDNumber": "AA000000A",
+                                              |      "requiresNameMatch": true,
+                                              |      "isAnAgent": false,
+                                              |      "individual": {
+                                              |        "firstName": "Patrick",
+                                              |        "lastName": "Dyson",
+                                              |        "dateOfBirth": "1970-10-04"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(UNAUTHORIZED)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/registrations/withId/individual"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |  "id": {
+                    |    "type": "NINO",
+                    |    "value": "AA000000A"
+                    |  },
+                    |  "firstName": "Patrick",
+                    |  "lastName": "Dyson",
+                    |  "dateOfBirth": "1970-10-04"
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            UNAUTHORIZED,
+            Some(
+              """
+                |[
+                |  {
+                |    "code": "eis-returned-unauthorised"
+                |  }
+                |]
+                |""".stripMargin
+            )
           )
           verifyThatDownstreamApiWasCalled()
         }

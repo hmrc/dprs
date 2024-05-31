@@ -21,7 +21,8 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
@@ -29,7 +30,7 @@ import javax.inject.Inject
 import scala.Function.unlift
 
 @Singleton
-class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
+class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
 
   override def baseUrl(): URL = url"${appConfig.registrationWithoutIdBaseUrl}"
 
@@ -38,7 +39,6 @@ class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: 
 object RegistrationWithoutIdConnector {
 
   val connectorPath: String = "/dac6/dct70a/v1"
-  val connectorName: String = "registration-without-id"
 
   object Request {
 
@@ -72,29 +72,14 @@ object RegistrationWithoutIdConnector {
   }
 
   final case class Response(
-    common: RegistrationWithoutIdConnector.Response.Common,
+    common: RegistrationConnector.Response.Common,
     detail: RegistrationWithoutIdConnector.Response.Detail
   )
   object Response {
 
     implicit lazy val reads: Reads[Response] =
-      ((JsPath \ "registerWithoutIDResponse" \ "responseCommon").read[RegistrationWithoutIdConnector.Response.Common] and
+      ((JsPath \ "registerWithoutIDResponse" \ "responseCommon").read[RegistrationConnector.Response.Common] and
         (JsPath \ "registerWithoutIDResponse" \ "responseDetail").read[RegistrationWithoutIdConnector.Response.Detail])(Response.apply _)
-
-    final case class Common(returnParams: Seq[Common.ReturnParam])
-
-    object Common {
-      implicit lazy val reads: Reads[Common] =
-        (JsPath \ "returnParameters").read[Seq[ReturnParam]].map(Common(_))
-
-      final case class ReturnParam(name: String, value: String)
-
-      object ReturnParam {
-        implicit val reads: Reads[ReturnParam] =
-          ((JsPath \ "paramName").read[String] and
-            (JsPath \ "paramValue").read[String])(ReturnParam.apply _)
-      }
-    }
 
     final case class Detail(safeId: String, arn: Option[String])
 

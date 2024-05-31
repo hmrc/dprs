@@ -18,12 +18,12 @@ package uk.gov.hmrc.dprs.subscription
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status._
-import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
+import uk.gov.hmrc.dprs.BaseBackendIntegrationSpec
+import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector
 
-class ReadSubscriptionSpec extends BaseIntegrationWithConnectorSpec {
+class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
 
-  override val baseConnectorPath: String  = "/dac6/dprs0202/v1"
-  override lazy val connectorName: String = "read-subscription"
+  override val baseConnectorPath: String = ReadSubscriptionConnector.connectorPath
 
   "attempting to read a subscription, when" - {
     "the request is" - {

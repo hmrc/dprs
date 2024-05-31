@@ -50,7 +50,8 @@ class RegistrationWithIdForOrganisationConnectorSpec extends BaseSpec {
           |    "requestCommon": {
           |      "receiptDate": "2024-02-15T11:46:47.516Z",
           |      "regime": "MDR",
-          |      "acknowledgementReference": "b79efb02-bc04-401b-9833-112d701c39bb"
+          |      "acknowledgementReference": "b79efb02-bc04-401b-9833-112d701c39bb",
+          |      "requestParameters": []
           |    },
           |    "requestDetail": {
           |      "IDType": "UTR",
@@ -115,8 +116,7 @@ class RegistrationWithIdForOrganisationConnectorSpec extends BaseSpec {
 
       rawJson should beValid(
         Response(
-          common = RegistrationWithIdConnector.Response
-            .Common(returnParams = Seq(RegistrationWithIdConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
+          common = RegistrationConnector.Response.Common(returnParams = Seq(RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
           detail = Response.Detail(
             safeId = "XE0000200775706",
             arn = Some("WARN3849921"),

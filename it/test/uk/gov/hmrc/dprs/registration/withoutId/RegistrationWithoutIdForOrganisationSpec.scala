@@ -19,12 +19,12 @@ package uk.gov.hmrc.dprs.registration.withoutId
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status._
 
-class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutIdSpec {
+class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutIdSpec {
 
-  "attempting to register without an ID, as an individual, when" - {
+  "attempting to register without an ID, as an organisation, when" - {
     "the request is" - {
       "valid, when" - {
-        "the country is inside the UK or related territories" in {
+        "the country is inside United Kingdom and related territories" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
@@ -33,14 +33,12 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
                                               |      "regime": "MDR",
-                                              |      "acknowledgementReference": "$acknowledgementReference"
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
                                               |    },
                                               |    "requestDetail": {
-                                              |      "individual": {
-                                              |        "firstName": "Patrick",
-                                              |        "middleName": "John",
-                                              |        "lastName": "Dyson",
-                                              |        "dateOfBirth": "1970-10-04"
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
                                               |      },
                                               |      "address": {
                                               |        "addressLine1": "34 Park Lane",
@@ -54,7 +52,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                                               |        "phoneNumber": "747663966",
                                               |        "mobileNumber": "38390756243",
                                               |        "faxNumber": "58371813020",
-                                              |        "emailAddress": "Patrick.Dyson@example.com"
+                                              |        "emailAddress": "dyson@example.com"
                                               |      }
                                               |    }
                                               |  }
@@ -87,14 +85,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -107,7 +102,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -138,40 +133,37 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
             )
           )
           verifyThatDownstreamApiWasCalled()
-
         }
-        "the country is outside UK and related territories" in {
+        "the country is outside United Kingdom and related territories" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "78 Rue Marie De Médicis",
-                                              |                "addressLine2": "Cambrai",
-                                              |                "addressLine3": "Nord-Pas-de-Calais",
-                                              |                "countryCode": "FR"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "78 Rue Marie De Médicis",
+                                              |        "addressLine2": "Cambrai",
+                                              |        "addressLine3": "Nord-Pas-de-Calais",
+                                              |        "countryCode": "FR"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -201,14 +193,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "78 Rue Marie De Médicis",
                     |        "lineTwo": "Cambrai",
@@ -219,7 +208,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -250,45 +239,40 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
             )
           )
           verifyThatDownstreamApiWasCalled()
-
         }
-
       }
       "valid but the integration call fails with response:" - {
         "internal server error" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
-              .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+              .withRequestBody(equalToJson(s"""{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -310,14 +294,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -330,7 +311,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -340,12 +321,12 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
             response,
             SERVICE_UNAVAILABLE,
             Some("""
-                |[
-                |  {
-                |    "code": "eis-returned-internal-server-error"
-                |  }
-                |]
-                |""".stripMargin)
+                   |[
+                   |  {
+                   |    "code": "eis-returned-internal-server-error"
+                   |  }
+                   |]
+                   |""".stripMargin)
           )
           verifyThatDownstreamApiWasCalled()
         }
@@ -353,36 +334,34 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -407,14 +386,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -427,7 +403,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -440,36 +416,34 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -494,14 +468,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -514,7 +485,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -539,36 +510,34 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -584,7 +553,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                               |    "errorMessage" : "Request could not be processed",
                               |    "source" : "Back End",
                               |    "sourceFaultDetail" : {
-                              |      "detail" : [ "Duplicate submission" ]
+                              |      "detail" : [ "Conflict?" ]
                               |    }
                               |  }
                               |}
@@ -593,14 +562,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -613,7 +579,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -638,36 +604,34 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           stubFor(
             post(urlEqualTo(baseConnectorPath))
               .withRequestBody(equalToJson(s"""
-                                              {
-                                              |    "registerWithoutIDRequest": {
-                                              |        "requestCommon": {
-                                              |            "receiptDate": "$currentDateAndTime",
-                                              |            "regime": "MDR",
-                                              |            "acknowledgementReference": "$acknowledgementReference"
-                                              |        },
-                                              |        "requestDetail": {
-                                              |            "individual": {
-                                              |            "firstName": "Patrick",
-                                              |            "middleName": "John",
-                                              |            "lastName": "Dyson",
-                                              |            "dateOfBirth": "1970-10-04"
-                                              |            },
-                                              |            "address": {
-                                              |                "addressLine1": "34 Park Lane",
-                                              |                "addressLine2": "Building A",
-                                              |                "addressLine3": "Suite 100",
-                                              |                "addressLine4": "Manchester",
-                                              |                "postalCode": "M54 1MQ",
-                                              |                "countryCode": "GB"
-                                              |            },
-                                              |            "contactDetails": {
-                                              |                "phoneNumber": "747663966",
-                                              |                "mobileNumber": "38390756243",
-                                              |                "faxNumber": "58371813020",
-                                              |                "emailAddress": "Patrick.Dyson@example.com"
-                                              |            }
-                                              |        }
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "MDR",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": []
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
                                               |    }
+                                              |  }
                                               |}
                                               |""".stripMargin))
               .willReturn(
@@ -692,14 +656,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           )
 
           val response = wsClient
-            .url(fullUrl("/registrations/withoutId/individual"))
+            .url(fullUrl("/registrations/withoutId/organisation"))
             .withHttpHeaders(("Content-Type", "application/json"))
             .post("""
                     |{
-                    |    "firstName": "Patrick",
-                    |    "middleName": "John",
-                    |    "lastName": "Dyson",
-                    |    "dateOfBirth": "1970-10-04",
+                    |    "name": "Dyson",
                     |    "address": {
                     |        "lineOne": "34 Park Lane",
                     |        "lineTwo": "Building A",
@@ -712,7 +673,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                     |        "landline": "747663966",
                     |        "mobile": "38390756243",
                     |        "fax": "58371813020",
-                    |        "emailAddress": "Patrick.Dyson@example.com"
+                    |        "emailAddress": "dyson@example.com"
                     |    }
                     |}
                     |""".stripMargin)
@@ -723,16 +684,13 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
         }
       }
       "invalid, specifically:" - {
-        "the first name is" - {
+        "the name is" - {
           "absent" in {
             val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
+              .url(fullUrl("/registrations/withoutId/organisation"))
               .withHttpHeaders(("Content-Type", "application/json"))
               .post("""
                       |{
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1970-10-04",
                       |    "address": {
                       |        "lineOne": "34 Park Lane",
                       |        "lineTwo": "Building A",
@@ -745,7 +703,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                       |        "landline": "747663966",
                       |        "mobile": "38390756243",
                       |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
+                      |        "emailAddress": "dyson@example.com"
                       |    }
                       |}
                       |""".stripMargin)
@@ -757,23 +715,21 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
               Some("""
                      |[
                      |  {
-                     |    "code": "invalid-first-name"
+                     |    "code": "invalid-name"
                      |  }
                      |]
                      |""".stripMargin)
             )
+
             verifyThatDownstreamApiWasNotCalled()
           }
           "blank" in {
             val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
+              .url(fullUrl("/registrations/withoutId/organisation"))
               .withHttpHeaders(("Content-Type", "application/json"))
               .post("""
                       |{
-                      |    "firstName": "",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1970-10-04",
+                      |    "name": "",
                       |    "address": {
                       |        "lineOne": "34 Park Lane",
                       |        "lineTwo": "Building A",
@@ -786,7 +742,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                       |        "landline": "747663966",
                       |        "mobile": "38390756243",
                       |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
+                      |        "emailAddress": "dyson@example.com"
                       |    }
                       |}
                       |""".stripMargin)
@@ -798,7 +754,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
               Some("""
                      |[
                      |  {
-                     |    "code": "invalid-first-name"
+                     |    "code": "invalid-name"
                      |  }
                      |]
                      |""".stripMargin)
@@ -808,14 +764,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           }
           "too long" in {
             val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
+              .url(fullUrl("/registrations/withoutId/organisation"))
               .withHttpHeaders(("Content-Type", "application/json"))
               .post("""
                       |{
-                      |    "firstName": "Patrick Alexander John Fitzpatrick James",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1970-10-04",
+                      |    "name": "The Dyson Electronics Company Of Great Britain And Northern Ireland (aka The Dyson Electronics Company Of Great Britain And Northern Ireland)",
                       |    "address": {
                       |        "lineOne": "34 Park Lane",
                       |        "lineTwo": "Building A",
@@ -828,7 +781,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                       |        "landline": "747663966",
                       |        "mobile": "38390756243",
                       |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
+                      |        "emailAddress": "dyson@example.com"
                       |    }
                       |}
                       |""".stripMargin)
@@ -840,391 +793,12 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
               Some("""
                      |[
                      |  {
-                     |    "code": "invalid-first-name"
+                     |    "code": "invalid-name"
                      |  }
                      |]
                      |""".stripMargin)
             )
 
-            verifyThatDownstreamApiWasNotCalled()
-          }
-        }
-        "the middle name is" - {
-          "blank" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1970-10-04",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-middle-name"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "too long" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "Alexander John Fitzpatrick James Edward",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1970-10-04",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-middle-name"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-        }
-        "the last name is" - {
-          "absent" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "dateOfBirth": "1970-10-04",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-last-name"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "blank" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "",
-                      |    "dateOfBirth": "1970-10-04",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-last-name"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "too long" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "Alexander III, Earl Of Somewhere Else",
-                      |    "dateOfBirth": "1970-10-04",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-last-name"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-        }
-        "the date of birth is" - {
-          "absent" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-date-of-birth"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "blank" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-date-of-birth"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "of an invalid format" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "10-04-1970",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-date-of-birth"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
-            verifyThatDownstreamApiWasNotCalled()
-          }
-          "doesn't exist" in {
-            val response = wsClient
-              .url(fullUrl("/registrations/withoutId/individual"))
-              .withHttpHeaders(("Content-Type", "application/json"))
-              .post("""
-                      |{
-                      |    "firstName": "Patrick",
-                      |    "middleName": "John",
-                      |    "lastName": "Dyson",
-                      |    "dateOfBirth": "1977-02-29",
-                      |    "address": {
-                      |        "lineOne": "34 Park Lane",
-                      |        "lineTwo": "Building A",
-                      |        "lineThree": "Suite 100",
-                      |        "lineFour": "Manchester",
-                      |        "postalCode": "M54 1MQ",
-                      |        "countryCode": "GB"
-                      |    },
-                      |    "contactDetails": {
-                      |        "landline": "747663966",
-                      |        "mobile": "38390756243",
-                      |        "fax": "58371813020",
-                      |        "emailAddress": "Patrick.Dyson@example.com"
-                      |    }
-                      |}
-                      |""".stripMargin)
-              .futureValue
-
-            assertAsExpected(
-              response,
-              BAD_REQUEST,
-              Some("""
-                     |[
-                     |  {
-                     |    "code": "invalid-date-of-birth"
-                     |  }
-                     |]
-                     |""".stripMargin)
-            )
             verifyThatDownstreamApiWasNotCalled()
           }
         }
@@ -1232,14 +806,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           "first line is" - {
             "absent" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineTwo": "Building A",
                         |        "lineThree": "Suite 100",
@@ -1251,7 +822,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1268,18 +839,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "",
                         |        "lineTwo": "Building A",
@@ -1292,7 +861,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1309,18 +878,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "6000-6600 Great Peter Boulevard North",
                         |        "lineTwo": "Building A",
@@ -1333,7 +900,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1350,20 +917,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "second line is" - {
             "absent" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineThree": "Suite 100",
@@ -1375,7 +940,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1392,18 +957,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "",
@@ -1416,7 +979,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1433,18 +996,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building Number Two, Northwest Corner",
@@ -1457,7 +1018,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1474,20 +1035,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "third line is" - {
             "absent" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1499,7 +1058,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1516,18 +1075,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1540,7 +1097,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1557,62 +1114,57 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
-                          |{
-                          |    "firstName": "Patrick",
-                          |    "middleName": "John",
-                          |    "lastName": "Dyson",
-                          |    "dateOfBirth": "1970-10-04",
-                          |    "address": {
-                          |        "lineOne": "34 Park Lane",
-                          |        "lineTwo": "Building A",
-                          |        "lineThree": "Suite 100, formerly the Presidential Suite",
-                          |        "lineFour": "Manchester",
-                          |        "postalCode": "M54 1MQ",
-                          |        "countryCode": "GB"
-                          |    },
-                          |    "contactDetails": {
-                          |        "landline": "747663966",
-                          |        "mobile": "38390756243",
-                          |        "fax": "58371813020",
-                          |        "emailAddress": "Patrick.Dyson@example.com"
-                          |    }
-                          |}
-                          |""".stripMargin)
+                        |{
+                        |    "name": "Dyson",
+                        |    "address": {
+                        |        "lineOne": "34 Park Lane",
+                        |        "lineTwo": "Building A",
+                        |        "lineThree": "Suite 100, formerly the Presidential Suite",
+                        |        "lineFour": "Manchester",
+                        |        "postalCode": "M54 1MQ",
+                        |        "countryCode": "GB"
+                        |    },
+                        |    "contactDetails": {
+                        |        "landline": "747663966",
+                        |        "mobile": "38390756243",
+                        |        "fax": "58371813020",
+                        |        "emailAddress": "dyson@example.com"
+                        |    }
+                        |}
+                        |""".stripMargin)
                 .futureValue
 
               assertAsExpected(
                 response,
                 BAD_REQUEST,
                 Some("""
-                         |[
-                         |  {
-                         |    "code": "invalid-address-line-three"
-                         |  }
-                         |]
-                         |""".stripMargin)
+                       |[
+                       |  {
+                       |    "code": "invalid-address-line-three"
+                       |  }
+                       |]
+                       |""".stripMargin)
               )
-              verifyThatDownstreamApiWasNotCalled()
 
+              verifyThatDownstreamApiWasNotCalled()
             }
           }
           "fourth line is" - {
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1625,7 +1177,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1642,18 +1194,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1666,7 +1216,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1683,20 +1233,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "country code is" - {
             "absent" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1708,7 +1256,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1725,18 +1273,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1749,7 +1295,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1766,18 +1312,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1790,7 +1334,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1807,34 +1351,72 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "unrecognised" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
-                          |{
-                          |    "firstName": "Patrick",
-                          |    "middleName": "John",
-                          |    "lastName": "Dyson",
-                          |    "dateOfBirth": "1970-10-04",
-                          |    "address": {
-                          |        "lineOne": "34 Park Lane",
-                          |        "lineTwo": "Building A",
-                          |        "lineThree": "Suite 100",
-                          |        "lineFour": "Manchester",
-                          |        "postalCode": "M54 1MQ",
-                          |        "countryCode": "XX"
-                          |    },
-                          |    "contactDetails": {
-                          |        "landline": "747663966",
-                          |        "mobile": "38390756243",
-                          |        "fax": "58371813020",
-                          |        "emailAddress": "Patrick.Dyson@example.com"
-                          |    }
-                          |}
-                          |""".stripMargin)
+                        |{
+                        |    "name": "Dyson",
+                        |    "address": {
+                        |        "lineOne": "34 Park Lane",
+                        |        "lineTwo": "Building A",
+                        |        "lineThree": "Suite 100",
+                        |        "lineFour": "Manchester",
+                        |        "postalCode": "M54 1MQ",
+                        |        "countryCode": "XX"
+                        |    },
+                        |    "contactDetails": {
+                        |        "landline": "747663966",
+                        |        "mobile": "38390756243",
+                        |        "fax": "58371813020",
+                        |        "emailAddress": "dyson@example.com"
+                        |    }
+                        |}
+                        |""".stripMargin)
+                .futureValue
+
+              assertAsExpected(
+                response,
+                BAD_REQUEST,
+                Some("""
+                       |[
+                       |  {
+                       |    "code": "invalid-address-country-code"
+                       |  }
+                       |]
+                       |""".stripMargin)
+              )
+
+              verifyThatDownstreamApiWasNotCalled()
+            }
+          }
+          "postal code is" - {
+            "expected but absent" in {
+              val response = wsClient
+                .url(fullUrl("/registrations/withoutId/organisation"))
+                .withHttpHeaders(("Content-Type", "application/json"))
+                .post("""
+                             |{
+                             |    "name": "Dyson",
+                             |    "address": {
+                             |        "lineOne": "34 Park Lane",
+                             |        "lineTwo": "Building A",
+                             |        "lineThree": "Suite 100",
+                             |        "lineFour": "Manchester",
+                             |        "countryCode": "GB"
+                             |    },
+                             |    "contactDetails": {
+                             |        "landline": "747663966",
+                             |        "mobile": "38390756243",
+                             |        "fax": "58371813020",
+                             |        "emailAddress": "dyson@example.com"
+                             |    }
+                             |}
+                             |""".stripMargin)
                 .futureValue
 
               assertAsExpected(
@@ -1843,68 +1425,20 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                 Some("""
                          |[
                          |  {
-                         |    "code": "invalid-address-country-code"
+                         |    "code": "invalid-address-postal-code"
                          |  }
                          |]
                          |""".stripMargin)
               )
               verifyThatDownstreamApiWasNotCalled()
-
-            }
-          }
-          "postal code is" - {
-            "expected but absent" in {
-              val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
-                .withHttpHeaders(("Content-Type", "application/json"))
-                .post(
-                  s"""
-                       |{
-                       |    "firstName": "Patrick",
-                       |    "middleName": "John",
-                       |    "lastName": "Dyson",
-                       |    "dateOfBirth": "1970-10-04",
-                       |    "address": {
-                       |        "lineOne": "34 Park Lane",
-                       |        "lineTwo": "Building A",
-                       |        "lineThree": "Suite 100",
-                       |        "lineFour": "Manchester",
-                       |        "countryCode": "GB"
-                       |    },
-                       |    "contactDetails": {
-                       |        "landline": "747663966",
-                       |        "mobile": "38390756243",
-                       |        "fax": "58371813020",
-                       |        "emailAddress": "Patrick.Dyson@example.com"
-                       |    }
-                       |}
-                       |""".stripMargin
-                )
-                .futureValue
-
-              assertAsExpected(
-                response,
-                BAD_REQUEST,
-                Some("""
-                      |[
-                      |  {
-                      |    "code": "invalid-address-postal-code"
-                      |  }
-                      |]
-                      |""".stripMargin)
-              )
-              verifyThatDownstreamApiWasNotCalled()
             }
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1917,7 +1451,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1934,18 +1468,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -1958,7 +1490,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -1975,6 +1507,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
@@ -1983,14 +1516,11 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
           "landline number is" - {
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2003,7 +1533,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2020,18 +1550,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2044,7 +1572,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966747663966747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2061,18 +1589,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "of an invalid format" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2085,7 +1611,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "£747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2102,20 +1628,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "mobile number is" - {
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2128,7 +1652,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2145,18 +1669,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2169,7 +1691,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243383907562433839",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2186,18 +1708,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "of an invalid format" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2210,7 +1730,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "£38390756243",
                         |        "fax": "58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2227,20 +1747,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "fax number is" - {
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2253,7 +1771,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2270,18 +1788,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "too long" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2294,7 +1810,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "583718130205837181302058371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2311,18 +1827,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "of an invalid format" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2335,7 +1849,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                         |        "landline": "747663966",
                         |        "mobile": "38390756243",
                         |        "fax": "£58371813020",
-                        |        "emailAddress": "Patrick.Dyson@example.com"
+                        |        "emailAddress": "dyson@example.com"
                         |    }
                         |}
                         |""".stripMargin)
@@ -2352,20 +1866,18 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }
           "email address is" - {
             "blank" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2395,18 +1907,16 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
             "of an invalid format" in {
               val response = wsClient
-                .url(fullUrl("/registrations/withoutId/individual"))
+                .url(fullUrl("/registrations/withoutId/organisation"))
                 .withHttpHeaders(("Content-Type", "application/json"))
                 .post("""
                         |{
-                        |    "firstName": "Patrick",
-                        |    "middleName": "John",
-                        |    "lastName": "Dyson",
-                        |    "dateOfBirth": "1970-10-04",
+                        |    "name": "Dyson",
                         |    "address": {
                         |        "lineOne": "34 Park Lane",
                         |        "lineTwo": "Building A",
@@ -2436,6 +1946,7 @@ class RegistrationWithoutIdForAnIndividualSpec extends BaseRegistrationWithoutId
                        |]
                        |""".stripMargin)
               )
+
               verifyThatDownstreamApiWasNotCalled()
             }
           }

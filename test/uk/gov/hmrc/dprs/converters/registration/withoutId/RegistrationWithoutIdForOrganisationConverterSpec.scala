@@ -66,9 +66,9 @@ class RegistrationWithoutIdForOrganisationConverterSpec extends BaseSpec {
     }
     "a connector response to a service response" in {
       val connectorResponse = RegistrationWithoutIdConnector.Response(
-        common = RegistrationWithoutIdConnector.Response.Common(returnParams =
+        common = RegistrationConnector.Response.Common(returnParams =
           Seq(
-            RegistrationWithoutIdConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967")
+            RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967")
           )
         ),
         detail = RegistrationWithoutIdConnector.Response.Detail(safeId = "XE0000200775706", arn = Some("WARN3849921"))

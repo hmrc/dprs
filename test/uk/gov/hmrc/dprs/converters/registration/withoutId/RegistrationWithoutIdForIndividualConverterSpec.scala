@@ -77,9 +77,9 @@ class RegistrationWithoutIdForIndividualConverterSpec extends BaseSpec {
     }
     "a connector response to a service response" in {
       val connectorResponse = CommonConnectorResponse(
-        common = CommonConnectorResponse.Common(returnParams =
+        common = RegistrationConnector.Response.Common(returnParams =
           Seq(
-            CommonConnectorResponse.Common.ReturnParam("SAP_NUMBER", "1960629967")
+            RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967")
           )
         ),
         detail = CommonConnectorResponse.Detail(safeId = "XE0000200775706", arn = Some("WARN3849921"))

@@ -16,15 +16,23 @@
 
 package uk.gov.hmrc.dprs.converters.registration.withId
 
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
-import uk.gov.hmrc.dprs.converters.registration.RegistrationConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdService
 
-import java.time.Clock
+import java.time.{Clock, Instant}
 
-class RegistrationWithIdConverter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator)
-    extends RegistrationConverter(clock, acknowledgementReferenceGenerator) {
+class RegistrationWithIdConverter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
+
+  private val regime = "DPRS"
+
+  def generateRequestCommon(): RegistrationConnector.Request.Common = RegistrationConnector.Request.Common(
+    receiptDate = Instant.now(clock).toString,
+    regime = regime,
+    acknowledgementReference = acknowledgementReferenceGenerator.generate(),
+    requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", regime))
+  )
 
   def convert(connectorAddress: RegistrationWithIdConnector.Response.Address): RegistrationWithIdService.Response.Address =
     RegistrationWithIdService.Response.Address(

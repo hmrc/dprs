@@ -38,12 +38,15 @@ object BaseService {
   }
 
   object ErrorCodes {
-    val internalServerError     = "eis-returned-internal-server-error"
-    val serviceUnavailableError = "eis-returned-service-unavailable"
     val conflict                = "eis-returned-conflict"
-    val notFound                = "eis-returned-not-found"
-    val unauthorised            = "eis-returned-unauthorised"
+    val couldNotBeProcessed     = "eis-returned-could-not-be-processed"
+    val duplicateSubmission     = "eis-returned-duplicate-submission"
     val forbidden               = "eis-returned-forbidden"
+    val internalError           = "eis-returned-internal-error"
+    val internalServerError     = "eis-returned-internal-server-error"
+    val notFound                = "eis-returned-not-found"
+    val serviceUnavailableError = "eis-returned-service-unavailable"
+    val unauthorised            = "eis-returned-unauthorised"
   }
 
 }

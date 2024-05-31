@@ -27,6 +27,7 @@ import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Requests.Request.{Contact, Id}
+import uk.gov.hmrc.dprs.services.subscription.CreateSubscriptionService.Responses.Response.ConnectorErrorCode
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,18 +53,17 @@ class CreateSubscriptionService @Inject() (
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import ConnectorErrorCode._
     connectorError match {
-      case Error(INTERNAL_SERVER_ERROR, None) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.CouldNotBeProcessed)) => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.MalformedPayload))    => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.DuplicateSubmission))  => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CouldNotBeProcessed)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.InvalidId))     => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Unauthorised)) => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Forbidden))    => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
-      case _                                                                    => ErrorResponse(connectorError.status)
+      case Error(INTERNAL_SERVER_ERROR, None)                        => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, Some(`couldNotBeProcessed`)) => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(`malformedPayload`))    => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(UNPROCESSABLE_ENTITY, Some(`duplicateSubmission`))  => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(`couldNotBeProcessed`))  => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(`invalidId`))            => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(`unauthorised`))        => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(`forbidden`))           => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case _                                                         => ErrorResponse(connectorError.status)
     }
   }
 }
@@ -175,6 +175,16 @@ object CreateSubscriptionService {
     object Response {
       implicit val writes: OWrites[Response] =
         (JsPath \ "id").write[String].contramap(_.id)
+
+      object ConnectorErrorCode {
+        val couldNotBeProcessed = "003"
+        val duplicateSubmission = "004"
+        val forbidden           = "403"
+        val invalidId           = "016"
+        val malformedPayload    = "400"
+        val unauthorised        = "401"
+      }
+
     }
 
   }

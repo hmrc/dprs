@@ -27,6 +27,7 @@ import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Converter
 import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Request.Contact
+import uk.gov.hmrc.dprs.services.subscription.UpdateSubscriptionService.Requests.Response.ConnectorErrorCode
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,16 +51,17 @@ class UpdateSubscriptionService @Inject() (updateSubscriptionConnector: UpdateSu
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => Service}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => Connector}
+    import ConnectorErrorCode._
     connectorError match {
-      case Error(INTERNAL_SERVER_ERROR, Some(Connector.InternalServerError))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.internalServerError))
-      case Error(INTERNAL_SERVER_ERROR, Some(Connector.Unauthorised))           => ErrorResponse(UNAUTHORIZED, Some(Service.unauthorised))
-      case Error(INTERNAL_SERVER_ERROR, Some(Connector.Forbidden))              => ErrorResponse(FORBIDDEN, Some(Service.forbidden))
-      case Error(UNPROCESSABLE_ENTITY, Some(Connector.CouldNotBeProcessed))     => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(Connector.CreateOrAmendInProgress)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(Connector.DuplicateSubmission))     => ErrorResponse(CONFLICT, Some(Service.conflict))
-      case Error(UNPROCESSABLE_ENTITY, Some(Connector.NoSubscription))          => ErrorResponse(NOT_FOUND, Some(Service.notFound))
-      case _                                                                    => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, Some(`unauthorised`))           => ErrorResponse(UNAUTHORIZED, Some(Service.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(`forbidden`))              => ErrorResponse(FORBIDDEN, Some(Service.forbidden))
+      case Error(UNPROCESSABLE_ENTITY, Some(`couldNotBeProcessed`))     => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(`createOrAmendInProgress`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(Service.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(`couldNotBeProcessed`))     => ErrorResponse(CONFLICT, Some(Service.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(`noSubscription`))          => ErrorResponse(NOT_FOUND, Some(Service.notFound))
+      case Error(UNPROCESSABLE_ENTITY, Some(`duplicateSubmission`))     => ErrorResponse(CONFLICT, Some(Service.conflict))
+      case _                                                            => ErrorResponse(INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -132,6 +134,18 @@ object UpdateSubscriptionService {
             (JsPath \ "emailAddress").read(maxLength[String](132).keepAnd(validEmailAddress)))(Organisation.apply _)
       }
 
+    }
+
+    object Response {
+      object ConnectorErrorCode {
+        val couldNotBeProcessed     = "003"
+        val createOrAmendInProgress = "201"
+        val duplicateSubmission     = "004"
+        val forbidden               = "403"
+        val internalServerError     = "500"
+        val noSubscription          = "202"
+        val unauthorised            = "401"
+      }
     }
   }
 

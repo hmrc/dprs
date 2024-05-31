@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.dprs.services.registration.withId
 
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites}
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
+import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdService.Response.ConnectorErrorCode
 
 import scala.Function.unlift
 
@@ -29,14 +30,16 @@ abstract class RegistrationWithIdService extends BaseService {
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import ConnectorErrorCode._
     connectorError match {
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(SERVICE_UNAVAILABLE, _) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(CONFLICT, _)            => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(BAD_REQUEST, _)         => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case _                             => ErrorResponse(connectorError.status)
+      case Error(BAD_REQUEST, Some(`badRequest`))                  => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case Error(CONFLICT, Some(`duplicateSubmission`))            => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.duplicateSubmission))
+      case Error(FORBIDDEN, None)                                  => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(NOT_FOUND, Some(`noMatch`))                       => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(UNAUTHORIZED, None)                               => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(SERVICE_UNAVAILABLE, Some(`couldNotBeProcessed`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.couldNotBeProcessed))
+      case Error(SERVICE_UNAVAILABLE, Some(`internalError`))       => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalError))
+      case _                                                       => ErrorResponse(connectorError.status)
     }
   }
 
@@ -80,6 +83,14 @@ object RegistrationWithIdService {
           (JsPath \ "mobile").writeNullable[String] and
           (JsPath \ "fax").writeNullable[String] and
           (JsPath \ "emailAddress").writeNullable[String])(unlift(ContactDetails.unapply))
+    }
+
+    object ConnectorErrorCode {
+      val badRequest          = "400"
+      val duplicateSubmission = "409"
+      val noMatch             = "404"
+      val couldNotBeProcessed = "503"
+      val internalError       = "500"
     }
   }
 
