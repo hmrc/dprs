@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.dprs.registration.withoutId
 
-import uk.gov.hmrc.dprs.BaseIntegrationWithConnectorSpec
+import uk.gov.hmrc.dprs.BaseBackendIntegrationSpec
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector
 
-class BaseRegistrationWithoutIdSpec extends BaseIntegrationWithConnectorSpec {
+class BaseRegistrationWithoutIdSpec extends BaseBackendIntegrationSpec {
 
-  override val baseConnectorPath: String  = RegistrationWithoutIdConnector.connectorPath
-  override lazy val connectorName: String = RegistrationWithoutIdConnector.connectorName
+  override val baseConnectorPath: String = RegistrationWithoutIdConnector.connectorPath
 
 }

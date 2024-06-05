@@ -25,6 +25,7 @@ import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Converter
+import uk.gov.hmrc.dprs.services.subscription.ReadSubscriptionService.Responses.Response.ConnectorErrorCode
 
 import javax.inject.Inject
 import scala.Function.unlift
@@ -44,20 +45,17 @@ class ReadSubscriptionService @Inject() (readSubscriptionConnector: ReadSubscrip
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import ConnectorErrorCode._
     connectorError match {
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CouldNotBeProcessed)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.DuplicateSubmission)) => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.InvalidId))           => ErrorResponse(SERVICE_UNAVAILABLE)
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.CreateOrAmendInProgress)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(ConnectorErrorCodes.NoSubscription)) => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Forbidden))     => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.Unauthorised))  => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case _ => ErrorResponse(connectorError.status)
+      case Error(UNPROCESSABLE_ENTITY, Some(`couldNotBeProcessed`))     => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(`duplicateSubmission`))     => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(UNPROCESSABLE_ENTITY, Some(`invalidId`))               => ErrorResponse(SERVICE_UNAVAILABLE)
+      case Error(UNPROCESSABLE_ENTITY, Some(`createOrAmendInProgress`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(UNPROCESSABLE_ENTITY, Some(`noSubscription`))          => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(INTERNAL_SERVER_ERROR, Some(`forbidden`))              => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(INTERNAL_SERVER_ERROR, Some(`unauthorised`))           => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case _                                                            => ErrorResponse(connectorError.status)
     }
   }
 }
@@ -116,6 +114,17 @@ object ReadSubscriptionService {
         ((JsPath \ "id").write[String] and
           (JsPath \ "name").writeNullable[String] and
           (JsPath \ "contacts").write[Seq[Contact]])(unlift(Response.unapply))
+
+      object ConnectorErrorCode {
+        val couldNotBeProcessed     = "003"
+        val createOrAmendInProgress = "201"
+        val duplicateSubmission     = "004"
+        val forbidden               = "403"
+        val internalServerError     = "500"
+        val invalidId               = "016"
+        val noSubscription          = "202"
+        val unauthorised            = "401"
+      }
     }
   }
 

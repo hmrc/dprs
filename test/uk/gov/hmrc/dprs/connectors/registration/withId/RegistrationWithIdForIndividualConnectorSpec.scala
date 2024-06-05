@@ -27,9 +27,11 @@ class RegistrationWithIdForIndividualConnectorSpec extends BaseSpec {
   "when" - {
     "writing the request object, we should generate the expected JSON request" in {
       val request = Request(
-        common = RegistrationConnector.Request.Common(receiptDate = "2024-02-15T11:32:43.364Z",
-                                                      regime = "MDR",
-                                                      acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4"
+        common = RegistrationConnector.Request.Common(
+          receiptDate = "2024-02-15T11:32:43.364Z",
+          regime = "DPRS",
+          acknowledgementReference = "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
+          requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
         ),
         detail = Request.Detail(
           idType = "NINO",
@@ -51,8 +53,14 @@ class RegistrationWithIdForIndividualConnectorSpec extends BaseSpec {
           |  "registerWithIDRequest": {
           |    "requestCommon": {
           |      "receiptDate": "2024-02-15T11:32:43.364Z",
-          |      "regime": "MDR",
-          |      "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4"
+          |      "regime": "DPRS",
+          |      "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
+          |      "requestParameters": [
+          |        {
+          |          "paramName": "REGIME",
+          |          "paramValue": "DPRS"
+          |        }
+          |      ]
           |    },
           |    "requestDetail": {
           |      "IDType": "NINO",
@@ -120,8 +128,8 @@ class RegistrationWithIdForIndividualConnectorSpec extends BaseSpec {
 
       rawJson should beValid(
         Response(
-          common = RegistrationWithIdConnector.Response
-            .Common(returnParams = Seq(RegistrationWithIdConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
+          common = RegistrationConnector.Response
+            .Common(returnParams = Seq(RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
           detail = Response.Detail(
             safeId = "XE0000200775706",
             arn = Some("WARN3849921"),

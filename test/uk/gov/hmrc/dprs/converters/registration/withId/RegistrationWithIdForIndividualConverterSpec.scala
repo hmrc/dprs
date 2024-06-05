@@ -42,8 +42,9 @@ class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
       connectorRequest shouldBe ConnectorRequest(
         common = RegistrationConnector.Request.Common(
           receiptDate = currentDateTime,
-          regime = "MDR",
-          acknowledgementReference = acknowledgementReference
+          regime = "DPRS",
+          acknowledgementReference = acknowledgementReference,
+          requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
         ),
         detail = ConnectorRequest.Detail(
           idType = "NINO",
@@ -60,9 +61,9 @@ class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
     }
     "a connector response to a service response, for" - {
       val connectorResponse = ConnectorResponse(
-        common = CommonConnectorResponse.Common(
+        common = RegistrationConnector.Response.Common(
           returnParams = Seq(
-            CommonConnectorResponse.Common.ReturnParam("SAP_NUMBER", "1960629967")
+            RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967")
           )
         ),
         detail = ConnectorResponse.Detail(

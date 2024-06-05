@@ -49,7 +49,12 @@ class RegistrationWithIdForOrganisationConverterSpec extends BaseSpec {
         val connectorRequest = converter.convert(serviceRequest)
 
         connectorRequest shouldBe RegistrationWithIdForOrganisationConnector.Request(
-          common = RegistrationConnector.Request.Common(receiptDate = currentDateTime, regime = "MDR", acknowledgementReference = acknowledgementReference),
+          common = RegistrationConnector.Request.Common(
+            receiptDate = currentDateTime,
+            regime = "DPRS",
+            acknowledgementReference = acknowledgementReference,
+            requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
+          ),
           detail = RegistrationWithIdForOrganisationConnector.Request.Detail(
             idType = "UTR",
             idNumber = "1234567890",
@@ -77,8 +82,7 @@ class RegistrationWithIdForOrganisationConverterSpec extends BaseSpec {
       forAll(types) { (code, expectedRawType) =>
         val expectedType = Response.Type.all.find(_.toString == expectedRawType).get
         val connectorResponse = RegistrationWithIdForOrganisationConnector.Response(
-          common = RegistrationWithIdConnector.Response
-            .Common(returnParams = Seq(RegistrationWithIdConnector.Response.Common.ReturnParam("SAP_NUMBER", "8231791429"))),
+          common = RegistrationConnector.Response.Common(returnParams = Seq(RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "8231791429"))),
           detail = RegistrationWithIdForOrganisationConnector.Response.Detail(
             safeId = "XE0000586571722",
             arn = Some("WARN1442450"),

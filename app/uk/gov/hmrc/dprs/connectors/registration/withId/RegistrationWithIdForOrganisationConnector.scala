@@ -62,7 +62,7 @@ object RegistrationWithIdForOrganisationConnector {
   }
 
   final case class Response(
-    common: RegistrationWithIdConnector.Response.Common,
+    common: RegistrationConnector.Response.Common,
     detail: Response.Detail
   )
 
@@ -87,7 +87,7 @@ object RegistrationWithIdForOrganisationConnector {
     }
 
     implicit val reads: Reads[Response] =
-      ((JsPath \ "registerWithIDResponse" \ "responseCommon").read[RegistrationWithIdConnector.Response.Common] and
+      ((JsPath \ "registerWithIDResponse" \ "responseCommon").read[RegistrationConnector.Response.Common] and
         (JsPath \ "registerWithIDResponse" \ "responseDetail").read[Response.Detail])(Response.apply _)
 
   }

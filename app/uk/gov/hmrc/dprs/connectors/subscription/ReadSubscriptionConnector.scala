@@ -22,7 +22,7 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.{JsPath, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Response
 import uk.gov.hmrc.http.StringContextOps
@@ -32,7 +32,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
+class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
 
   def call(id: String)(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
     get[Response](id)
@@ -43,7 +43,6 @@ class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSCli
 object ReadSubscriptionConnector {
 
   val connectorPath: String = "/dac6/dprs0202/v1"
-  val connectorName: String = "read-subscription"
 
   object Responses {
 

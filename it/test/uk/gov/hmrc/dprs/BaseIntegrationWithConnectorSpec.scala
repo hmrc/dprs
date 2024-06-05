@@ -29,7 +29,7 @@ abstract class BaseIntegrationWithConnectorSpec extends BaseIntegrationSpec {
   override def extraApplicationConfig: Map[String, Any] = Map(
     s"microservice.services.$connectorName.host"    -> wireMockHost,
     s"microservice.services.$connectorName.port"    -> wireMockPort,
-    s"microservice.services.$connectorName.context" -> baseConnectorPath
+    s"microservice.services.$connectorName.context" -> ""
   )
 
   def verifyThatDownstreamApiWasCalled(): Unit = {

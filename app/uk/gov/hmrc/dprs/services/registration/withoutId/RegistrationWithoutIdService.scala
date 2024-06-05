@@ -23,6 +23,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
+import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService.Response.ConnectorErrorCode
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 import uk.gov.hmrc.dprs.support.ValidationSupport.isValidCountryCode
 
@@ -32,15 +33,13 @@ abstract class RegistrationWithoutIdService extends BaseService {
 
   override protected def convert(connectorError: Error): ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.{ErrorCodes => ConnectorErrorCodes}
+    import ConnectorErrorCode._
     connectorError match {
-      case Error(INTERNAL_SERVER_ERROR, Some(ConnectorErrorCodes.InternalServerError)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
-      case Error(SERVICE_UNAVAILABLE, Some(ConnectorErrorCodes.ServiceUnavailable)) =>
-        ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(CONFLICT, _)    => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
-      case Error(BAD_REQUEST, _) => ErrorResponse(INTERNAL_SERVER_ERROR)
-      case _                     => ErrorResponse(connectorError.status)
+      case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(SERVICE_UNAVAILABLE, Some(`serviceUnavailable`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
+      case Error(CONFLICT, _)                                        => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(BAD_REQUEST, _)                                     => ErrorResponse(INTERNAL_SERVER_ERROR)
+      case _                                                         => ErrorResponse(connectorError.status)
     }
   }
 
@@ -119,5 +118,11 @@ object RegistrationWithoutIdService {
       implicit val writes: OWrites[Error] =
         (JsPath \ "code").write[String].contramap(_.code)
     }
+
+    object ConnectorErrorCode {
+      val internalServerError = "500"
+      val serviceUnavailable  = "503"
+    }
+
   }
 }

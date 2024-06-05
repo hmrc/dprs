@@ -53,32 +53,33 @@ class RegistrationWithoutIdForOrganisationConnectorSpec extends BaseSpec {
 
       json should beSameAs(s"""
                               |{
-                              |    "registerWithoutIDRequest": {
-                              |        "requestCommon": {
-                              |            "receiptDate": "2024-02-15T11:32:43.364Z",
-                              |            "regime": "MDR",
-                              |            "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4"
-                              |        },
-                              |        "requestDetail": {
-                              |            "organisation": {
-                              |                "organisationName": "Dyson"
-                              |            },
-                              |            "address": {
-                              |                "addressLine1": "34 Park Lane",
-                              |                "addressLine2": "Building A",
-                              |                "addressLine3": "Suite 100",
-                              |                "addressLine4": "Manchester",
-                              |                "postalCode": "M54 1MQ",
-                              |                "countryCode": "GB"
-                              |            },
-                              |            "contactDetails": {
-                              |                "phoneNumber": "747663966",
-                              |                "mobileNumber": "38390756243",
-                              |                "faxNumber": "58371813020",
-                              |                "emailAddress": "dyson@example.com"
-                              |            }
-                              |        }
+                              |  "registerWithoutIDRequest": {
+                              |    "requestCommon": {
+                              |      "receiptDate": "2024-02-15T11:32:43.364Z",
+                              |      "regime": "MDR",
+                              |      "acknowledgementReference": "0badb375-30dd-41c8-821b-e7d92ebd2ce4",
+                              |      "requestParameters": []
+                              |    },
+                              |    "requestDetail": {
+                              |      "organisation": {
+                              |        "organisationName": "Dyson"
+                              |      },
+                              |      "address": {
+                              |        "addressLine1": "34 Park Lane",
+                              |        "addressLine2": "Building A",
+                              |        "addressLine3": "Suite 100",
+                              |        "addressLine4": "Manchester",
+                              |        "postalCode": "M54 1MQ",
+                              |        "countryCode": "GB"
+                              |      },
+                              |      "contactDetails": {
+                              |        "phoneNumber": "747663966",
+                              |        "mobileNumber": "38390756243",
+                              |        "faxNumber": "58371813020",
+                              |        "emailAddress": "dyson@example.com"
+                              |      }
                               |    }
+                              |  }
                               |}
                               |""".stripMargin)
     }
@@ -106,8 +107,7 @@ class RegistrationWithoutIdForOrganisationConnectorSpec extends BaseSpec {
 
       rawJson should BaseSpec.beValid(
         Response(
-          common = RegistrationWithoutIdConnector.Response
-            .Common(returnParams = Seq(RegistrationWithoutIdConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
+          common = RegistrationConnector.Response.Common(returnParams = Seq(RegistrationConnector.Response.Common.ReturnParam("SAP_NUMBER", "1960629967"))),
           detail = Response.Detail(safeId = "XE0000200775706", arn = Some("WARN3849921"))
         )
       )

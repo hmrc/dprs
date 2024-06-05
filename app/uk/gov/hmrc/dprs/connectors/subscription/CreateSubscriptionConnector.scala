@@ -21,7 +21,7 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Requests.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Requests.Request
 import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Responses.Response
@@ -33,7 +33,7 @@ import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
+class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
 
   def call(
     request: Request
@@ -47,7 +47,6 @@ class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 object CreateSubscriptionConnector {
 
   val connectorPath: String = "/dac6/dprs0201/v1"
-  val connectorName: String = "create-subscription"
 
   object Requests {
 

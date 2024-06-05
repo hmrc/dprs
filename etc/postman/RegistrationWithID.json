@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "90479c76-9861-4106-9ab2-156685bdc878",
+		"_postman_id": "91350983-ee07-4f73-9325-1bef1f49b479",
 		"name": "Registration With ID",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30217849"
@@ -118,56 +118,6 @@
 							"name": "Downstream",
 							"item": [
 								{
-									"name": "Internal Server Error",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is as expected\", function () {",
-													"    pm.response.to.have.status(503);",
-													"});",
-													"",
-													"pm.test(\"Single error code is as expected\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.length).to.equal(1);",
-													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript",
-												"packages": {}
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000500\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{BASE_URL}}/registrations/withId/individual",
-											"host": [
-												"{{BASE_URL}}"
-											],
-											"path": [
-												"registrations",
-												"withId",
-												"individual"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Bad Request",
 									"event": [
 										{
@@ -195,7 +145,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000400\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000400_400\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -217,7 +167,7 @@
 									"response": []
 								},
 								{
-									"name": "Service Unavailable",
+									"name": "Could Not Be Processed",
 									"event": [
 										{
 											"listen": "test",
@@ -230,7 +180,7 @@
 													"pm.test(\"Single error code is as expected\", function () {",
 													"    var jsonData = pm.response.json();",
 													"    pm.expect(jsonData.length).to.equal(1);",
-													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-could-not-be-processed\");",
 													"});",
 													"",
 													"",
@@ -247,7 +197,265 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000503B\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000503_503\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Duplicate Submission",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(409);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-duplicate-submission\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000409_409\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Forbidden",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000403\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Internal Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000503_500\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "No Match",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-not-found\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000404_404\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Unauthorised",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-unauthorised\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"NINO\",\n        \"value\": \"000000401\"\n    },\n    \"firstName\": \"Patrick\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1183,56 +1391,6 @@
 							"name": "Downstream",
 							"item": [
 								{
-									"name": "Internal Server Error",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is as expected\", function () {",
-													"    pm.response.to.have.status(503);",
-													"});",
-													"",
-													"pm.test(\"Single error code is as expected\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.length).to.equal(1);",
-													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript",
-												"packages": {}
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000500\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{BASE_URL}}/registrations/withId/organisation",
-											"host": [
-												"{{BASE_URL}}"
-											],
-											"path": [
-												"registrations",
-												"withId",
-												"organisation"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Bad Request",
 									"event": [
 										{
@@ -1260,7 +1418,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000400\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000400_400\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1282,7 +1440,7 @@
 									"response": []
 								},
 								{
-									"name": "Service Unavailable",
+									"name": "Could Not Be Processed",
 									"event": [
 										{
 											"listen": "test",
@@ -1295,7 +1453,7 @@
 													"pm.test(\"Single error code is as expected\", function () {",
 													"    var jsonData = pm.response.json();",
 													"    pm.expect(jsonData.length).to.equal(1);",
-													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-service-unavailable\");",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-could-not-be-processed\");",
 													"});",
 													"",
 													"",
@@ -1314,7 +1472,270 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000503B\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000503_503\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Duplicate Submission",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(409);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-duplicate-submission\");",
+													"});",
+													"",
+													"",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000409_409\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Forbidden",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+													"});",
+													"",
+													"",
+													"",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000403\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Internal Error",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(503);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-error\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000503_500\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "No Match",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-not-found\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000404_404\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Unauthorised",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is as expected\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-unauthorised\");",
+													"});",
+													"",
+													"",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": {\n        \"type\": \"UTR\",\n        \"value\": \"000000401\"\n    },\n    \"name\": \"Dyson\",\n    \"type\": \"CorporateBody\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"

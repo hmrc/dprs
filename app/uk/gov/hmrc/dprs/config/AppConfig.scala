@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.dprs.config
 
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
 import uk.gov.hmrc.dprs.connectors.subscription.{CreateSubscriptionConnector, ReadSubscriptionConnector, UpdateSubscriptionConnector}
@@ -26,17 +27,17 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class AppConfig @Inject() (servicesConfig: ServicesConfig) {
 
-  val registrationWithIdBaseUrl: String = generateBaseUrl(RegistrationWithIdConnector.connectorName, RegistrationWithIdConnector.connectorPath)
+  val registrationWithIdBaseUrl: String = generateBackendBaseUrl(RegistrationWithIdConnector.connectorPath)
 
-  val registrationWithoutIdBaseUrl: String = generateBaseUrl(RegistrationWithoutIdConnector.connectorName, RegistrationWithoutIdConnector.connectorPath)
+  val registrationWithoutIdBaseUrl: String = generateBackendBaseUrl(RegistrationWithoutIdConnector.connectorPath)
 
-  val createSubscriptionBaseUrl: String = generateBaseUrl(CreateSubscriptionConnector.connectorName, CreateSubscriptionConnector.connectorPath)
+  val createSubscriptionBaseUrl: String = generateBackendBaseUrl(CreateSubscriptionConnector.connectorPath)
 
-  val updateSubscriptionBaseUrl: String = generateBaseUrl(UpdateSubscriptionConnector.connectorName, UpdateSubscriptionConnector.connectorPath)
+  val updateSubscriptionBaseUrl: String = generateBackendBaseUrl(UpdateSubscriptionConnector.connectorPath)
 
-  val readSubscriptionBaseUrl: String = generateBaseUrl(ReadSubscriptionConnector.connectorName, ReadSubscriptionConnector.connectorPath)
+  val readSubscriptionBaseUrl: String = generateBackendBaseUrl(ReadSubscriptionConnector.connectorPath)
 
-  private def generateBaseUrl(key: String, fallback: String): String =
-    servicesConfig.baseUrl(key) + servicesConfig.getConfString(key + ".context", fallback)
+  private def generateBackendBaseUrl(path: String): String =
+    servicesConfig.baseUrl(BaseBackendConnector.connectorName) + servicesConfig.getConfString(BaseBackendConnector.connectorName + ".context", "") + path
 
 }

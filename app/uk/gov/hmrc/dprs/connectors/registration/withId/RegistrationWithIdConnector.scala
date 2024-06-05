@@ -21,13 +21,13 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.http.StringContextOps
 
 import javax.inject.Inject
 
 @Singleton
-class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseConnector(wsClient) {
+class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
 
   override def baseUrl() = url"${appConfig.registrationWithIdBaseUrl}"
 
@@ -35,24 +35,9 @@ class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSC
 
 object RegistrationWithIdConnector {
 
-  val connectorPath: String = "/dac6/dct70b/v1"
-  val connectorName: String = "registration-with-id"
+  val connectorPath: String = "/dac6/DPRS0102/v1"
 
   object Response {
-    final case class Common(returnParams: Seq[Common.ReturnParam])
-
-    object Common {
-      implicit lazy val reads: Reads[Common] =
-        (JsPath \ "returnParameters").read[Seq[ReturnParam]].map(Common(_))
-
-      final case class ReturnParam(name: String, value: String)
-
-      object ReturnParam {
-        implicit val reads: Reads[ReturnParam] =
-          ((JsPath \ "paramName").read[String] and
-            (JsPath \ "paramValue").read[String])(ReturnParam.apply _)
-      }
-    }
 
     final case class Address(lineOne: String,
                              lineTwo: Option[String],

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.registration.withId
+package uk.gov.hmrc.dprs.connectors
 
-import uk.gov.hmrc.dprs.BaseBackendIntegrationSpec
-import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
+import play.api.libs.ws.WSClient
 
-class BaseRegistrationWithIdSpec extends BaseBackendIntegrationSpec {
+abstract class BaseBackendConnector(wsClient: WSClient) extends BaseConnector(wsClient)
 
-  override val baseConnectorPath: String = RegistrationWithIdConnector.connectorPath
-
+object BaseBackendConnector {
+  val connectorName: String = "backend"
 }

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.dprs.connectors.registration
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, OWrites}
+import play.api.libs.json.{JsPath, OWrites, Reads}
 
 import scala.Function.unlift
 
@@ -25,13 +25,43 @@ object RegistrationConnector {
 
   object Request {
 
-    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String)
+    final case class Common(receiptDate: String, regime: String, acknowledgementReference: String, requestParameters: Seq[Common.RequestParameter] = Seq.empty)
 
     object Common {
+
       implicit val writes: OWrites[Common] =
         ((JsPath \ "receiptDate").write[String] and
           (JsPath \ "regime").write[String] and
-          (JsPath \ "acknowledgementReference").write[String])(unlift(Common.unapply))
+          (JsPath \ "acknowledgementReference").write[String] and
+          (JsPath \ "requestParameters").write[Seq[Common.RequestParameter]])(unlift(Common.unapply))
+
+      final case class RequestParameter(name: String, value: String)
+
+      object RequestParameter {
+        implicit val writes: OWrites[RequestParameter] =
+          ((JsPath \ "paramName").write[String] and
+            (JsPath \ "paramValue").write[String])(unlift(RequestParameter.unapply))
+      }
+
+    }
+
+  }
+
+  object Response {
+
+    final case class Common(returnParams: Seq[Common.ReturnParam])
+
+    object Common {
+      implicit lazy val reads: Reads[Common] =
+        (JsPath \ "returnParameters").read[Seq[ReturnParam]].map(Common(_))
+
+      final case class ReturnParam(name: String, value: String)
+
+      object ReturnParam {
+        implicit val reads: Reads[ReturnParam] =
+          ((JsPath \ "paramName").read[String] and
+            (JsPath \ "paramValue").read[String])(ReturnParam.apply _)
+      }
     }
 
   }
