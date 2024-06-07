@@ -22,20 +22,23 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.{JsPath, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Contact.{IndividualDetails, OrganisationDetails}
 import uk.gov.hmrc.dprs.connectors.subscription.ReadSubscriptionConnector.Responses.Response
+import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
+import java.time.Clock
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
+class ReadSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient, clock: Clock) extends BaseBackendConnector(wsClient, clock) {
 
-  def call(id: String)(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
-    get[Response](id)
+  def call(id: String, requestHeaders: BaseBackendConnector.Request.Headers)(implicit
+    executionContext: ExecutionContext
+  ): Future[Either[BaseConnector.Responses.Error, Response]] =
+    get[Response](id, requestHeaders)
 
   override def baseUrl(): URL = url"${appConfig.readSubscriptionBaseUrl}"
 }

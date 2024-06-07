@@ -63,13 +63,18 @@ abstract class BaseIntegrationSpec
 
   def fullUrl(path: String): String = baseUrl + "/dprs" + path
 
-  def assertAsExpected(response: WSResponse, status: Int, jsonBodyOpt: Option[String] = None): Unit = {
+  def assertAsExpected(response: WSResponse, status: Int, jsonBodyOpt: Option[String] = None, expectedHeaders: Option[Map[String, String]] = None): Unit = {
     response should haveStatus(status)
     jsonBodyOpt match {
       case Some(body) => response should haveJsonBody(body)
       case None       => response should haveNoBody
     }
     ()
+    expectedHeaders.foreach{ expectedHeaders =>
+      expectedHeaders.foreach{
+        case (key, value) => response.header(key) shouldBe Some(value)
+      }
+    }
   }
 }
 

@@ -26,11 +26,12 @@ import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
+import java.time.Clock
 import javax.inject.Inject
 import scala.Function.unlift
 
 @Singleton
-class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
+class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient, clock: Clock) extends BaseBackendConnector(wsClient, clock) {
 
   override def baseUrl(): URL = url"${appConfig.registrationWithoutIdBaseUrl}"
 

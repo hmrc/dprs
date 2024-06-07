@@ -18,70 +18,88 @@ package uk.gov.hmrc.dprs.support
 
 import org.scalatest.prop.TableFor2
 import uk.gov.hmrc.dprs.services.BaseSpec
-import uk.gov.hmrc.dprs.support.ValidationSupport.{isValidCountryCode, isValidDate, isValidEmailAddress, isValidPhoneNumber}
+import uk.gov.hmrc.dprs.support.ValidationSupport.{isPostalCodeRequired, isValidCountryCode, isValidDate, isValidEmailAddress, isValidPhoneNumber}
 
 class ValidationSupportSpec extends BaseSpec {
 
-  "when validating" - {
-    "dates" in {
-      assert(
-        isValidDate _,
-        Table(
-          ("value", "verdict"),
-          ("1977-02-29", false),
-          ("2024-02-28", true),
-          ("2024-2-28", true),
-          ("2024-02-29", true),
-          ("2024-02-29", true),
-          ("2024-01-03", true),
-          ("2024-32-03", false),
-          ("2024-12-26", true)
+  "when" - {
+    "validating" - {
+      "dates" in {
+        assert(
+          isValidDate _,
+          Table(
+            ("value", "verdict"),
+            ("1977-02-29", false),
+            ("2024-02-28", true),
+            ("2024-2-28", true),
+            ("2024-02-29", true),
+            ("2024-02-29", true),
+            ("2024-01-03", true),
+            ("2024-32-03", false),
+            ("2024-12-26", true)
+          )
         )
-      )
-    }
-    "phone numbers" in {
-      assert(
-        isValidPhoneNumber _,
-        Table(
-          ("value", "verdict"),
-          ("+44-4848-667-261", true),
-          ("(44)1438-744-016", true),
-          ("07070526950", true),
-          ("+44-6044-156-173#22", true),
-          ("+44-6044-156-173/22", true),
-          ("+44-6044-156-173*22", true),
-          ("£44-7192-282-397", false)
+      }
+      "phone numbers" in {
+        assert(
+          isValidPhoneNumber _,
+          Table(
+            ("value", "verdict"),
+            ("+44-4848-667-261", true),
+            ("(44)1438-744-016", true),
+            ("07070526950", true),
+            ("+44-6044-156-173#22", true),
+            ("+44-6044-156-173/22", true),
+            ("+44-6044-156-173*22", true),
+            ("£44-7192-282-397", false)
+          )
         )
-      )
-    }
-    "email addresses" in {
-      assert(
-        isValidEmailAddress _,
-        Table(
-          ("value", "verdict"),
-          ("someone@example.com", true),
-          ("bob,roberts@example.com", false),
-          ("someone@example", true),
-          ("someone@wtf", true),
-          ("someone@problems.wtf", true),
-          ("someone@apple", true),
-          ("@example.com", false),
-          ("Loremipsumdolorsitametconsetetursadipscingelitrseddiam@example.com", true)
+      }
+      "email addresses" in {
+        assert(
+          isValidEmailAddress _,
+          Table(
+            ("value", "verdict"),
+            ("someone@example.com", true),
+            ("bob,roberts@example.com", false),
+            ("someone@example", true),
+            ("someone@wtf", true),
+            ("someone@problems.wtf", true),
+            ("someone@apple", true),
+            ("@example.com", false),
+            ("Loremipsumdolorsitametconsetetursadipscingelitrseddiam@example.com", true)
+          )
         )
-      )
+      }
+      "country codes" in {
+        assert(
+          isValidCountryCode _,
+          Table(
+            ("value", "verdict"),
+            ("GB", true),
+            ("DK", true),
+            ("IE", true),
+            ("Ie", true),
+            ("ie", true),
+            ("PC", false),
+            ("XX", false)
+          )
+        )
+      }
     }
-    "country codes" in {
+    "deciding if a postal code is required, when the country code is" - {
       assert(
-        isValidCountryCode _,
+        isPostalCodeRequired _,
         Table(
           ("value", "verdict"),
           ("GB", true),
-          ("DK", true),
-          ("IE", true),
-          ("Ie", true),
-          ("ie", true),
-          ("PC", false),
-          ("XX", false)
+          ("IM", true),
+          ("im", true),
+          (" im ", true),
+          ("JE", true),
+          ("GG", true),
+          ("DK", false),
+          ("IE", false)
         )
       )
     }

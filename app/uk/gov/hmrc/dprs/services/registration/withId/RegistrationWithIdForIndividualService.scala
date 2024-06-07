@@ -17,6 +17,7 @@
 package uk.gov.hmrc.dprs.services.registration.withId
 
 import play.api.libs.json.OWrites
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdForIndividualConnector
 import uk.gov.hmrc.dprs.converters.registration.withId.RegistrationWithIdForIndividualConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
@@ -36,11 +37,12 @@ class RegistrationWithIdForIndividualService @Inject() (clock: Clock,
   private val converter = new RegistrationWithIdForIndividualConverter(clock, acknowledgementReferenceGenerator)
 
   def call(
-    request: RegistrationWithIdForIndividualService.Request
+    request: RegistrationWithIdForIndividualService.Request,
+    requestHeaders: BaseBackendConnector.Request.Headers
   )(implicit
     executionContext: ExecutionContext
   ): Future[Either[ErrorResponse, RegistrationWithIdForIndividualService.Response]] =
-    registrationWithIdForIndividualConnector.call(converter.convert(request)).map {
+    registrationWithIdForIndividualConnector.call(converter.convert(request), requestHeaders).map {
       case Right(response) => Right(converter.convert(response))
       case Left(error)     => Left(convert(error))
     }
@@ -67,7 +69,7 @@ object RegistrationWithIdForIndividualService {
           (JsPath \ "value").read(lengthBetween(1, 35)))(RequestId.apply _)
     }
 
-    trait RequestIdType
+    sealed trait RequestIdType
 
     object RequestIdType {
 

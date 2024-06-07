@@ -18,10 +18,13 @@ package uk.gov.hmrc.dprs.controllers
 
 import play.api.libs.json.Json.toJson
 import play.api.libs.json.{JsPath, JsonValidationError}
-import play.api.mvc.{ControllerComponents, Result}
+import play.api.mvc.{ControllerComponents, Request, Result}
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.{Error, ErrorResponse}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+
+import java.util.UUID
 
 abstract class BaseController(cc: ControllerComponents) extends BackendController(cc) {
 
@@ -32,12 +35,42 @@ abstract class BaseController(cc: ControllerComponents) extends BackendControlle
     }
 
   protected def convert(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])],
-                        fieldToErrorCode: Map[String, String]
-  ): Seq[BaseService.Error] =
+                        fieldPatternToErrorCode: Map[String, String]
+  ): Seq[BaseService.Error] = {
+
+    /** If the path includes an array, use something like this for the json error path key:
+      *
+      * /ids(#)/type
+      *
+      * The culprit element index will replace the '#'.
+      *
+      * In turn, the error code template will have its '#' replaced by that index plus 1; for example "invalid-id-#-type" would become "invalid-id-1-type", if
+      * the problem was found in the first element.
+      */
+    def toErrorCode(jsonError: String): Option[String] = {
+      val patternForIndex = ".*(\\d+).*".r
+      jsonError match {
+        case patternForIndex(rawIndex) =>
+          rawIndex.toIntOption.flatMap { index =>
+            val correctedKey = jsonError.replace(index.toString, "#")
+            fieldPatternToErrorCode.get(correctedKey).map(_.replace("#", (index + 1).toString))
+          }
+        case _ => fieldPatternToErrorCode.get(jsonError)
+      }
+    }
+
     extractSimplePaths(errors)
-      .map(fieldToErrorCode.get(_).map(BaseService.Error(_)))
+      .map(toErrorCode(_).map(BaseService.Error(_)))
       .toSeq
       .flatten
+  }
+
+  protected def generateRequestHeaders(request: Request[_]): BaseBackendConnector.Request.Headers = BaseBackendConnector.Request.Headers(
+    authorisation = request.headers.get("authorization").getOrElse(""),
+    conversationId = request.headers.get("x-conversation-id").getOrElse(UUID.randomUUID().toString),
+    correlationId = request.headers.get("x-correlation-id").getOrElse(UUID.randomUUID().toString),
+    forwardedHost = request.headers.get("x-forwarded-host").getOrElse(request.host)
+  )
 
   private def extractSimplePaths(errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]): collection.Seq[String] =
     errors

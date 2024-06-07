@@ -20,20 +20,23 @@ import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.BaseConnector
+import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdForOrganisationConnector.Response
 
+import java.time.Clock
 import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationWithIdForOrganisationConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends RegistrationWithIdConnector(appConfig, wsClient) {
+class RegistrationWithIdForOrganisationConnector @Inject() (appConfig: AppConfig, wsClient: WSClient, clock: Clock)
+    extends RegistrationWithIdConnector(appConfig, wsClient, clock) {
 
   def call(
-    request: RegistrationWithIdForOrganisationConnector.Request
+    request: RegistrationWithIdForOrganisationConnector.Request,
+    requestHeaders: BaseBackendConnector.Request.Headers
   )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
-    post[RegistrationWithIdForOrganisationConnector.Request, Response](request)
+    post[RegistrationWithIdForOrganisationConnector.Request, Response](request, requestHeaders)
 
 }
 

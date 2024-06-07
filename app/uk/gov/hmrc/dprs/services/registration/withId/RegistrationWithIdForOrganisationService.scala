@@ -19,6 +19,7 @@ package uk.gov.hmrc.dprs.services.registration.withId
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{minLength, verifying}
 import play.api.libs.json.{JsPath, OWrites, Reads}
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdForOrganisationConnector
 import uk.gov.hmrc.dprs.converters.registration.withId.RegistrationWithIdForOrganisationConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
@@ -39,11 +40,12 @@ class RegistrationWithIdForOrganisationService @Inject() (clock: Clock,
   private val converter = new RegistrationWithIdForOrganisationConverter(clock, acknowledgementReferenceGenerator)
 
   def call(
-    request: RegistrationWithIdForOrganisationService.Request
+    request: RegistrationWithIdForOrganisationService.Request,
+    requestHeaders: BaseBackendConnector.Request.Headers
   )(implicit
     executionContext: ExecutionContext
   ): Future[Either[ErrorResponse, RegistrationWithIdForOrganisationService.Response]] =
-    registrationWithIdForOrganisationConnector.call(converter.convert(request)).map {
+    registrationWithIdForOrganisationConnector.call(converter.convert(request), requestHeaders).map {
       case Right(response) => Right(converter.convert(response))
       case Left(error)     => Left(convert(error))
     }

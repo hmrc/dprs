@@ -24,10 +24,11 @@ import uk.gov.hmrc.dprs.config.AppConfig
 import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.http.StringContextOps
 
+import java.time.Clock
 import javax.inject.Inject
 
 @Singleton
-class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
+class RegistrationWithIdConnector @Inject() (appConfig: AppConfig, wsClient: WSClient, clock: Clock) extends BaseBackendConnector(wsClient, clock) {
 
   override def baseUrl() = url"${appConfig.registrationWithIdBaseUrl}"
 

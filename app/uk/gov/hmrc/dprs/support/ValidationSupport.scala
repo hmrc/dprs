@@ -31,6 +31,7 @@ object ValidationSupport {
   private val dateFormat                     = generateDateFormat()
   private val phoneNumberPattern: Regex      = raw"[A-Z0-9/)(\\\-*#+]*".r
   private val emailValidator: EmailValidator = EmailValidator.getInstance(true)
+  private val domesticCountryCodes           = Set("GB", "IM", "JE", "GG")
 
   def isValidDate(rawDate: String): Boolean = Try(dateFormat.parse(rawDate)).isSuccess
 
@@ -40,6 +41,8 @@ object ValidationSupport {
 
   def isValidCountryCode(rawCountryCode: String): Boolean =
     Locale.getISOCountries.toSeq.contains(rawCountryCode.toUpperCase)
+
+  def isPostalCodeRequired(countryCode: String): Boolean = domesticCountryCodes.contains(countryCode.toUpperCase.trim)
 
   object Reads {
     def lengthBetween(min: Int, max: Int): Reads[String] =
