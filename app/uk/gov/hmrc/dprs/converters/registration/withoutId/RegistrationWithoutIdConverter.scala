@@ -16,23 +16,17 @@
 
 package uk.gov.hmrc.dprs.converters.registration.withoutId
 
-import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common.RequestParameter
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
+import uk.gov.hmrc.dprs.converters.registration.RegistrationConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService.{Request => CommonServiceRequest}
 
-import java.time.{Clock, Instant}
+import java.time.Clock
 
-abstract class RegistrationWithoutIdConverter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
-
-  private val regime = "MDR"
-
-  def generateRequestCommon(): RegistrationConnector.Request.Common = RegistrationConnector.Request.Common(
-    receiptDate = Instant.now(clock).toString,
-    regime = regime,
-    acknowledgementReference = acknowledgementReferenceGenerator.generate()
-  )
+abstract class RegistrationWithoutIdConverter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator)
+    extends RegistrationConverter(clock, acknowledgementReferenceGenerator) {
 
   def extractIds(connectorResponse: ConnectorResponse): Seq[RegistrationWithoutIdService.Response.Id] =
     Seq(

@@ -18,10 +18,10 @@ package uk.gov.hmrc.dprs.converters.registration.withoutId
 
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.{RegistrationWithoutIdConnector, RegistrationWithoutIdForOrganisationConnector}
-import uk.gov.hmrc.dprs.services.BaseSpec
+import uk.gov.hmrc.dprs.converters.registration.RegistrationConverterBaseSpec
 import uk.gov.hmrc.dprs.services.registration.withoutId.{RegistrationWithoutIdForOrganisationService, RegistrationWithoutIdService}
 
-class RegistrationWithoutIdForOrganisationConverterSpec extends BaseSpec {
+class RegistrationConverterWithoutIdForOrganisationConverterSpec extends RegistrationConverterBaseSpec {
 
   private val converter = new RegistrationWithoutIdForOrganisationConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -46,7 +46,7 @@ class RegistrationWithoutIdForOrganisationConverterSpec extends BaseSpec {
       val connectorRequest = converter.convert(serviceRequest)
 
       connectorRequest shouldBe RegistrationWithoutIdForOrganisationConnector.Request(
-        common = RegistrationConnector.Request.Common(receiptDate = currentDateTime, regime = "MDR", acknowledgementReference = acknowledgementReference),
+        common = expectedCommon(),
         detail = RegistrationWithoutIdForOrganisationConnector.Request.Detail(
           name = "Dyson",
           address = RegistrationWithoutIdConnector.Request.Address(lineOne = "34 Park Lane",

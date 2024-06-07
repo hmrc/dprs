@@ -19,11 +19,11 @@ package uk.gov.hmrc.dprs.converters.registration.withId
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector.{Response => CommonConnectorResponse}
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdForIndividualConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
-import uk.gov.hmrc.dprs.services.BaseSpec
+import uk.gov.hmrc.dprs.converters.registration.RegistrationConverterBaseSpec
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdForIndividualService.{Request => ServiceRequest, Response => ServiceResponse}
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdService.{Response => CommonServiceResponse}
 
-class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
+class RegistrationConverterWithIdForIndividualConverterSpec extends RegistrationConverterBaseSpec {
 
   private val converter = new RegistrationWithIdForIndividualConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -40,12 +40,7 @@ class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
       val connectorRequest = converter.convert(serviceRequest)
 
       connectorRequest shouldBe ConnectorRequest(
-        common = RegistrationConnector.Request.Common(
-          receiptDate = currentDateTime,
-          regime = "DPRS",
-          acknowledgementReference = acknowledgementReference,
-          requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
-        ),
+        common = expectedCommon(),
         detail = ConnectorRequest.Detail(
           idType = "NINO",
           idNumber = "AA000000A",

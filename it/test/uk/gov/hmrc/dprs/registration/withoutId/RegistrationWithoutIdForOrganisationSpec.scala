@@ -32,9 +32,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -142,9 +147,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -249,9 +259,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -338,9 +353,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -420,9 +440,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -514,9 +539,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
@@ -608,9 +638,14 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
                                               |  "registerWithoutIDRequest": {
                                               |    "requestCommon": {
                                               |      "receiptDate": "$currentDateAndTime",
-                                              |      "regime": "MDR",
+                                              |      "regime": "DPRS",
                                               |      "acknowledgementReference": "$acknowledgementReference",
-                                              |      "requestParameters": []
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
                                               |    },
                                               |    "requestDetail": {
                                               |      "organisation": {
