@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.dprs.converters.registration.withId
 
-import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
-import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common.RequestParameter
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
 import uk.gov.hmrc.dprs.converters.registration.RegistrationConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
