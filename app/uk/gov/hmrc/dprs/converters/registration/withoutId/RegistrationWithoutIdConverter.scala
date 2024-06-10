@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.dprs.converters.registration.withoutId
 
-import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common.RequestParameter
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
 import uk.gov.hmrc.dprs.converters.registration.RegistrationConverter
 import uk.gov.hmrc.dprs.services.AcknowledgementReferenceGenerator
