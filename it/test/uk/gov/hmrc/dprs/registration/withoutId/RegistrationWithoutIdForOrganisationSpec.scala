@@ -630,6 +630,91 @@ class RegistrationWithoutIdForOrganisationSpec extends BaseRegistrationWithoutId
           )
           verifyThatDownstreamApiWasCalled()
         }
+        "forbidden" in {
+          stubFor(
+            post(urlEqualTo(baseConnectorPath))
+              .withRequestBody(equalToJson(s"""
+                                              |{
+                                              |  "registerWithoutIDRequest": {
+                                              |    "requestCommon": {
+                                              |      "receiptDate": "$currentDateAndTime",
+                                              |      "regime": "DPRS",
+                                              |      "acknowledgementReference": "$acknowledgementReference",
+                                              |      "requestParameters": [
+                                              |        {
+                                              |          "paramName": "REGIME",
+                                              |          "paramValue": "DPRS"
+                                              |        }
+                                              |      ]
+                                              |    },
+                                              |    "requestDetail": {
+                                              |      "organisation": {
+                                              |        "organisationName": "Dyson"
+                                              |      },
+                                              |      "address": {
+                                              |        "addressLine1": "34 Park Lane",
+                                              |        "addressLine2": "Building A",
+                                              |        "addressLine3": "Suite 100",
+                                              |        "addressLine4": "Manchester",
+                                              |        "postalCode": "M54 1MQ",
+                                              |        "countryCode": "GB"
+                                              |      },
+                                              |      "contactDetails": {
+                                              |        "phoneNumber": "747663966",
+                                              |        "mobileNumber": "38390756243",
+                                              |        "faxNumber": "58371813020",
+                                              |        "emailAddress": "dyson@example.com"
+                                              |      }
+                                              |    }
+                                              |  }
+                                              |}
+                                              |""".stripMargin))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(FORBIDDEN)
+              )
+          )
+
+          val response = wsClient
+            .url(fullUrl("/registrations/withoutId/organisation"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .post("""
+                    |{
+                    |    "name": "Dyson",
+                    |    "address": {
+                    |        "lineOne": "34 Park Lane",
+                    |        "lineTwo": "Building A",
+                    |        "lineThree": "Suite 100",
+                    |        "lineFour": "Manchester",
+                    |        "postalCode": "M54 1MQ",
+                    |        "countryCode": "GB"
+                    |    },
+                    |    "contactDetails": {
+                    |        "landline": "747663966",
+                    |        "mobile": "38390756243",
+                    |        "fax": "58371813020",
+                    |        "emailAddress": "dyson@example.com"
+                    |    }
+                    |}
+                    |""".stripMargin)
+            .futureValue
+
+          assertAsExpected(
+            response,
+            FORBIDDEN,
+            Some(
+              """
+                |[
+                |  {
+                |    "code": "eis-returned-forbidden"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
         "i'm a teapot" in {
           stubFor(
             post(urlEqualTo(baseConnectorPath))
