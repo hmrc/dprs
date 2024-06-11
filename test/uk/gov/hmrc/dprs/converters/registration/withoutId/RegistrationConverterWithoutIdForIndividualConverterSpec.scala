@@ -17,16 +17,14 @@
 package uk.gov.hmrc.dprs.converters.registration.withoutId
 
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
-import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector.{
-  Request => CommonConnectorRequest,
-  Response => CommonConnectorResponse
-}
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common
+import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector.{Request => CommonConnectorRequest, Response => CommonConnectorResponse}
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdForIndividualConnector.{Request => ConnectorRequest}
-import uk.gov.hmrc.dprs.converters.registration.RegistrationConverterBaseSpec
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdForIndividualService.{Request => ServiceRequest}
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService.{Request => CommonServiceRequest, Response => CommonServiceResponse}
 
-class RegistrationConverterWithoutIdForIndividualConverterSpec extends RegistrationConverterBaseSpec {
+class RegistrationConverterWithoutIdForIndividualConverterSpec extends BaseSpec {
 
   private val converter = new RegistrationWithoutIdForIndividualConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -54,7 +52,12 @@ class RegistrationConverterWithoutIdForIndividualConverterSpec extends Registrat
       val connectorRequest = converter.convert(serviceRequest)
 
       connectorRequest shouldBe ConnectorRequest(
-        common = expectedCommon(),
+        common = Common(
+          receiptDate = currentDateTime,
+          regime = "DPRS",
+          acknowledgementReference = acknowledgementReference,
+          requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
+        ),
         detail = ConnectorRequest.Detail(
           firstName = "Patrick",
           middleName = Some("John"),

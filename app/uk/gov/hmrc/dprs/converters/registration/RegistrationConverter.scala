@@ -24,7 +24,7 @@ import java.time.{Clock, Instant}
 
 abstract class RegistrationConverter(clock: Clock, acknowledgementReferenceGenerator: AcknowledgementReferenceGenerator) {
 
-  final protected val regime = RegistrationConverter.regime
+  private val regime = "DPRS"
 
   final protected def generateRequestCommon(): RegistrationConnector.Request.Common = RegistrationConnector.Request.Common(
     receiptDate = Instant.now(clock).toString,
@@ -32,10 +32,4 @@ abstract class RegistrationConverter(clock: Clock, acknowledgementReferenceGener
     acknowledgementReference = acknowledgementReferenceGenerator.generate(),
     requestParameters = Seq(RequestParameter("REGIME", regime))
   )
-}
-
-object RegistrationConverter {
-
-  val regime = "DPRS"
-
 }

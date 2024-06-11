@@ -17,12 +17,13 @@
 package uk.gov.hmrc.dprs.converters.registration.withId
 
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common
 import uk.gov.hmrc.dprs.connectors.registration.withId.{RegistrationWithIdConnector, RegistrationWithIdForOrganisationConnector}
-import uk.gov.hmrc.dprs.converters.registration.RegistrationConverterBaseSpec
+import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdForOrganisationService.{Request, Response}
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdService.{Response => CommonServiceResponse}
 
-class RegistrationConverterWithIdForOrganisationConverterSpec extends RegistrationConverterBaseSpec {
+class RegistrationConverterWithIdForOrganisationConverterSpec extends BaseSpec {
 
   private val converter = new RegistrationWithIdForOrganisationConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -49,7 +50,12 @@ class RegistrationConverterWithIdForOrganisationConverterSpec extends Registrati
         val connectorRequest = converter.convert(serviceRequest)
 
         connectorRequest shouldBe RegistrationWithIdForOrganisationConnector.Request(
-          common = expectedCommon(),
+          common = Common(
+            receiptDate = currentDateTime,
+            regime = "DPRS",
+            acknowledgementReference = acknowledgementReference,
+            requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
+          ),
           detail = RegistrationWithIdForOrganisationConnector.Request.Detail(
             idType = "UTR",
             idNumber = "1234567890",
