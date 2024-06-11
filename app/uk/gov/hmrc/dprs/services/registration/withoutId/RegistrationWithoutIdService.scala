@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.dprs.services.registration.withoutId
 
-import play.api.http.Status.{BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.verifying
 import play.api.libs.json._
@@ -38,12 +38,13 @@ abstract class RegistrationWithoutIdService extends BaseService {
       case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
       case Error(SERVICE_UNAVAILABLE, Some(`serviceUnavailable`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
       case Error(CONFLICT, _)                                        => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
+      case Error(FORBIDDEN, _)                                       => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
       case Error(BAD_REQUEST, _)                                     => ErrorResponse(INTERNAL_SERVER_ERROR)
       case _                                                         => ErrorResponse(connectorError.status)
     }
   }
-
 }
+
 object RegistrationWithoutIdService {
 
   object Request {
