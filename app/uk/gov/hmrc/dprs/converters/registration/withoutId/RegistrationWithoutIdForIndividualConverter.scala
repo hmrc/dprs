@@ -32,7 +32,7 @@ class RegistrationWithoutIdForIndividualConverter(clock: Clock, acknowledgementR
         firstName = request.firstName,
         middleName = request.middleName,
         lastName = request.lastName,
-        dateOfBirth = request.dateOfBirth,
+        dateOfBirth = Some(request.dateOfBirth),
         address = convert(request.address),
         contactDetails = convert(request.contactDetails)
       )

@@ -49,7 +49,7 @@ object RegistrationWithoutIdForIndividualConnector {
     final case class Detail(firstName: String,
                             middleName: Option[String],
                             lastName: String,
-                            dateOfBirth: String,
+                            dateOfBirth: Option[String],
                             address: RegistrationWithoutIdConnector.Request.Address,
                             contactDetails: RegistrationWithoutIdConnector.Request.ContactDetails
     )
@@ -59,7 +59,7 @@ object RegistrationWithoutIdForIndividualConnector {
         ((JsPath \ "individual" \ "firstName").write[String] and
           (JsPath \ "individual" \ "middleName").writeNullable[String] and
           (JsPath \ "individual" \ "lastName").write[String] and
-          (JsPath \ "individual" \ "dateOfBirth").write[String] and
+          (JsPath \ "individual" \ "dateOfBirth").writeNullable[String] and
           (JsPath \ "address").write[RegistrationWithoutIdConnector.Request.Address] and
           (JsPath \ "contactDetails").write[RegistrationWithoutIdConnector.Request.ContactDetails])(unlift(Detail.unapply))
 

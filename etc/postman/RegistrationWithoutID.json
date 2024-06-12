@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d5b3410b-c9f5-4480-8947-f605d27c28ca",
+		"_postman_id": "11bede9e-3946-4c03-b9cd-2b3fbd75bf15",
 		"name": "Registration Without ID",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30217849"
+		"_exporter_id": "25291378"
 	},
 	"item": [
 		{
@@ -297,6 +297,59 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004090\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/individual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"individual"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Forbidden",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+													"});",
+													"",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"firstName\": \"Patrick\",\n    \"middleName\": \"John\",\n    \"lastName\": \"Dyson\",\n    \"dateOfBirth\": \"1970-10-04\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004030\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2712,6 +2765,56 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004090\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/registrations/withoutId/organisation",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"registrations",
+												"withoutId",
+												"organisation"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Forbidden",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Dyson\",\n    \"address\": {\n        \"lineOne\": \"34 Park Lane\",\n        \"lineTwo\": \"Building A\",\n        \"lineThree\": \"Suite 100\",\n        \"lineFour\": \"Manchester\",\n        \"postalCode\": \"M54 1MQ\",\n        \"countryCode\": \"GB\"\n    },\n    \"contactDetails\": {\n        \"landline\": \"0000004030\",\n        \"mobile\": \"38390756243\",\n        \"fax\": \"58371813020\",\n        \"emailAddress\": \"dyson@example.com\"\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"

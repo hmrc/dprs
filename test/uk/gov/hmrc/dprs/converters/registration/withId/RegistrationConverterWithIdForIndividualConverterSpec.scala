@@ -17,13 +17,14 @@
 package uk.gov.hmrc.dprs.converters.registration.withId
 
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector.{Response => CommonConnectorResponse}
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdForIndividualConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdForIndividualService.{Request => ServiceRequest, Response => ServiceResponse}
 import uk.gov.hmrc.dprs.services.registration.withId.RegistrationWithIdService.{Response => CommonServiceResponse}
 
-class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
+class RegistrationConverterWithIdForIndividualConverterSpec extends BaseSpec {
 
   private val converter = new RegistrationWithIdForIndividualConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -40,7 +41,7 @@ class RegistrationWithIdForIndividualConverterSpec extends BaseSpec {
       val connectorRequest = converter.convert(serviceRequest)
 
       connectorRequest shouldBe ConnectorRequest(
-        common = RegistrationConnector.Request.Common(
+        common = Common(
           receiptDate = currentDateTime,
           regime = "DPRS",
           acknowledgementReference = acknowledgementReference,

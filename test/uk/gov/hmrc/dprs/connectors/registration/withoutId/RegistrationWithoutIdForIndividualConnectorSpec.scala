@@ -35,7 +35,7 @@ class RegistrationWithoutIdForIndividualConnectorSpec extends BaseSpec {
           firstName = "Patrick",
           middleName = Some("John"),
           lastName = "Dyson",
-          dateOfBirth = "1970-10-04",
+          dateOfBirth = Some("1970-10-04"),
           address = RegistrationWithoutIdConnector.Request.Address(lineOne = "34 Park Lane",
                                                                    lineTwo = "Building A",
                                                                    lineThree = "Suite 100",

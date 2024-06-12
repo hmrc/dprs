@@ -17,6 +17,7 @@
 package uk.gov.hmrc.dprs.converters.registration.withoutId
 
 import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector
+import uk.gov.hmrc.dprs.connectors.registration.RegistrationConnector.Request.Common
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector.{
   Request => CommonConnectorRequest,
   Response => CommonConnectorResponse
@@ -26,7 +27,7 @@ import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdForIndividualService.{Request => ServiceRequest}
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService.{Request => CommonServiceRequest, Response => CommonServiceResponse}
 
-class RegistrationWithoutIdForIndividualConverterSpec extends BaseSpec {
+class RegistrationConverterWithoutIdForIndividualConverterSpec extends BaseSpec {
 
   private val converter = new RegistrationWithoutIdForIndividualConverter(fixedClock, acknowledgementReferenceGenerator)
 
@@ -54,12 +55,17 @@ class RegistrationWithoutIdForIndividualConverterSpec extends BaseSpec {
       val connectorRequest = converter.convert(serviceRequest)
 
       connectorRequest shouldBe ConnectorRequest(
-        common = RegistrationConnector.Request.Common(receiptDate = currentDateTime, regime = "MDR", acknowledgementReference = acknowledgementReference),
+        common = Common(
+          receiptDate = currentDateTime,
+          regime = "DPRS",
+          acknowledgementReference = acknowledgementReference,
+          requestParameters = Seq(RegistrationConnector.Request.Common.RequestParameter("REGIME", "DPRS"))
+        ),
         detail = ConnectorRequest.Detail(
           firstName = "Patrick",
           middleName = Some("John"),
           lastName = "Dyson",
-          dateOfBirth = "1970-10-04",
+          dateOfBirth = Some("1970-10-04"),
           address = CommonConnectorRequest.Address(lineOne = "34 Park Lane",
                                                    lineTwo = "Building A",
                                                    lineThree = "Suite 100",

@@ -38,7 +38,7 @@ class RegistrationWithoutIdConnector @Inject() (appConfig: AppConfig, wsClient: 
 
 object RegistrationWithoutIdConnector {
 
-  val connectorPath: String = "/dac6/dct70a/v1"
+  val connectorPath: String = "/dac6/DPRS0101/v1"
 
   object Request {
 
@@ -75,6 +75,7 @@ object RegistrationWithoutIdConnector {
     common: RegistrationConnector.Response.Common,
     detail: RegistrationWithoutIdConnector.Response.Detail
   )
+
   object Response {
 
     implicit lazy val reads: Reads[Response] =
