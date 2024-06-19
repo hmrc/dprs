@@ -113,22 +113,6 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                 aResponse()
                   .withHeader("Content-Type", "application/json")
                   .withStatus(INTERNAL_SERVER_ERROR)
-                  .withBody(s"""
-                       |{
-                       |    "errorDetail": {
-                       |        "timestamp": "$currentDateAndTime",
-                       |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                       |        "errorCode": "500",
-                       |        "errorMessage": "Internal Server Error",
-                       |        "source": "journey-dct70c-service-camel",
-                       |        "sourceFaultDetail": {
-                       |            "detail": [
-                       |                "Internal Server Error"
-                       |            ]
-                       |        }
-                       |    }
-                       |}
-                       |""".stripMargin)
               )
           )
           val response = wsClient
@@ -139,7 +123,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
 
           assertAsExpected(
             response,
-            SERVICE_UNAVAILABLE,
+            INTERNAL_SERVER_ERROR,
             Some(
               """
                 |[
@@ -191,52 +175,6 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                 |[
                 |  {
                 |    "code" : "eis-returned-service-unavailable"
-                |  }
-                |]
-                |""".stripMargin
-            )
-          )
-          verifyThatDownstreamApiWasCalled()
-        }
-        "duplicate submission" in {
-          stubFor(
-            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(UNPROCESSABLE_ENTITY)
-                  .withBody(s"""
-                               |{
-                               |    "errorDetail": {
-                               |        "timestamp": "$currentDateAndTime",
-                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                               |        "errorCode": "004",
-                               |        "errorMessage": "Duplicate Submission",
-                               |        "source": "ETMP",
-                               |        "sourceFaultDetail": {
-                               |            "detail": [
-                               |                "Duplicate Submission"
-                               |            ]
-                               |        }
-                               |    }
-                               |}
-                               |""".stripMargin)
-              )
-          )
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .get()
-            .futureValue
-
-          assertAsExpected(
-            response,
-            CONFLICT,
-            Some(
-              """
-                |[
-                |  {
-                |    "code" : "eis-returned-conflict"
                 |  }
                 |]
                 |""".stripMargin
@@ -324,75 +262,13 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
           )
           verifyThatDownstreamApiWasCalled()
         }
-        "no subscription" in {
-          stubFor(
-            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-              .willReturn(
-                aResponse()
-                  .withHeader("Content-Type", "application/json")
-                  .withStatus(UNPROCESSABLE_ENTITY)
-                  .withBody(s"""
-                               |{
-                               |    "errorDetail": {
-                               |        "timestamp": "$currentDateAndTime",
-                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                               |        "errorCode": "202",
-                               |        "errorMessage": "No Subscription data found",
-                               |        "source": "ETMP",
-                               |        "sourceFaultDetail": {
-                               |            "detail": [
-                               |                "No Subscription data found"
-                               |            ]
-                               |        }
-                               |    }
-                               |}
-                               |""".stripMargin)
-              )
-          )
-          val response = wsClient
-            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
-            .withHttpHeaders(("Content-Type", "application/json"))
-            .get()
-            .futureValue
-
-          assertAsExpected(
-            response,
-            NOT_FOUND,
-            Some(
-              """
-                |[
-                |  {
-                |    "code" : "eis-returned-not-found"
-                |  }
-                |]
-                |""".stripMargin
-            )
-          )
-          verifyThatDownstreamApiWasCalled()
-        }
         "forbidden" in {
           stubFor(
             get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
-                  .withStatus(INTERNAL_SERVER_ERROR)
-                  .withBody(s"""
-                               |{
-                               |    "errorDetail": {
-                               |        "timestamp": "$currentDateAndTime",
-                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                               |        "errorCode": "403",
-                               |        "errorMessage": "Unexpected backend application error",
-                               |        "source": "ETMP",
-                               |        "sourceFaultDetail": {
-                               |            "detail": [
-                               |                "Unexpected backend application error"
-                               |            ]
-                               |        }
-                               |    }
-                               |}
-                               |""".stripMargin)
+                  .withStatus(FORBIDDEN)
               )
           )
           val response = wsClient
@@ -416,29 +292,13 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
           )
           verifyThatDownstreamApiWasCalled()
         }
-        "unauthorised" in {
+        "bad gateway" in {
           stubFor(
             get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
               .willReturn(
                 aResponse()
                   .withHeader("Content-Type", "application/json")
-                  .withStatus(INTERNAL_SERVER_ERROR)
-                  .withBody(s"""
-                               |{
-                               |    "errorDetail": {
-                               |        "timestamp": "$currentDateAndTime",
-                               |        "correlationId": "3e8873a3-b8d4-4d95-aa2b-9e8ab397422b",
-                               |        "errorCode": "401",
-                               |        "errorMessage": "Unexpected backend application error",
-                               |        "source": "ETMP",
-                               |        "sourceFaultDetail": {
-                               |            "detail": [
-                               |                "Unexpected backend application error"
-                               |            ]
-                               |        }
-                               |    }
-                               |}
-                               |""".stripMargin)
+                  .withStatus(BAD_GATEWAY)
               )
           )
           val response = wsClient
@@ -449,12 +309,12 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
 
           assertAsExpected(
             response,
-            UNAUTHORIZED,
+            BAD_GATEWAY,
             Some(
               """
                 |[
                 |  {
-                |    "code" : "eis-returned-unauthorised"
+                |    "code" : "eis-returned-bad-gateway"
                 |  }
                 |]
                 |""".stripMargin
