@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "0be6ff2d-cef3-44e5-8bb3-ef032302550e",
+		"_postman_id": "be0ce5ef-c35c-4e1d-b67e-4eaa7a83a8db",
 		"name": "Read Subscription",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30217849"
+		"_exporter_id": "25291378"
 	},
 	"item": [
 		{
@@ -175,61 +175,6 @@
 							"response": []
 						},
 						{
-							"name": "Duplicate Submission",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(409);",
-											"});",
-											"",
-											"pm.test(\"Single Error code is as expected\", function () {",
-											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.length).to.equal(1);",
-											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-conflict\");",
-											"});",
-											"",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000422_004",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "20001",
-									"path": [
-										"dprs",
-										"subscriptions",
-										"000000422_004"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Forbidden",
 							"event": [
 								{
@@ -269,7 +214,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000500_403",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000403",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -278,7 +223,7 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000500_403"
+										"000000403"
 									]
 								}
 							},
@@ -292,7 +237,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(503);",
+											"    pm.response.to.have.status(500);",
 											"});",
 											"",
 											"pm.test(\"Single Error code is as expected\", function () {",
@@ -324,7 +269,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000500_500",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -333,7 +278,7 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000500_500"
+										"000000500"
 									]
 								}
 							},
@@ -393,20 +338,20 @@
 							"response": []
 						},
 						{
-							"name": "No Subscription",
+							"name": "Bad Gateway",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
 											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(404);",
+											"    pm.response.to.have.status(502);",
 											"});",
 											"",
 											"pm.test(\"Single Error code is as expected\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.length).to.equal(1);",
-											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-not-found\");",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-bad-gateway\");",
 											"});",
 											"",
 											""
@@ -432,7 +377,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000422_202",
+									"raw": "http://localhost:20001/dprs/subscriptions/000000502",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -441,62 +386,7 @@
 									"path": [
 										"dprs",
 										"subscriptions",
-										"000000422_202"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Unauthorised",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(401);",
-											"});",
-											"",
-											"pm.test(\"Single Error code is as expected\", function () {",
-											"    var jsonData = pm.response.json();",
-											"    pm.expect(jsonData.length).to.equal(1);",
-											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-unauthorised\");",
-											"});",
-											"",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:20001/dprs/subscriptions/000000500_401",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "20001",
-									"path": [
-										"dprs",
-										"subscriptions",
-										"000000500_401"
+										"000000502"
 									]
 								}
 							},
