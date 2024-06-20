@@ -116,12 +116,10 @@ object ReadSubscriptionService {
       object ConnectorErrorCode {
         val couldNotBeProcessed     = "003"
         val createOrAmendInProgress = "201"
-        val duplicateSubmission     = "004"
         val forbidden               = "403"
         val internalServerError     = "500"
         val invalidId               = "016"
-        val noSubscription          = "202"
-        val unauthorised            = "401"
+        val badGateway              = "502"
       }
     }
   }
