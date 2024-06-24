@@ -113,6 +113,22 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                 aResponse()
                   .withHeader("Content-Type", "application/json")
                   .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "errorCode": "500",
+                               |        "errorMessage": "Failure in back-end SAP System",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Failure in back-end SAP System"
+                               |            ]
+                               |        },
+                               |        "timestamp": "2023-08-31T13:00:21.655Z",
+                               |        "correlationId": "d60de98c-f499-47f5-b2d6-e80966e8d19e"
+                               |    }
+                               |}
+                               |""".stripMargin)
               )
           )
           val response = wsClient
@@ -315,6 +331,136 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                 |[
                 |  {
                 |    "code" : "eis-returned-bad-gateway"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "unexpected" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "errorCode": "422",
+                               |        "errorMessage": "Unexpected EIS application error",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Unexpected backend application error"
+                               |            ]
+                               |        },
+                               |        "timestamp": "2023-08-31T13:00:21.655Z",
+                               |        "correlationId": "d60de98c-f499-47f5-b2d6-e80966e8d19e"
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            INTERNAL_SERVER_ERROR,
+            None
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "alt forbidden" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "errorCode": "403",
+                               |        "errorMessage": "Unexpected backend application error",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Unexpected backend application error"
+                               |            ]
+                               |        },
+                               |        "timestamp": "2023-09-07T14:02:47.029Z",
+                               |        "correlationId": "82d0bc78-22d3-4157-8e2d-f718155d0f95"
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            FORBIDDEN,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-forbidden"
+                |  }
+                |]
+                |""".stripMargin
+            )
+          )
+          verifyThatDownstreamApiWasCalled()
+        }
+        "not found" in {
+          stubFor(
+            get(urlEqualTo(baseConnectorPath + "/" + "a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+              .willReturn(
+                aResponse()
+                  .withHeader("Content-Type", "application/json")
+                  .withStatus(INTERNAL_SERVER_ERROR)
+                  .withBody(s"""
+                               |{
+                               |    "errorDetail": {
+                               |        "errorCode": "404",
+                               |        "errorMessage": "Unexpected backend application error",
+                               |        "source": "ETMP",
+                               |        "sourceFaultDetail": {
+                               |            "detail": [
+                               |                "Unexpected backend application error"
+                               |            ]
+                               |        },
+                               |        "timestamp": "2023-09-07T14:02:47.029Z",
+                               |        "correlationId": "82d0bc78-22d3-4157-8e2d-f718155d0f95"
+                               |    }
+                               |}
+                               |""".stripMargin)
+              )
+          )
+          val response = wsClient
+            .url(fullUrl("/subscriptions/a7405c8d-06ee-46a3-b5a0-5d65176360ec"))
+            .withHttpHeaders(("Content-Type", "application/json"))
+            .get()
+            .futureValue
+
+          assertAsExpected(
+            response,
+            NOT_FOUND,
+            Some(
+              """
+                |[
+                |  {
+                |    "code" : "eis-returned-not-found"
                 |  }
                 |]
                 |""".stripMargin

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "be0ce5ef-c35c-4e1d-b67e-4eaa7a83a8db",
+		"_postman_id": "06616e62-838f-440b-958a-d9ab13905dac",
 		"name": "Read Subscription",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25291378"
@@ -279,6 +279,169 @@
 										"dprs",
 										"subscriptions",
 										"000000500"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unexpected",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Response body is enpty\", function () {",
+											"    pm.expect(pm.response.body).to.equal(undefined);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_422",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500_422"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Alt Forbidden",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_403",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500_403"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not Found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is as expected\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											"pm.test(\"Single Error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-not-found\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:20001/dprs/subscriptions/000000500_404",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "20001",
+									"path": [
+										"dprs",
+										"subscriptions",
+										"000000500_404"
 									]
 								}
 							},
