@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors.platform_operator
+package uk.gov.hmrc.dprs.connectors.platformOperator
 
 import play.api.libs.json.Json.toJson
-import uk.gov.hmrc.dprs.connectors.platform_operator.CreatePlatformOperatorConnector.{Request, Response}
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector.{Request, Response}
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.{beSameAs, beValid}
 

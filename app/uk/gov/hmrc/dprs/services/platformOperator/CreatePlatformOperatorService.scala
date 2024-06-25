@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services.platform_operator
+package uk.gov.hmrc.dprs.services.platformOperator
 
 import com.google.inject.Inject
 import play.api.http.Status._
@@ -24,11 +24,11 @@ import play.api.libs.json._
 import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
-import uk.gov.hmrc.dprs.connectors.platform_operator.CreatePlatformOperatorConnector
-import uk.gov.hmrc.dprs.converters.platform_operator.CreatePlatformOperatorConverter
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector
+import uk.gov.hmrc.dprs.converters.platformOperator.CreatePlatformOperatorConverter
 import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
-import uk.gov.hmrc.dprs.services.platform_operator.CreatePlatformOperatorService.{Request, Response}
+import uk.gov.hmrc.dprs.services.platformOperator.CreatePlatformOperatorService.{Request, Response}
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
 import uk.gov.hmrc.dprs.support.ValidationSupport.{isPostalCodeRequired, isValidCountryCode}
 
@@ -56,7 +56,7 @@ class CreatePlatformOperatorService @Inject() (createPlatformOperatorConnector: 
 
   override protected def convert(connectorError: Responses.Error): BaseService.ErrorResponse = {
     import BaseService.{ErrorCodes => ServiceErrorCodes}
-    import uk.gov.hmrc.dprs.services.platform_operator.CreatePlatformOperatorService.Response.ConnectorErrorCode._
+    import uk.gov.hmrc.dprs.services.platformOperator.CreatePlatformOperatorService.Response.ConnectorErrorCode._
     connectorError match {
       case Error(BAD_REQUEST, None)                                        => ErrorResponse(INTERNAL_SERVER_ERROR)
       case Error(FORBIDDEN, None)                                          => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))

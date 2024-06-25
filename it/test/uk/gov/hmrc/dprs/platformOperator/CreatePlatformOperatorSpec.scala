@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.platform_operator
+package uk.gov.hmrc.dprs.platformOperator
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.EqualToPattern
 import play.api.http.Status._
 import uk.gov.hmrc.dprs.BaseBackendIntegrationSpec
-import uk.gov.hmrc.dprs.connectors.platform_operator.CreatePlatformOperatorConnector
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector
 
 import java.time.Instant
 

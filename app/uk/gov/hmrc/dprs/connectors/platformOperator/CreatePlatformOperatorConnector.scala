@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.connectors.platform_operator
+package uk.gov.hmrc.dprs.connectors.platformOperator
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.dprs.config.AppConfig
-import uk.gov.hmrc.dprs.connectors.platform_operator.CreatePlatformOperatorConnector.{Request, Response}
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector.{Request, Response}
 import uk.gov.hmrc.dprs.connectors.{BaseBackendConnector, BaseConnector}
 import uk.gov.hmrc.http.StringContextOps
 

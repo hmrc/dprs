@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.controllers.platform_operator
+package uk.gov.hmrc.dprs.controllers.platformOperator
 
 import com.google.inject.Inject
 import play.api.libs.json.Json.toJson
@@ -22,7 +22,7 @@ import play.api.libs.json._
 import play.api.mvc.{Action, ControllerComponents, Request}
 import uk.gov.hmrc.dprs.controllers.BaseController
 import uk.gov.hmrc.dprs.services.BaseService
-import uk.gov.hmrc.dprs.services.platform_operator.CreatePlatformOperatorService
+import uk.gov.hmrc.dprs.services.platformOperator.CreatePlatformOperatorService
 
 import scala.concurrent.{ExecutionContext, Future}
 

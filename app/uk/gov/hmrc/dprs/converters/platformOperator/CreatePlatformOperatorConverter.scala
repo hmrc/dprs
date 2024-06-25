@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.converters.platform_operator
+package uk.gov.hmrc.dprs.converters.platformOperator
 
-import uk.gov.hmrc.dprs.connectors.platform_operator.CreatePlatformOperatorConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
-import uk.gov.hmrc.dprs.services.platform_operator.CreatePlatformOperatorService.{Request => ServiceRequest, Response => ServiceResponse}
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector.{Request => ConnectorRequest, Response => ConnectorResponse}
+import uk.gov.hmrc.dprs.services.platformOperator.CreatePlatformOperatorService.{Request => ServiceRequest, Response => ServiceResponse}
 
 class CreatePlatformOperatorConverter {
 

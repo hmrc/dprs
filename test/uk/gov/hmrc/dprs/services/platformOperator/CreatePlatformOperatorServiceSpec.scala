@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.dprs.services.platform_operator
+package uk.gov.hmrc.dprs.services.platformOperator
 
 import play.api.libs.json.{__, JsonValidationError}
 import uk.gov.hmrc.dprs.services.BaseSpec
 import uk.gov.hmrc.dprs.services.BaseSpec.{beInvalid, beValid}
-import uk.gov.hmrc.dprs.services.platform_operator.CreatePlatformOperatorService.{Request => ServiceRequest}
+import uk.gov.hmrc.dprs.services.platformOperator.CreatePlatformOperatorService.{Request => ServiceRequest}
 
 import scala.collection.immutable
 
