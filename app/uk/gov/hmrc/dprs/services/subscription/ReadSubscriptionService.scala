@@ -48,13 +48,15 @@ class ReadSubscriptionService @Inject() (readSubscriptionConnector: ReadSubscrip
     import ConnectorErrorCode._
     connectorError match {
       case Error(UNPROCESSABLE_ENTITY, Some(`couldNotBeProcessed`))     => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(`duplicateSubmission`))     => ErrorResponse(CONFLICT, Some(ServiceErrorCodes.conflict))
       case Error(UNPROCESSABLE_ENTITY, Some(`invalidId`))               => ErrorResponse(SERVICE_UNAVAILABLE)
       case Error(UNPROCESSABLE_ENTITY, Some(`createOrAmendInProgress`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
-      case Error(UNPROCESSABLE_ENTITY, Some(`noSubscription`))          => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(FORBIDDEN, _)                                          => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
+      case Error(BAD_GATEWAY, _)                                        => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.badGateway))
       case Error(INTERNAL_SERVER_ERROR, Some(`forbidden`))              => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
-      case Error(INTERNAL_SERVER_ERROR, Some(`unauthorised`))           => ErrorResponse(UNAUTHORIZED, Some(ServiceErrorCodes.unauthorised))
+      case Error(INTERNAL_SERVER_ERROR, Some(`notFound`))               => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
+      case Error(INTERNAL_SERVER_ERROR, Some(`unexpected`))             => ErrorResponse(NOT_FOUND, None)
       case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
+      case Error(INTERNAL_SERVER_ERROR, _)                              => ErrorResponse(INTERNAL_SERVER_ERROR, Some(ServiceErrorCodes.internalServerError))
       case _                                                            => ErrorResponse(connectorError.status)
     }
   }
@@ -118,12 +120,11 @@ object ReadSubscriptionService {
       object ConnectorErrorCode {
         val couldNotBeProcessed     = "003"
         val createOrAmendInProgress = "201"
-        val duplicateSubmission     = "004"
         val forbidden               = "403"
+        val notFound                = "404"
         val internalServerError     = "500"
         val invalidId               = "016"
-        val noSubscription          = "202"
-        val unauthorised            = "401"
+        val unexpected              = "422"
       }
     }
   }
