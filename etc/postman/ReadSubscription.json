@@ -18,6 +18,10 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has the expected id\", function () {",
+									"    pm.expect(pm.response.json().id).to.eql(\"XLD1234567891\");",
 									"});"
 								],
 								"type": "text/javascript",
@@ -237,7 +241,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(500);",
+											"    pm.response.to.have.status(503);",
 											"});",
 											"",
 											"pm.test(\"Single Error code is as expected\", function () {",
@@ -295,7 +299,7 @@
 											"    pm.response.to.have.status(500);",
 											"});",
 											"",
-											"pm.test(\"Response body is enpty\", function () {",
+											"pm.test(\"Response body is empty\", function () {",
 											"    pm.expect(pm.response.body).to.equal(undefined);",
 											"});",
 											"",
@@ -508,10 +512,10 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Status code is as expected\", function () {",
-											"    pm.response.to.have.status(502);",
+											"    pm.response.to.have.status(503);",
 											"});",
 											"",
-											"pm.test(\"Single Error code is as expected\", function () {",
+											"pm.test(\"Single Error code is as expecteds\", function () {",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.length).to.equal(1);",
 											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-bad-gateway\");",

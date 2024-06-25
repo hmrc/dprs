@@ -124,7 +124,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                                |                "Failure in back-end SAP System"
                                |            ]
                                |        },
-                               |        "timestamp": "2023-08-31T13:00:21.655Z",
+                               |        "timestamp": "$currentDateAndTime",
                                |        "correlationId": "d60de98c-f499-47f5-b2d6-e80966e8d19e"
                                |    }
                                |}
@@ -139,7 +139,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
 
           assertAsExpected(
             response,
-            INTERNAL_SERVER_ERROR,
+            SERVICE_UNAVAILABLE,
             Some(
               """
                 |[
@@ -325,7 +325,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
 
           assertAsExpected(
             response,
-            BAD_GATEWAY,
+            SERVICE_UNAVAILABLE,
             Some(
               """
                 |[
@@ -394,7 +394,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                                |                "Unexpected backend application error"
                                |            ]
                                |        },
-                               |        "timestamp": "2023-09-07T14:02:47.029Z",
+                               |        "timestamp": "$currentDateAndTime",
                                |        "correlationId": "82d0bc78-22d3-4157-8e2d-f718155d0f95"
                                |    }
                                |}
@@ -440,7 +440,7 @@ class ReadSubscriptionSpec extends BaseBackendIntegrationSpec {
                                |                "Unexpected backend application error"
                                |            ]
                                |        },
-                               |        "timestamp": "2023-09-07T14:02:47.029Z",
+                               |        "timestamp": "$currentDateAndTime",
                                |        "correlationId": "82d0bc78-22d3-4157-8e2d-f718155d0f95"
                                |    }
                                |}

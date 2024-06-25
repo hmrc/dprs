@@ -51,10 +51,11 @@ class ReadSubscriptionService @Inject() (readSubscriptionConnector: ReadSubscrip
       case Error(UNPROCESSABLE_ENTITY, Some(`invalidId`))               => ErrorResponse(SERVICE_UNAVAILABLE)
       case Error(UNPROCESSABLE_ENTITY, Some(`createOrAmendInProgress`)) => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.serviceUnavailableError))
       case Error(FORBIDDEN, _)                                          => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
-      case Error(BAD_GATEWAY, _)                                        => ErrorResponse(BAD_GATEWAY, Some(ServiceErrorCodes.badGateway))
+      case Error(BAD_GATEWAY, _)                                        => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.badGateway))
       case Error(INTERNAL_SERVER_ERROR, Some(`forbidden`))              => ErrorResponse(FORBIDDEN, Some(ServiceErrorCodes.forbidden))
       case Error(INTERNAL_SERVER_ERROR, Some(`notFound`))               => ErrorResponse(NOT_FOUND, Some(ServiceErrorCodes.notFound))
       case Error(INTERNAL_SERVER_ERROR, Some(`unexpected`))             => ErrorResponse(NOT_FOUND, None)
+      case Error(INTERNAL_SERVER_ERROR, Some(`internalServerError`))    => ErrorResponse(SERVICE_UNAVAILABLE, Some(ServiceErrorCodes.internalServerError))
       case Error(INTERNAL_SERVER_ERROR, _)                              => ErrorResponse(INTERNAL_SERVER_ERROR, Some(ServiceErrorCodes.internalServerError))
       case _                                                            => ErrorResponse(connectorError.status)
     }
@@ -123,7 +124,6 @@ object ReadSubscriptionService {
         val notFound                = "404"
         val internalServerError     = "500"
         val invalidId               = "016"
-        val badGateway              = "502"
         val unexpected              = "422"
       }
     }
