@@ -21,6 +21,7 @@ import play.api.http.Status._
 import play.api.libs.functional.syntax.{toApplicativeOps, toFunctionalBuilderOps}
 import play.api.libs.json.Reads.{maxLength, minLength, verifying}
 import play.api.libs.json._
+import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
 import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector
 import uk.gov.hmrc.dprs.services.BaseService
@@ -38,13 +39,13 @@ class CreateSubscriptionService @Inject() (
 
   private val converter = new Converter
 
-  def call(serviceRequest: CreateSubscriptionService.Requests.Request)(implicit
+  def call(serviceRequest: CreateSubscriptionService.Requests.Request, requestHeaders: BaseBackendConnector.Request.Headers)(implicit
     executionContext: ExecutionContext
   ): Future[Either[BaseService.ErrorResponse, CreateSubscriptionService.Responses.Response]] =
     converter
       .convert(serviceRequest)
       .map { connectorRequest =>
-        createSubscriptionConnector.call(connectorRequest).map {
+        createSubscriptionConnector.call(connectorRequest, requestHeaders).map {
           case Right(connectorResponse) => Right(converter.convert(connectorResponse))
           case Left(error)              => Left(convert(error))
         }

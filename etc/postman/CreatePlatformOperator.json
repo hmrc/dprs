@@ -1,0 +1,2426 @@
+{
+	"info": {
+		"_postman_id": "d6ccfda4-f805-451d-be8c-4626cffc4056",
+		"name": "Create Platform Operator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30217849"
+	},
+	"item": [
+		{
+			"name": "Success",
+			"item": [
+				{
+					"name": "Inside UK",
+					"item": [
+						{
+							"name": "One Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/88884264",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"88884264"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Two Contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/88884264",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"88884264"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Outside UK",
+					"item": [
+						{
+							"name": "One Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"countryCode\": \"DK\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/88884264",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"88884264"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Two Contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"countryCode\": \"DK\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/88884264",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"88884264"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Failure",
+			"item": [
+				{
+					"name": "Downstream",
+					"item": [
+						{
+							"name": "Bad Request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000400",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000400"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forbidden",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Single error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-forbidden\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000403",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000403"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Insufficient Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000422_005",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000422_005"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Internal Server Error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(503);",
+											"});",
+											"",
+											"pm.test(\"Single error code is as expected\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.equal(1);",
+											"    pm.expect(jsonData[0].code).to.eql(\"eis-returned-internal-server-error\");",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000500",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000500"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Missing Request Type Or Regime",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000422_001",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000422_001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Service Unavailable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code as expected\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});",
+											"",
+											"pm.test(\"Body is empty\", function () {",
+											"    pm.response.to.have.body(\"\");",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/platform-operators/000000503",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"platform-operators",
+										"000000503"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Invalid",
+					"item": [
+						{
+							"name": "Address",
+							"item": [
+								{
+									"name": "Country Code",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-country-code\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Line One",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Short",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-one\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Line Two",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-two\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858834583594358345834593453423\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Line Three",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Too Short",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-three\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Line Four",
+									"item": [
+										{
+											"name": "Too Long",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-line-four\");",
+															"});",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"Just East of the Sun, West of the Moon\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Postal Code",
+									"item": [
+										{
+											"name": "Not Required",
+											"item": [
+												{
+													"name": "Too Short",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"\",\n    \"countryCode\": \"DK\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Required",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-address-postal-code\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD OX2\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Business Name",
+							"item": [
+								{
+									"name": "Too Long",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-business-name\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"A long business name for the Platform Operator. A long business name for the Platform Operator. Maximum is 105.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Contacts",
+							"item": [
+								{
+									"name": "One Has",
+									"item": [
+										{
+											"name": "Email Address",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-2-email-address\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Name",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-2-name\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-1-name\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Phillipa Elisabeth Louis Parker Stephenson Musk Yeti Elisabeth Louis Parker Stephenson Musk Yeti Elisabeth Louis Parker Stephenson Musk Yeti Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Phone Number",
+											"item": [
+												{
+													"name": "Format",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Single error code is as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(1);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-contact-2-phone\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"£38390756243\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "None",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-number-of-contacts\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Three",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-number-of-contacts\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Paul Dyson\",\n      \"phone\": \"38390756248\",\n      \"emailAddress\": \"Paul.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "IDs",
+							"item": [
+								{
+									"name": "One Has",
+									"item": [
+										{
+											"name": "Country Code of Issue",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-country-code-of-issue\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-country-code-of-issue\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Unrecognised",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-country-code-of-issue\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-country-code-of-issue\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"XX\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"ZZ\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Type",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-type\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-type\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Unrecognised",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-type\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-type\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"PASSPORT\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"DRV\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Value",
+											"item": [
+												{
+													"name": "Absent",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-value\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-value\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Too Long",
+													"event": [
+														{
+															"listen": "test",
+															"script": {
+																"exec": [
+																	"pm.test(\"Status code as expected\", function () {",
+																	"    pm.response.to.have.status(400);",
+																	"});",
+																	"",
+																	"pm.test(\"Error codes as expected\", function () {",
+																	"    var jsonData = pm.response.json();",
+																	"    pm.expect(jsonData.length).to.equal(2);",
+																	"    pm.expect(jsonData[0].code).to.eql(\"invalid-id-1-value\");",
+																	"    pm.expect(jsonData[1].code).to.eql(\"invalid-id-2-value\");",
+																	"});",
+																	"",
+																	""
+																],
+																"type": "text/javascript",
+																"packages": {}
+															}
+														}
+													],
+													"request": {
+														"method": "POST",
+														"header": [],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"123456789012345678901234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"123456789012345678901234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{BASE_URL}}/platform-operators/88884264",
+															"host": [
+																"{{BASE_URL}}"
+															],
+															"path": [
+																"platform-operators",
+																"88884264"
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Internal Name",
+							"item": [
+								{
+									"name": "Absent",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-internal-name\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Too Short",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-internal-name\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"internalName\": \"\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Reporting Notification",
+							"item": [
+								{
+									"name": "Type",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-type\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unrecognised",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-type\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"WTF\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Is Active Seller",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-is-active-seller\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"EPO\",\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Is Due Diligence",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-is-due-diligence\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"year\": 2024\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Year",
+									"item": [
+										{
+											"name": "Absent",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-year\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Before 2024",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code as expected\", function () {",
+															"    pm.response.to.have.status(400);",
+															"});",
+															"",
+															"pm.test(\"Single error code is as expected\", function () {",
+															"    var jsonData = pm.response.json();",
+															"    pm.expect(jsonData.length).to.equal(1);",
+															"    pm.expect(jsonData[0].code).to.eql(\"invalid-reporting-notification-year\");",
+															"});",
+															"",
+															"",
+															"",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"Dyson\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    },\n    {\n      \"type\": \"OTHER\",\n      \"value\": \"007\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2020\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{BASE_URL}}/platform-operators/88884264",
+													"host": [
+														"{{BASE_URL}}"
+													],
+													"path": [
+														"platform-operators",
+														"88884264"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Trading Name",
+							"item": [
+								{
+									"name": "Too Short",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code as expected\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"",
+													"pm.test(\"Single error code is as expected\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.length).to.equal(1);",
+													"    pm.expect(jsonData[0].code).to.eql(\"invalid-trading-name\");",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"internalName\": \"Dyson\",\n  \"businessName\": \"Dyson Inc.\",\n  \"tradingName\": \"\",\n  \"ids\": [\n    {\n      \"type\": \"UTR\",\n      \"value\": \"1234567890\",\n      \"countryCodeOfIssue\": \"GB\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"name\": \"Patrick Dyson\",\n      \"phone\": \"38390756243\",\n      \"emailAddress\": \"Patrick.Dyson@example.com\"\n    },\n    {\n      \"name\": \"Phillipa Dyson\",\n      \"phone\": \"38390756246\",\n      \"emailAddress\": \"Phillipa.Dyson@example.com\"\n    }\n  ],\n  \"address\": {\n    \"lineOne\": \"26424 Cecelia Junction\",\n    \"lineTwo\": \"Suite 858\",\n    \"lineThree\": \"Building Two\",\n    \"lineFour\": \"West Siobhanberg\",\n    \"postalCode\": \"OX2 3HD\",\n    \"countryCode\": \"GB\"\n  },\n  \"reportingNotification\": {\n    \"type\": \"RPO\",\n    \"isActiveSeller\": true,\n    \"isDueDiligence\": false,\n    \"year\": 2024\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/platform-operators/88884264",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"platform-operators",
+												"88884264"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "ff32273c-2ca9-4a0a-86ed-a23fc726fc3a",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:20001/dprs",
+			"type": "string"
+		}
+	]
+}

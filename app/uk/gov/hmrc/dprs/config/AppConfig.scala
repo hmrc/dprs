@@ -17,6 +17,7 @@
 package uk.gov.hmrc.dprs.config
 
 import uk.gov.hmrc.dprs.connectors.BaseBackendConnector
+import uk.gov.hmrc.dprs.connectors.platformOperator.CreatePlatformOperatorConnector
 import uk.gov.hmrc.dprs.connectors.registration.withoutId.RegistrationWithoutIdConnector
 import uk.gov.hmrc.dprs.connectors.registration.withId.RegistrationWithIdConnector
 import uk.gov.hmrc.dprs.connectors.subscription.{CreateSubscriptionConnector, ReadSubscriptionConnector, UpdateSubscriptionConnector}
@@ -36,6 +37,8 @@ class AppConfig @Inject() (servicesConfig: ServicesConfig) {
   val updateSubscriptionBaseUrl: String = generateBackendBaseUrl(UpdateSubscriptionConnector.connectorPath)
 
   val readSubscriptionBaseUrl: String = generateBackendBaseUrl(ReadSubscriptionConnector.connectorPath)
+
+  val createPlatformOperatorBaseUrl: String = generateBackendBaseUrl(CreatePlatformOperatorConnector.connectorPath)
 
   private def generateBackendBaseUrl(path: String): String =
     servicesConfig.baseUrl(BaseBackendConnector.connectorName) + servicesConfig.getConfString(BaseBackendConnector.connectorName + ".context", "") + path

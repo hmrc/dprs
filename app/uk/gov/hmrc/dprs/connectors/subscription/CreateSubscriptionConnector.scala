@@ -28,17 +28,19 @@ import uk.gov.hmrc.dprs.connectors.subscription.CreateSubscriptionConnector.Resp
 import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
+import java.time.Clock
 import javax.inject.Inject
 import scala.Function.unlift
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient) extends BaseBackendConnector(wsClient) {
+class CreateSubscriptionConnector @Inject() (appConfig: AppConfig, wsClient: WSClient, clock: Clock) extends BaseBackendConnector(wsClient, clock) {
 
   def call(
-    request: Request
+    request: Request,
+    requestHeaders: BaseBackendConnector.Request.Headers
   )(implicit executionContext: ExecutionContext): Future[Either[BaseConnector.Responses.Error, Response]] =
-    post[Request, Response](request)
+    post[Request, Response](request, requestHeaders)
 
   override def baseUrl(): URL = url"${appConfig.createSubscriptionBaseUrl}"
 

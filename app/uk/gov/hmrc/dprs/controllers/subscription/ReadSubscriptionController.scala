@@ -28,8 +28,8 @@ class ReadSubscriptionController @Inject() (cc: ControllerComponents, readSubscr
   executionContext: ExecutionContext
 ) extends BaseController(cc) {
 
-  def call(id: String): Action[AnyContent] = Action.async {
-    readSubscriptionService.call(id).map {
+  def call(id: String): Action[AnyContent] = Action.async { implicit request =>
+    readSubscriptionService.call(id, generateRequestHeaders(request)).map {
       case Right(serviceResponse) => Ok(toJson(serviceResponse))
       case Left(error)            => handleServiceError(error)
     }

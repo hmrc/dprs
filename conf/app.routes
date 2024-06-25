@@ -9,3 +9,5 @@ POST        /registrations/withoutId/organisation        uk.gov.hmrc.dprs.contro
 POST        /subscriptions                               uk.gov.hmrc.dprs.controllers.subscription.CreateSubscriptionController.call()
 POST        /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.subscription.UpdateSubscriptionController.call(id)
 GET         /subscriptions/:id                           uk.gov.hmrc.dprs.controllers.subscription.ReadSubscriptionController.call(id)
+
+POST        /platform-operators/:subscriptionId          uk.gov.hmrc.dprs.controllers.platformOperator.CreatePlatformOperatorController.call(subscriptionId)

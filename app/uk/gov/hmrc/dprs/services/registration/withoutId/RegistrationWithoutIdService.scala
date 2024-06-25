@@ -25,7 +25,7 @@ import uk.gov.hmrc.dprs.services.BaseService
 import uk.gov.hmrc.dprs.services.BaseService.ErrorResponse
 import uk.gov.hmrc.dprs.services.registration.withoutId.RegistrationWithoutIdService.Response.ConnectorErrorCode
 import uk.gov.hmrc.dprs.support.ValidationSupport.Reads.{lengthBetween, validEmailAddress, validPhoneNumber}
-import uk.gov.hmrc.dprs.support.ValidationSupport.isValidCountryCode
+import uk.gov.hmrc.dprs.support.ValidationSupport.{isPostalCodeRequired, isValidCountryCode}
 
 import scala.Function.unlift
 
@@ -53,11 +53,8 @@ object RegistrationWithoutIdService {
 
     object Address {
 
-      private def postalCodePresentIfExpected(address: Request.Address): Boolean = {
-        val countryCodesForWhichWeNeedAPostalCode = Set("GB", "IM", "JE", "GG")
-        if (countryCodesForWhichWeNeedAPostalCode.contains(address.countryCode.toUpperCase.trim)) address.postalCode.isDefined
-        else true
-      }
+      private def postalCodePresentIfExpected(address: Request.Address): Boolean =
+        if (isPostalCodeRequired(address.countryCode)) address.postalCode.isDefined else true
 
       implicit val reads: Reads[Address] =
         ((JsPath \ "lineOne").read(lengthBetween(1, 35)) and

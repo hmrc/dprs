@@ -16,10 +16,48 @@
 
 package uk.gov.hmrc.dprs.connectors
 
+import play.api.libs.json.{Reads, Writes}
 import play.api.libs.ws.WSClient
+import uk.gov.hmrc.dprs.connectors.BaseConnector.Responses.Error
 
-abstract class BaseBackendConnector(wsClient: WSClient) extends BaseConnector(wsClient)
+import java.time.{Clock, Instant}
+import scala.concurrent.{ExecutionContext, Future}
+
+abstract class BaseBackendConnector(wsClient: WSClient, clock: Clock) extends BaseConnector(wsClient) {
+
+  def post[REQUEST, RESPONSE](request: REQUEST, requestHeaders: BaseBackendConnector.Request.Headers)(implicit
+    executionContext: ExecutionContext,
+    writes: Writes[REQUEST],
+    reads: Reads[RESPONSE]
+  ): Future[Either[Error, RESPONSE]] =
+    post(request, generateHeaders(requestHeaders))
+
+  def get[RESPONSE](path: String, requestHeaders: BaseBackendConnector.Request.Headers)(implicit
+    executionContext: ExecutionContext,
+    reads: Reads[RESPONSE]
+  ): Future[Either[Error, RESPONSE]] =
+    get(path, generateHeaders(requestHeaders))
+
+  private def generateHeaders(requestHeaders: BaseBackendConnector.Request.Headers): Map[String, String] =
+    Map(
+      "accept"            -> "application/json",
+      "authorization"     -> requestHeaders.authorisation,
+      "date"              -> Instant.now(clock).toString,
+      "x-conversation-id" -> requestHeaders.conversationId,
+      "x-correlation-id"  -> requestHeaders.correlationId,
+      "x-forwarded-host"  -> requestHeaders.forwardedHost
+    )
+}
 
 object BaseBackendConnector {
   val connectorName: String = "backend"
+
+  object Request {
+    final case class Headers(
+      authorisation: String,
+      conversationId: String,
+      correlationId: String,
+      forwardedHost: String
+    )
+  }
 }

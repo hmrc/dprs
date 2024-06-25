@@ -35,7 +35,7 @@ class RegistrationWithIdForIndividualController @Inject() (cc: ControllerCompone
   def call(): Action[JsValue] = Action(parse.json).async { implicit request =>
     request.body.validate[RegistrationWithIdForIndividualService.Request] match {
       case JsSuccess(requestForIndividual, _) =>
-        registrationWithIdForIndividualService.call(requestForIndividual).map {
+        registrationWithIdForIndividualService.call(requestForIndividual, generateRequestHeaders(request)).map {
           case Right(responseForIndividual) => Ok(toJson(responseForIndividual))
           case Left(error)                  => handleServiceError(error)
         }

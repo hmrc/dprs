@@ -33,25 +33,28 @@ abstract class BaseConnector(wsClient: WSClient) {
 
   /** We would have liked to use HttpClientV2, but when it encounters a 400 or 500 status code, the response body is inaccessible.
     */
-  def post[REQUEST, RESPONSE](request: REQUEST)(implicit
+
+  def post[REQUEST, RESPONSE](request: REQUEST, headers: Map[String, String])(implicit
     executionContext: ExecutionContext,
     writes: Writes[REQUEST],
     reads: Reads[RESPONSE]
   ): Future[Either[Error, RESPONSE]] =
     wsClient
       .url(baseUrl().toString)
+      .withHttpHeaders(headers.toSeq: _*)
       .post(toJson(request))
       .transform {
         case Success(wsResponse) => handleResponse(wsResponse)
         case Failure(exception)  => Failure(exception)
       }
 
-  def get[RESPONSE](path: String)(implicit
+  def get[RESPONSE](path: String, headers: Map[String, String])(implicit
     executionContext: ExecutionContext,
     reads: Reads[RESPONSE]
   ): Future[Either[Error, RESPONSE]] =
     wsClient
       .url(baseUrl().toString + "/" + path)
+      .withHttpHeaders(headers.toSeq: _*)
       .get()
       .transform {
         case Success(wsResponse) => handleResponse(wsResponse)
@@ -64,10 +67,10 @@ abstract class BaseConnector(wsClient: WSClient) {
   }
 
   private def asSuccessfulResponse[RESPONSE](wsResponse: WSResponse)(implicit reads: Reads[RESPONSE]): Try[Either[Error, RESPONSE]] =
-    wsResponse.json
-      .validate[RESPONSE]
-      .map(response => Success(Right(response)))
-      .getOrElse(Failure(new ResponseParsingException(wsResponse.body)))
+    Try(wsResponse.json.validate[RESPONSE] match {
+      case JsSuccess(response, _) => Success(Right(response))
+      case JsError(_)             => Failure(new ResponseParsingException(wsResponse.body))
+    }).getOrElse(Failure(new ResponseParsingException(wsResponse.body)))
 
   private def asErrors[RESPONSE](statusCode: Int, wsResponse: WSResponse): Try[Either[Error, RESPONSE]] =
     if (wsResponse.body.nonEmpty)

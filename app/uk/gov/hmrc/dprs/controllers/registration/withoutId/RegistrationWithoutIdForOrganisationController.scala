@@ -35,7 +35,7 @@ class RegistrationWithoutIdForOrganisationController @Inject() (cc: ControllerCo
   def call(): Action[JsValue] = Action(parse.json).async { implicit request =>
     request.body.validate[RegistrationWithoutIdForOrganisationService.Request] match {
       case JsSuccess(requestForOrganisation, _) =>
-        registrationWithoutIdForOrganisationService.call(requestForOrganisation).map {
+        registrationWithoutIdForOrganisationService.call(requestForOrganisation, generateRequestHeaders(request)).map {
           case Right(requestForOrganisation) => Ok(toJson(requestForOrganisation))
           case Left(error)                   => handleServiceError(error)
         }

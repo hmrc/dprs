@@ -33,7 +33,7 @@ class CreateSubscriptionController @Inject() (cc: ControllerComponents, createSu
   def call(): Action[JsValue] = Action(parse.json).async { implicit request =>
     request.body.validate[CreateSubscriptionService.Requests.Request] match {
       case JsSuccess(serviceRequest, _) =>
-        createSubscriptionService.call(serviceRequest).map {
+        createSubscriptionService.call(serviceRequest, generateRequestHeaders(request)).map {
           case Right(serviceResponse) => Ok(toJson(serviceResponse))
           case Left(error)            => handleServiceError(error)
         }
@@ -49,22 +49,14 @@ class CreateSubscriptionController @Inject() (cc: ControllerComponents, createSu
         "/id/value"                 -> "invalid-id-value",
         "/name"                     -> "invalid-name",
         "/contacts"                 -> "invalid-number-of-contacts",
-        "/contacts(0)/type"         -> "invalid-contact-1-type",
-        "/contacts(0)/name"         -> "invalid-contact-1-name",
-        "/contacts(0)/firstName"    -> "invalid-contact-1-first-name",
-        "/contacts(0)/middleName"   -> "invalid-contact-1-middle-name",
-        "/contacts(0)/lastName"     -> "invalid-contact-1-last-name",
-        "/contacts(0)/landline"     -> "invalid-contact-1-landline",
-        "/contacts(0)/mobile"       -> "invalid-contact-1-mobile",
-        "/contacts(0)/emailAddress" -> "invalid-contact-1-email-address",
-        "/contacts(1)/type"         -> "invalid-contact-2-type",
-        "/contacts(1)/name"         -> "invalid-contact-2-name",
-        "/contacts(1)/firstName"    -> "invalid-contact-2-first-name",
-        "/contacts(1)/middleName"   -> "invalid-contact-2-middle-name",
-        "/contacts(1)/lastName"     -> "invalid-contact-2-last-name",
-        "/contacts(1)/landline"     -> "invalid-contact-2-landline",
-        "/contacts(1)/mobile"       -> "invalid-contact-2-mobile",
-        "/contacts(1)/emailAddress" -> "invalid-contact-2-email-address"
+        "/contacts(#)/type"         -> "invalid-contact-#-type",
+        "/contacts(#)/name"         -> "invalid-contact-#-name",
+        "/contacts(#)/firstName"    -> "invalid-contact-#-first-name",
+        "/contacts(#)/middleName"   -> "invalid-contact-#-middle-name",
+        "/contacts(#)/lastName"     -> "invalid-contact-#-last-name",
+        "/contacts(#)/landline"     -> "invalid-contact-#-landline",
+        "/contacts(#)/mobile"       -> "invalid-contact-#-mobile",
+        "/contacts(#)/emailAddress" -> "invalid-contact-#-email-address"
       )
     )
 
